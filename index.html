@@ -12,35 +12,27 @@
 :root{--green:#4ade80;--bg:#0f1117;--s1:#1c2228;--s2:#242c35;--text:#e8eaed;--muted:#99aabb;--faint:#2a3a4a;--gold:#FFC72C}
 html,body{height:100%;background:#0a0d10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);-webkit-tap-highlight-color:transparent}
 body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
-
 .shell{width:100%;max-width:390px;background:var(--bg);border-radius:32px;border:4px solid var(--s1);overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 32px);max-height:780px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.6)}
-
-@media(max-width:430px){
-  body{padding:0;align-items:stretch}
-  .shell{max-width:100%;border-radius:0;border:none;height:100vh;max-height:none}
-}
-
+@media(max-width:430px){body{padding:0;align-items:stretch}.shell{max-width:100%;border-radius:0;border:none;height:100vh;max-height:none}}
 .notch{width:80px;height:20px;background:var(--s1);border-radius:0 0 14px 14px;margin:0 auto;flex-shrink:0}
-
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 6px;border-bottom:.5px solid var(--faint);flex-shrink:0}
 .logo-row{display:flex;align-items:center;gap:8px}
 .logo-svg{width:18px;height:26px}
 .wm{font-family:Georgia,serif;font-size:17px;font-weight:700;color:var(--text);letter-spacing:-.5px}
-.top-icons{display:flex;gap:6px}
-.tico{background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:4px;border-radius:6px;transition:all .15s}
-.tico.on{color:var(--text);background:var(--s2)}
-
+.ver{font-size:9px;color:var(--faint);background:var(--s2);padding:2px 8px;border-radius:99px;border:.5px solid var(--faint)}
+.reload-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:17px;padding:4px 6px;border-radius:6px;transition:all .15s;line-height:1}
+.reload-btn:hover{color:var(--text);background:var(--s2)}
+.reload-btn.spinning{animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 .btabs{display:flex;border-bottom:.5px solid var(--faint);flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .btabs::-webkit-scrollbar{display:none}
 .btab{border:none;background:transparent;cursor:pointer;padding:6px 12px;font-size:12px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-.5px;white-space:nowrap;transition:all .15s}
 .btab.on{color:var(--green);border-bottom-color:var(--green);font-weight:500}
-
 .stats{display:flex;padding:5px 0;border-bottom:.5px solid var(--faint);flex-shrink:0}
 .st{flex:1;text-align:center}
 .stv{font-size:14px;font-weight:500;color:var(--text)}
 .stl{font-size:8px;color:var(--muted)}
 .std{width:.5px;background:var(--faint)}
-
 .grid-view{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:3px;overflow-y:auto;flex:1;-webkit-overflow-scrolling:touch}
 .pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:4px;overflow:hidden;transition:opacity .15s}
 .pw:active{opacity:.75}
@@ -50,7 +42,10 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .pmr{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px}
 .ph-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--faint);font-size:12px;text-align:center;grid-column:1/-1;padding:3rem 1.5rem;line-height:1.8}
 .ph-empty-ico{font-size:36px;margin-bottom:10px;opacity:.3}
-
+.loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px}
+.loading-txt{font-size:13px;color:var(--muted)}
+.loading-dots::after{content:"...";animation:dots 1.2s steps(4,end) infinite}
+@keyframes dots{0%,20%{content:"."}40%{content:".."}60%,100%{content:"..."}}
 .modal-back{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:50;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-tap{flex:1;cursor:pointer}
 .msheet{background:var(--s1);border-radius:18px 18px 0 0;max-height:86%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px}
@@ -73,47 +68,19 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .vcnum{font-size:20px;font-weight:500;color:var(--text)}
 .vclbl{font-size:10px;color:var(--muted)}
 .vcctrl{display:flex;gap:8px}
-.vcbtn{width:32px;height:32px;border-radius:50%;border:.5px solid var(--faint);background:transparent;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);transition:all .15s}
+.vcbtn{width:32px;height:32px;border-radius:50%;border:.5px solid var(--faint);background:transparent;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text)}
 .vcbtn:disabled{opacity:.3}
 .vcbtn.p{border-color:var(--green);color:var(--green)}
 .crow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .clbl{font-size:12px;color:var(--muted);width:80px;flex-shrink:0}
 .srow{display:flex;gap:3px}
-.sbtn{font-size:20px;background:none;border:none;cursor:pointer;color:var(--faint);padding:0;transition:color .15s}
+.sbtn{font-size:20px;background:none;border:none;cursor:pointer;color:var(--faint);padding:0}
 .sbtn.lit{color:var(--gold)}
-.notea{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:8px 10px;font-size:12px;font-family:inherit;color:var(--text);resize:none;outline:none;min-height:56px;margin-top:.875rem;transition:border-color .15s}
+.notea{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:8px 10px;font-size:12px;font-family:inherit;color:var(--text);resize:none;outline:none;min-height:56px;margin-top:.875rem}
 .notea::placeholder{color:var(--faint)}
 .notea:focus{border-color:var(--green)}
 .grow{display:flex;align-items:center;gap:6px;margin-bottom:.875rem}
 .gscore{font-size:17px;font-weight:500;color:var(--text)}
-
-.admin-screen{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.admin-head{padding:.875rem 1.25rem .625rem;border-bottom:.5px solid var(--faint);flex-shrink:0}
-.admin-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
-.admin-sub{font-size:11px;color:var(--muted)}
-.admin-body{flex:1;overflow-y:auto;padding:.875rem 1.25rem;-webkit-overflow-scrolling:touch}
-.flabel{font-size:11px;font-weight:500;color:var(--muted);margin-bottom:5px}
-.finput,.fselect{width:100%;padding:9px 11px;font-size:13px;border:.5px solid var(--faint);border-radius:10px;font-family:inherit;color:var(--text);background:var(--s2);outline:none;transition:border-color .15s;margin-bottom:.75rem}
-.finput:focus{border-color:var(--green)}
-.finput::placeholder{color:var(--faint)}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.frow .finput,.frow .fselect{margin-bottom:0}
-.add-btn{width:100%;padding:12px;background:var(--green);color:#0f1117;font-size:14px;font-weight:700;border:none;border-radius:10px;cursor:pointer;font-family:inherit;margin-top:6px;transition:opacity .15s}
-.add-btn:active{opacity:.85}
-.add-btn:disabled{opacity:.35;cursor:default}
-.divider-thin{height:.5px;background:var(--faint);margin:1rem 0}
-.rest-list-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.rlt-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-.rlt-clear{background:none;border:none;cursor:pointer;font-size:10px;color:#e05;font-family:inherit}
-.rest-row{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--s2);border-radius:10px;border:.5px solid var(--faint);margin-bottom:6px}
-.rr-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.rr-info{flex:1;min-width:0}
-.rr-name{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rr-meta{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rr-del{background:none;border:none;cursor:pointer;color:var(--faint);font-size:16px;padding:2px 5px;border-radius:5px;transition:color .15s}
-.rr-del:hover{color:#e05}
-.empty-admin{text-align:center;padding:2rem 0;color:var(--faint);font-size:12px;line-height:1.8}
-
 .ach-screen{flex:1;overflow-y:auto;padding:.875rem 1.25rem;-webkit-overflow-scrolling:touch}
 .ach-prog{background:var(--s2);border-radius:12px;padding:.875rem;margin-bottom:1rem}
 .ach-prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
@@ -122,25 +89,22 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .ach-bar{height:5px;background:var(--faint);border-radius:99px}
 .ach-bar-fill{height:5px;background:var(--gold);border-radius:99px;transition:width .4s}
 .ach-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.ach-card{background:var(--s2);border-radius:12px;padding:.875rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;border:.5px solid var(--faint);transition:border-color .2s}
+.ach-card{background:var(--s2);border-radius:12px;padding:.875rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;border:.5px solid var(--faint)}
 .ach-card.unlocked{border-color:var(--gold)}
-.ach-ico{font-size:26px;transition:filter .2s}
+.ach-ico{font-size:26px}
 .ach-card:not(.unlocked) .ach-ico{filter:grayscale(1) opacity(.2)}
 .ach-name{font-size:12px;font-weight:500;color:var(--faint)}
 .ach-card.unlocked .ach-name{color:var(--text)}
 .ach-desc{font-size:10px;color:var(--faint);line-height:1.4}
 .ach-sec{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:1rem 0 .625rem}
-
 .bnav{display:flex;border-top:.5px solid var(--faint);background:var(--bg);flex-shrink:0}
-.bntab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 10px;background:none;border:none;cursor:pointer;transition:all .15s}
+.bntab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 10px;background:none;border:none;cursor:pointer}
 .bnico{font-size:19px;color:var(--faint)}
 .bnlbl{font-size:8px;color:var(--faint)}
 .bntab.on .bnico,.bntab.on .bnlbl{color:var(--green)}
-
 .toast{position:absolute;bottom:72px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--green);color:#0f1117;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:700;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;z-index:999;pointer-events:none;box-shadow:0 4px 20px rgba(74,222,128,.3)}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
-.version-badge{position:absolute;top:10px;right:14px;font-size:8px;color:var(--faint);background:var(--s2);padding:2px 7px;border-radius:99px;border:.5px solid var(--faint)}
+.retry-btn{margin-top:10px;padding:8px 18px;background:#DA291C;color:white;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
@@ -149,35 +113,55 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
   <div id="screen" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative"></div>
   <div class="toast" id="toast"></div>
 </div>
-
 <script>
+const SHEET_URL="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
+const VERSION="1.0.0";
+
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
 const BB={"mcdonald's":"#1a0000","burger king":"#1a0800","bob's":"#00081a","kfc":"#1a0000","subway":"#001a00","pizzaria":"#1a0800","hamburgueria":"#0f0800","bar":"#0a0014","outro":"#0f1117"};
 const BI={"mcdonald's":"✦","burger king":"♨","bob's":"◈","kfc":"☖","subway":"≋","pizzaria":"✿","hamburgueria":"☀","bar":"◉","outro":"◎"};
-const VERSION="1.0.0";
 
 function bk(r){return(r||"outro").toLowerCase().trim()}
 function bc(r){return BC[bk(r)]||"#4ade80"}
 function bb(r){return BB[bk(r)]||"#0f1117"}
 function bi(r){return BI[bk(r)]||"◎"}
 
-const LOGO_SVG=`<svg class="logo-svg" viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg"><line x1="9" y1="1" x2="9" y2="15" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="1" x2="4" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="1" x2="14" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><path d="M4 8 Q9 13 14 8" fill="none" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="25" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="20" r="3.2" fill="#4ade80"/></svg>`;
+const LOGO=`<svg class="logo-svg" viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg"><line x1="9" y1="1" x2="9" y2="15" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="1" x2="4" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="1" x2="14" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><path d="M4 8 Q9 13 14 8" fill="none" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="25" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="20" r="3.2" fill="#4ade80"/></svg>`;
 
-let S={nav:"home",tab:"all",v:{},rat:{},notes:{},likes:{},ach:{},modal:null,restaurants:[],nextId:1,admin:{name:"",addr:"",rede:"outro",hours:"",rating:""}};
+let S={nav:"home",tab:"all",v:{},rat:{},notes:{},likes:{},ach:{},modal:null,restaurants:[],loading:false,loadError:false,lastLoaded:null};
 
-// STORAGE
-function saveKey(k,v){try{localStorage.setItem("garfado_"+k,JSON.stringify(v))}catch(e){}}
-function loadKey(k,def){try{const r=localStorage.getItem("garfado_"+k);return r!==null?JSON.parse(r):def}catch{return def}}
-function saveAll(){
-  saveKey("restaurants",S.restaurants);saveKey("v",S.v);saveKey("rat",S.rat);
-  saveKey("notes",S.notes);saveKey("likes",S.likes);saveKey("ach",S.ach);saveKey("nextId",S.nextId);
-}
-function loadAll(){
-  S.restaurants=loadKey("restaurants",[]);S.v=loadKey("v",{});S.rat=loadKey("rat",{});
-  S.notes=loadKey("notes",{});S.likes=loadKey("likes",{});S.ach=loadKey("ach",{});S.nextId=loadKey("nextId",1);
-}
+function sk(k,v){try{localStorage.setItem("garfado_"+k,JSON.stringify(v))}catch(e){}}
+function lk(k,d){try{const r=localStorage.getItem("garfado_"+k);return r!==null?JSON.parse(r):d}catch{return d}}
+function saveLocal(){sk("v",S.v);sk("rat",S.rat);sk("notes",S.notes);sk("likes",S.likes);sk("ach",S.ach)}
+function loadLocal(){S.v=lk("v",{});S.rat=lk("rat",{});S.notes=lk("notes",{});S.likes=lk("likes",{});S.ach=lk("ach",{})}
 
 function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
+
+async function fetchRestaurants(spin=true){
+  if(spin){S.loading=true;S.loadError=false;render();}
+  const btn=document.getElementById("reload-btn");
+  if(btn)btn.classList.add("spinning");
+  try{
+    const res=await fetch(SHEET_URL);
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const data=await res.json();
+    S.restaurants=data.filter(r=>r.nome).map((r,i)=>({
+      id:i,
+      name:String(r.nome||"").trim(),
+      addr:String(r.endereco||"").trim(),
+      rede:String(r.rede||"Outro").trim(),
+      hours:String(r.horario||"–").trim(),
+      rating:r.nota?parseFloat(r.nota):null,
+    }));
+    S.loading=false;S.loadError=false;S.lastLoaded=new Date();
+    toast("✓ "+S.restaurants.length+" restaurantes carregados!");
+  }catch(e){
+    S.loading=false;S.loadError=true;
+  }
+  render();
+  const btn2=document.getElementById("reload-btn");
+  if(btn2)btn2.classList.remove("spinning");
+}
 
 function mkPoster(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
@@ -196,9 +180,9 @@ function mkPoster(r){
 
 function getFiltered(){
   const t=S.tab,rs=S.restaurants;
-  if(t==="garfados") return rs.filter(r=>(S.v[r.id]||0)>0);
-  if(t==="faltam")   return rs.filter(r=>!((S.v[r.id]||0)>0));
-  if(t!=="all")      return rs.filter(r=>bk(r.rede)===t);
+  if(t==="garfados")return rs.filter(r=>(S.v[r.id]||0)>0);
+  if(t==="faltam")return rs.filter(r=>!((S.v[r.id]||0)>0));
+  if(t!=="all")return rs.filter(r=>bk(r.rede)===t);
   return rs;
 }
 function getRedes(){return[...new Set(S.restaurants.map(r=>bk(r.rede)).filter(Boolean))]}
@@ -206,62 +190,61 @@ const CRIT=["Comida","Atendimento","Limpeza","Banheiro"];
 function totVisits(){return Object.values(S.v).reduce((a,b)=>a+b,0)}
 function garfCount(){return S.restaurants.filter(r=>(S.v[r.id]||0)>0).length}
 
-function addVisit(id,d){S.v[id]=Math.max(0,(S.v[id]||0)+d);saveAll();checkAchs();render()}
-function toggleLike(id){S.likes[id]=!S.likes[id];saveAll();render()}
-function setRat(rid,c,v){if(!S.rat[rid])S.rat[rid]={};S.rat[rid][c]=v;saveAll();checkAchs();renderModal()}
+function addVisit(id,d){S.v[id]=Math.max(0,(S.v[id]||0)+d);saveLocal();checkAchs();render()}
+function toggleLike(id){S.likes[id]=!S.likes[id];saveLocal();render()}
+function setRat(rid,c,v){if(!S.rat[rid])S.rat[rid]={};S.rat[rid][c]=v;saveLocal();checkAchs();renderModal()}
 function openModal(id){S.modal=id;render()}
 function closeModal(){S.modal=null;render()}
 function setNav(n){S.nav=n;S.modal=null;render()}
 function setTab(t){S.tab=t;render()}
 
-function addRestaurant(){
-  const {name,addr,rede,hours,rating}=S.admin;
-  if(!name.trim()||!addr.trim()) return;
-  const r={id:S.nextId++,name:name.trim(),addr:addr.trim(),rede,hours:hours.trim()||"–",rating:rating?parseFloat(rating):null};
-  S.restaurants.unshift(r);
-  S.admin={name:"",addr:"",rede:"outro",hours:"",rating:""};
-  saveAll();toast("✓ "+r.name+" adicionado!");render();
-}
-function deleteRestaurant(id){
-  S.restaurants=S.restaurants.filter(r=>r.id!==id);
-  delete S.v[id];delete S.rat[id];delete S.notes[id];delete S.likes[id];
-  saveAll();render();
-}
-
 const ACHS=[
-  {id:"first",  ico:"🍟",name:"Primeira garfada",  desc:"Marque 1 lugar",                check:s=>Object.values(s.v).some(v=>v>0)},
-  {id:"three",  ico:"🗺️",name:"Explorador",         desc:"Garfe 3 lugares diferentes",    check:s=>s.restaurants.filter(r=>(s.v[r.id]||0)>0).length>=3},
-  {id:"five",   ico:"⭐",name:"Colecionador",        desc:"Garfe 5 lugares diferentes",    check:s=>s.restaurants.filter(r=>(s.v[r.id]||0)>0).length>=5},
-  {id:"all",    ico:"🏆",name:"Completou!",          desc:"Garfe todos os lugares",        check:s=>s.restaurants.length>0&&s.restaurants.every(r=>(s.v[r.id]||0)>0)},
-  {id:"viciado",ico:"😵",name:"Viciado",             desc:"5x no mesmo lugar",             check:s=>Math.max(0,...Object.values(s.v).concat(0))>=5},
-  {id:"habitue",ico:"👑",name:"Habitué",             desc:"10x no mesmo lugar",            check:s=>Math.max(0,...Object.values(s.v).concat(0))>=10},
-  {id:"20",     ico:"🎖️",name:"Devoto",              desc:"20 visitas no total",           check:s=>Object.values(s.v).reduce((a,b)=>a+b,0)>=20},
-  {id:"rated",  ico:"📋",name:"Crítico",             desc:"Avalie critérios em 3 lugares", check:s=>{let n=0;s.restaurants.forEach(r=>{if(Object.keys(s.rat[r.id]||{}).length>=3)n++});return n>=3}},
-  {id:"notes",  ico:"✏️",name:"Cronista",            desc:"Escreva notas em 3 lugares",    check:s=>Object.values(s.notes).filter(n=>n&&n.length>5).length>=3},
-  {id:"like",   ico:"♥", name:"Favorito",            desc:"Curta um lugar",                check:s=>Object.values(s.likes).some(Boolean)},
+  {id:"first",ico:"🍟",name:"Primeira garfada",desc:"Marque 1 lugar",check:s=>Object.values(s.v).some(v=>v>0)},
+  {id:"three",ico:"🗺️",name:"Explorador",desc:"Garfe 3 lugares",check:s=>s.restaurants.filter(r=>(s.v[r.id]||0)>0).length>=3},
+  {id:"five",ico:"⭐",name:"Colecionador",desc:"Garfe 5 lugares",check:s=>s.restaurants.filter(r=>(s.v[r.id]||0)>0).length>=5},
+  {id:"all",ico:"🏆",name:"Completou!",desc:"Garfe todos os lugares",check:s=>s.restaurants.length>0&&s.restaurants.every(r=>(s.v[r.id]||0)>0)},
+  {id:"viciado",ico:"😵",name:"Viciado",desc:"5x no mesmo lugar",check:s=>Math.max(0,...Object.values(s.v).concat(0))>=5},
+  {id:"habitue",ico:"👑",name:"Habitué",desc:"10x no mesmo lugar",check:s=>Math.max(0,...Object.values(s.v).concat(0))>=10},
+  {id:"20",ico:"🎖️",name:"Devoto",desc:"20 visitas no total",check:s=>Object.values(s.v).reduce((a,b)=>a+b,0)>=20},
+  {id:"rated",ico:"📋",name:"Crítico",desc:"Avalie critérios em 3 lugares",check:s=>{let n=0;s.restaurants.forEach(r=>{if(Object.keys(s.rat[r.id]||{}).length>=3)n++});return n>=3}},
+  {id:"notes",ico:"✏️",name:"Cronista",desc:"Notas em 3 lugares",check:s=>Object.values(s.notes).filter(n=>n&&n.length>5).length>=3},
+  {id:"like",ico:"♥",name:"Favorito",desc:"Curta um lugar",check:s=>Object.values(s.likes).some(Boolean)},
 ];
 function checkAchs(){
   let changed=false;
   ACHS.forEach(a=>{if(!S.ach[a.id]&&a.check(S)){S.ach[a.id]=true;changed=true;setTimeout(()=>toast(a.ico+" "+a.name+" desbloqueada!"),300)}});
-  if(changed) saveAll();
+  if(changed)saveLocal();
 }
 
 function render(){
   const scr=document.getElementById("screen");
-  let html="";
-  if(S.nav==="home")  html=renderHome();
-  else if(S.nav==="admin") html=renderAdmin();
-  else if(S.nav==="ach")   html=renderAch();
+  if(S.loading){scr.innerHTML=renderLoading()+renderNav();return;}
+  let html=S.nav==="home"?renderHome():renderAch();
   html+=renderNav();
   scr.innerHTML=html;
-  // inject modal
   const ms=document.getElementById("modal-slot");
-  if(ms) ms.innerHTML=S.modal!==null?renderModal():"";
+  if(ms)ms.innerHTML=S.modal!==null?renderModal():"";
+}
+
+function renderLoading(){
+  return`<div class="loading-screen">
+    <svg style="width:52px;height:52px" viewBox="0 0 48 68" xmlns="http://www.w3.org/2000/svg">
+      <line x1="24" y1="4" x2="24" y2="38" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/>
+      <line x1="10" y1="4" x2="10" y2="20" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/>
+      <line x1="38" y1="4" x2="38" y2="20" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/>
+      <path d="M10 20 Q24 34 38 20" fill="none" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/>
+      <line x1="24" y1="38" x2="24" y2="64" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="24" cy="52" r="9" fill="#4ade80"/>
+    </svg>
+    <div class="loading-txt">carregando<span class="loading-dots"></span></div>
+  </div>`;
 }
 
 function renderNav(){
-  const tabs=[{id:"home",ico:"⊞",lbl:"explorar"},{id:"admin",ico:"✎",lbl:"admin"},{id:"ach",ico:"🏆",lbl:"conquistas"}];
-  return`<div class="bnav">${tabs.map(t=>`<button class="bntab${S.nav===t.id?" on":""}" onclick="setNav('${t.id}')"><span class="bnico">${t.ico}</span><span class="bnlbl">${t.lbl}</span></button>`).join("")}</div>`;
+  return`<div class="bnav">
+    <button class="bntab${S.nav==="home"?" on":""}" onclick="setNav('home')"><span class="bnico">⊞</span><span class="bnlbl">explorar</span></button>
+    <button class="bntab${S.nav==="ach"?" on":""}" onclick="setNav('ach')"><span class="bnico">🏆</span><span class="bnlbl">conquistas</span></button>
+  </div>`;
 }
 
 function renderHome(){
@@ -269,18 +252,34 @@ function renderHome(){
   const tabs=[{id:"all",l:"Todas"},...redes.map(r=>({id:r,l:(r.charAt(0).toUpperCase()+r.slice(1)).split(" ")[0]})),{id:"garfados",l:"Garfadas"},{id:"faltam",l:"Faltam"}];
   const list=getFiltered();
   const garf=garfCount();
-  const gridH=!list.length
-    ?`<div class="ph-empty"><div class="ph-empty-ico">${S.restaurants.length===0?"✎":"◎"}</div>${S.restaurants.length===0?"Vá na aba <strong>admin</strong><br>e adicione o primeiro restaurante!":"Nenhum restaurante aqui"}</div>`
-    :list.map(r=>{
-        const v=S.v[r.id]||0;
-        const vals=Object.values(S.rat[r.id]||{});
-        const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
-        return`<div class="pw" onclick="openModal(${r.id})">${mkPoster(r)}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
-      }).join("");
+  const lastTxt=S.lastLoaded?S.lastLoaded.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}):"–";
+
+  let gridH="";
+  if(S.loadError){
+    gridH=`<div class="ph-empty" style="grid-column:1/-1">
+      <div class="ph-empty-ico">⚠</div>
+      <div>Não foi possível carregar a planilha.<br>Verifique sua conexão.</div>
+      <button class="retry-btn" onclick="fetchRestaurants()">↻ Tentar novamente</button>
+    </div>`;
+  }else if(!list.length){
+    gridH=`<div class="ph-empty"><div class="ph-empty-ico">${S.restaurants.length===0?"📋":"◎"}</div>${S.restaurants.length===0?"Nenhum restaurante na planilha ainda.":"Nenhum restaurante aqui."}</div>`;
+  }else{
+    gridH=list.map(r=>{
+      const v=S.v[r.id]||0;
+      const vals=Object.values(S.rat[r.id]||{});
+      const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
+      return`<div class="pw" onclick="openModal(${r.id})">${mkPoster(r)}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
+    }).join("");
+  }
+
   return`
     <div class="topbar">
-      <div class="logo-row">${LOGO_SVG}<span class="wm">garfado</span></div>
-      <div style="font-size:9px;color:var(--faint);background:var(--s2);padding:2px 8px;border-radius:99px;border:.5px solid var(--faint)">v${VERSION}</div>
+      <div class="logo-row">${LOGO}<span class="wm">garfado</span></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:9px;color:var(--faint)">${lastTxt}</span>
+        <button class="reload-btn" id="reload-btn" onclick="fetchRestaurants(false)" title="Atualizar restaurantes">↻</button>
+        <span class="ver">v${VERSION}</span>
+      </div>
     </div>
     <div class="btabs">${tabs.map(t=>`<button class="btab${S.tab===t.id?" on":""}" onclick="setTab('${t.id}')">${t.l}</button>`).join("")}</div>
     <div class="stats">
@@ -297,21 +296,34 @@ function renderHome(){
 }
 
 function renderModal(){
-  if(S.modal===null) return"";
+  if(S.modal===null)return"";
   const r=S.restaurants.find(x=>x.id===S.modal);
-  if(!r) return"";
+  if(!r)return"";
   const v=S.v[r.id]||0,liked=S.likes[r.id],myR=S.rat[r.id]||{},note=S.notes[r.id]||"";
   const critH=CRIT.map(c=>{const cur=myR[c]||0;return`<div class="crow"><span class="clbl">${c}</span><div class="srow">${[1,2,3,4,5].map(n=>`<button class="sbtn${n<=cur?" lit":""}" onclick="setRat(${r.id},'${c}',${n})">★</button>`).join("")}</div>${cur?`<span style="font-size:11px;color:var(--muted);margin-left:5px">${cur}.0</span>`:""}</div>`;}).join("");
-  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet"><div class="mhandle"></div><div class="mhead"><div class="mtitle">${r.name}</div><div class="msub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div></div><div class="mposter">${mkPoster(r)}${v>0?'<div class="mribbon">garfado</div>':""}</div><div class="mactions"><button class="mact" onclick="addVisit(${r.id},1)"><span class="mact-ico${v>0?" aw":""}">◎</span><span class="mact-lbl">${v>0?v+"x garfado":"Garfar"}</span></button><button class="mact" onclick="toggleLike(${r.id})"><span class="mact-ico${liked?" al":""}">${liked?"♥":"♡"}</span><span class="mact-lbl">Curtir</span></button><button class="mact" onclick="addVisit(${r.id},-1)"><span class="mact-ico" style="${v>0?"":"opacity:.3"}">−◎</span><span class="mact-lbl">Remover</span></button></div><div class="mbody">${r.rating?`<div class="grow"><span class="gscore">${r.rating}</span><span style="color:var(--gold);font-size:13px">${"★".repeat(Math.round(r.rating))}</span><span style="font-size:11px;color:var(--muted)">${r.rating}/5.0</span></div>`:""}<div class="vcrow"><div><div class="vclbl">minhas visitas</div><div class="vcnum">${v}<span style="font-size:13px;font-weight:400;color:var(--muted)"> vez${v!==1?"es":""}</span></div></div><div class="vcctrl"><button class="vcbtn" onclick="addVisit(${r.id},-1)" ${v===0?"disabled":""}>−</button><button class="vcbtn p" onclick="addVisit(${r.id},1)">+</button></div></div><div class="msec">minha avaliação</div>${critH}<textarea class="notea" placeholder="Escreva sua impressão..." oninput="S.notes[${r.id}]=this.value;saveAll()">${note}</textarea></div></div></div>`;
-}
-
-function renderAdmin(){
-  const a=S.admin;
-  const canAdd=a.name.trim()&&a.addr.trim();
-  const listH=!S.restaurants.length
-    ?`<div class="empty-admin">Nenhum restaurante ainda.<br>Preencha o formulário acima!</div>`
-    :S.restaurants.map(r=>`<div class="rest-row"><div class="rr-dot" style="background:${bc(r.rede)}"></div><div class="rr-info"><div class="rr-name">${r.name}</div><div class="rr-meta">${r.addr} · ${r.hours}</div></div><button class="rr-del" onclick="deleteRestaurant(${r.id})">✕</button></div>`).join("");
-  return`<div class="admin-screen"><div class="admin-head"><div class="admin-title">Painel admin</div><div class="admin-sub">Adicione restaurantes — ficam salvos para todos</div></div><div class="admin-body"><div class="flabel">Nome do restaurante *</div><input class="finput" placeholder="Ex: Bob's Consolação" value="${a.name}" oninput="S.admin.name=this.value;updateAddBtn()"/><div class="flabel">Endereço *</div><input class="finput" placeholder="Ex: Rua Augusta, 1200" value="${a.addr}" oninput="S.admin.addr=this.value;updateAddBtn()"/><div class="frow" style="margin-bottom:.75rem"><div><div class="flabel">Rede</div><select class="fselect" onchange="S.admin.rede=this.value">${["outro","mcdonald's","burger king","bob's","kfc","subway","pizzaria","hamburgueria","bar"].map(r=>`<option value="${r}"${a.rede===r?" selected":""}>${r.charAt(0).toUpperCase()+r.slice(1)}</option>`).join("")}</select></div><div><div class="flabel">Horário</div><input class="finput" placeholder="10h–22h" value="${a.hours}" oninput="S.admin.hours=this.value"/></div></div><div class="flabel">Nota Google (opcional)</div><input class="finput" type="number" min="0" max="5" step="0.1" placeholder="Ex: 4.3" value="${a.rating}" oninput="S.admin.rating=this.value"/><button class="add-btn" id="add-btn" onclick="addRestaurant()" ${canAdd?"":"disabled"}>+ Adicionar ao Garfado</button><div class="divider-thin"></div><div class="rest-list-title"><span class="rlt-label">Restaurantes (${S.restaurants.length})</span>${S.restaurants.length?`<button class="rlt-clear" onclick="if(confirm('Limpar tudo?')){S.restaurants=[];S.v={};S.rat={};S.notes={};S.likes={};saveAll();render()}">limpar tudo</button>`:""}</div>${listH}</div></div>`;
+  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mhead"><div class="mtitle">${r.name}</div><div class="msub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div></div>
+    <div class="mposter">${mkPoster(r)}${v>0?'<div class="mribbon">garfado</div>':""}</div>
+    <div class="mactions">
+      <button class="mact" onclick="addVisit(${r.id},1)"><span class="mact-ico${v>0?" aw":""}">◎</span><span class="mact-lbl">${v>0?v+"x garfado":"Garfar"}</span></button>
+      <button class="mact" onclick="toggleLike(${r.id})"><span class="mact-ico${liked?" al":""}">${liked?"♥":"♡"}</span><span class="mact-lbl">Curtir</span></button>
+      <button class="mact" onclick="addVisit(${r.id},-1)"><span class="mact-ico" style="${v>0?"":"opacity:.3"}">−◎</span><span class="mact-lbl">Remover</span></button>
+    </div>
+    <div class="mbody">
+      ${r.rating?`<div class="grow"><span class="gscore">${r.rating}</span><span style="color:var(--gold);font-size:13px">${"★".repeat(Math.round(r.rating))}</span><span style="font-size:11px;color:var(--muted)">&nbsp;${r.rating}/5.0</span></div>`:""}
+      <div class="vcrow">
+        <div><div class="vclbl">minhas visitas</div><div class="vcnum">${v}<span style="font-size:13px;font-weight:400;color:var(--muted)"> vez${v!==1?"es":""}</span></div></div>
+        <div class="vcctrl">
+          <button class="vcbtn" onclick="addVisit(${r.id},-1)" ${v===0?"disabled":""}>−</button>
+          <button class="vcbtn p" onclick="addVisit(${r.id},1)">+</button>
+        </div>
+      </div>
+      <div class="msec">minha avaliação</div>
+      ${critH}
+      <textarea class="notea" placeholder="Escreva sua impressão..." oninput="S.notes[${r.id}]=this.value;saveLocal()">${note}</textarea>
+    </div>
+  </div></div>`;
 }
 
 function renderAch(){
@@ -319,12 +331,21 @@ function renderAch(){
   const unlocked=ACHS.filter(a=>S.ach[a.id]),locked=ACHS.filter(a=>!S.ach[a.id]);
   const pct=ACHS.length?Math.round(unlocked.length/ACHS.length*100):0;
   const cards=list=>list.map(a=>`<div class="ach-card${S.ach[a.id]?" unlocked":""}"><div class="ach-ico">${a.ico}</div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>`).join("");
-  return`<div class="topbar"><div class="logo-row">${LOGO_SVG}<span class="wm">conquistas</span></div></div><div class="ach-screen"><div class="ach-prog"><div class="ach-prog-top"><span class="ach-prog-title">seu progresso</span><span class="ach-prog-pct">${unlocked.length}/${ACHS.length} · ${pct}%</span></div><div class="ach-bar"><div class="ach-bar-fill" style="width:${pct}%"></div></div></div>${unlocked.length?`<div class="ach-sec">desbloqueadas</div><div class="ach-grid">${cards(unlocked)}</div>`:""}<div class="ach-sec">${unlocked.length?"bloqueadas":"todas as conquistas"}</div><div class="ach-grid">${cards(locked)}</div></div>`;
+  return`
+    <div class="topbar"><div class="logo-row">${LOGO}<span class="wm">conquistas</span></div></div>
+    <div class="ach-screen">
+      <div class="ach-prog">
+        <div class="ach-prog-top"><span class="ach-prog-title">seu progresso</span><span class="ach-prog-pct">${unlocked.length}/${ACHS.length} · ${pct}%</span></div>
+        <div class="ach-bar"><div class="ach-bar-fill" style="width:${pct}%"></div></div>
+      </div>
+      ${unlocked.length?`<div class="ach-sec">desbloqueadas</div><div class="ach-grid">${cards(unlocked)}</div>`:""}
+      <div class="ach-sec">${unlocked.length?"bloqueadas":"todas as conquistas"}</div>
+      <div class="ach-grid">${cards(locked)}</div>
+    </div>`;
 }
 
-function updateAddBtn(){const btn=document.getElementById("add-btn");if(btn)btn.disabled=!(S.admin.name.trim()&&S.admin.addr.trim())}
-
-loadAll();render();
+loadLocal();
+fetchRestaurants();
 </script>
 </body>
 </html>
