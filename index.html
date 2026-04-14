@@ -16,7 +16,6 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 @media(max-width:430px){body{padding:0;align-items:stretch}.shell{max-width:100%;border-radius:0;border:none;height:100vh;max-height:none}}
 
 .notch{width:80px;height:20px;background:var(--s1);border-radius:0 0 14px 14px;margin:0 auto;flex-shrink:0}
-
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 6px;border-bottom:.5px solid var(--faint);flex-shrink:0}
 .logo-row{display:flex;align-items:center;gap:8px}
 .logo-svg{width:18px;height:26px}
@@ -29,16 +28,14 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 @keyframes spin{to{transform:rotate(360deg)}}
 .ver{font-size:9px;color:var(--faint);background:var(--s2);padding:2px 8px;border-radius:99px;border:.5px solid var(--faint)}
 
-/* SEARCH BAR */
-.search-wrap{padding:8px 12px;border-bottom:.5px solid var(--faint);flex-shrink:0;position:relative}
+.search-wrap{padding:8px 12px;border-bottom:.5px solid var(--faint);flex-shrink:0;position:relative;display:flex;align-items:center}
+.search-icon{position:absolute;left:22px;color:var(--faint);font-size:15px;pointer-events:none}
 .search-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:8px 36px 8px 34px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:border-color .15s}
 .search-input:focus{border-color:var(--green)}
 .search-input::placeholder{color:var(--faint)}
-.search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:15px;pointer-events:none}
-.search-clear{position:absolute;right:22px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--faint);font-size:16px;padding:2px;line-height:1;display:none}
+.search-clear{position:absolute;right:22px;background:none;border:none;cursor:pointer;color:var(--faint);font-size:16px;padding:2px;line-height:1;display:none}
 .search-clear.show{display:block}
 
-/* BOTTOM NAV */
 .bnav{display:flex;border-top:.5px solid var(--faint);background:var(--bg);flex-shrink:0}
 .bntab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 10px;background:none;border:none;cursor:pointer;transition:all .15s;border-top:2px solid transparent;margin-top:-1px}
 .bnico{font-size:18px;color:var(--faint)}
@@ -53,7 +50,6 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 
 .scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .scroll-body::-webkit-scrollbar{display:none}
-
 .sec-head{padding:1rem 1rem .5rem;display:flex;align-items:baseline;justify-content:space-between}
 .sec-title{font-family:Georgia,serif;font-size:15px;font-weight:700;color:var(--text)}
 .sec-sub{font-size:10px;color:var(--muted)}
@@ -64,50 +60,41 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .stat-pill-v{font-size:18px;font-weight:500;color:var(--text)}
 .stat-pill-l{font-size:9px;color:var(--muted);margin-top:1px}
 
-/* POSTER GRID */
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 3px}
 .pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:5px;overflow:hidden;transition:opacity .15s}
 .pw:active{opacity:.75}
-.pw svg{width:100%;height:100%;display:block}
-.pw img.poster-img{width:100%;height:100%;object-fit:cover;display:block}
+.pw svg,.pw img.poster-img{width:100%;height:100%;object-fit:cover;display:block}
 .pvc{position:absolute;top:5px;right:5px;background:var(--green);color:#0f1117;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .pvn{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px}
 .pmr{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px}
-/* overlay de nome no poster com imagem */
 .pw-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 100%);padding:20px 6px 6px;pointer-events:none}
 .pw-label-name{font-size:10px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* SEARCH RESULTS */
-.search-results{padding:0 3px}
-.search-item{display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:8px;cursor:pointer;transition:background .15s;margin-bottom:4px}
+.search-results{padding:0 8px}
+.search-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;transition:background .15s;margin-bottom:4px}
 .search-item:hover,.search-item:active{background:var(--s2)}
-.search-thumb{width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;position:relative}
-.search-thumb img{width:100%;height:100%;object-fit:cover}
-.search-thumb svg{width:100%;height:100%;display:block}
+.search-thumb{width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0}
+.search-thumb img,.search-thumb svg{width:100%;height:100%;object-fit:cover;display:block}
 .search-info{flex:1;min-width:0}
 .search-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.search-addr{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-addr{font-size:10px;color:var(--muted);margin-top:1px}
 .search-rede{font-size:9px;padding:1px 6px;border-radius:99px;margin-top:3px;display:inline-block}
-.search-check{font-size:14px;color:var(--green);flex-shrink:0}
 .search-empty{text-align:center;padding:2rem 1rem;color:var(--faint);font-size:12px;line-height:1.7}
 
-/* DESTAQUES */
 .cards-h{display:flex;gap:10px;padding:0 1rem .75rem;overflow-x:auto}
 .cards-h::-webkit-scrollbar{display:none}
-.dest-card{width:130px;flex-shrink:0;cursor:pointer;border-radius:10px;overflow:hidden;background:var(--s2);border:.5px solid var(--faint);transition:opacity .15s}
+.dest-card{width:130px;flex-shrink:0;cursor:pointer;border-radius:10px;overflow:hidden;background:var(--s2);border:.5px solid var(--faint)}
 .dest-card:active{opacity:.75}
-.dest-poster{width:100%;height:100px;overflow:hidden;position:relative}
-.dest-poster img{width:100%;height:100%;object-fit:cover}
-.dest-poster svg{width:100%;height:100%;display:block}
+.dest-poster{width:100%;height:100px;overflow:hidden}
+.dest-poster img,.dest-poster svg{width:100%;height:100%;object-fit:cover;display:block}
 .dest-info{padding:6px 8px 8px}
 .dest-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dest-meta{font-size:9px;color:var(--muted)}
 .dest-rating{color:var(--gold);font-size:9px}
 .dest-empty{font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center}
 
-/* HUNTER */
 .franchise-list{padding:0 1rem;display:flex;flex-direction:column;gap:8px;padding-bottom:1rem}
-.franchise-card{background:var(--s2);border-radius:12px;border:.5px solid var(--faint);overflow:hidden;cursor:pointer;transition:opacity .15s}
+.franchise-card{background:var(--s2);border-radius:12px;border:.5px solid var(--faint);overflow:hidden;cursor:pointer}
 .franchise-card:active{opacity:.75}
 .franchise-head{display:flex;align-items:center;gap:12px;padding:10px 12px}
 .franchise-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
@@ -118,12 +105,47 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .franchise-prog-fill{height:3px;border-radius:99px;transition:width .4s}
 .franchise-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
 .franchise-pct{font-size:13px;font-weight:500}
-.franchise-check{font-size:16px}
 
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;color:var(--faint);font-size:12px;text-align:center;line-height:1.8}
 .empty-ico{font-size:32px;margin-bottom:8px;opacity:.3}
 
-/* MODAL */
+/* PERFIL */
+.profile-hero{padding:1.25rem 1rem 1rem;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.avatar-wrap{position:relative;cursor:pointer}
+.avatar-circle{width:68px;height:68px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:26px;font-weight:700;color:#0f1117;overflow:hidden;border:3px solid var(--s2)}
+.avatar-circle img{width:100%;height:100%;object-fit:cover}
+.avatar-edit{position:absolute;bottom:0;right:0;width:20px;height:20px;background:var(--s1);border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--faint)}
+.profile-name-wrap{display:flex;align-items:center;gap:6px}
+.profile-name{font-family:Georgia,serif;font-size:17px;font-weight:700;color:var(--text)}
+.profile-edit-ico{background:none;border:none;cursor:pointer;color:var(--faint);font-size:13px}
+.profile-bio{font-size:11px;color:var(--muted);max-width:220px;line-height:1.5}
+.profile-stats{display:flex;width:100%;margin-top:4px;border-top:.5px solid var(--faint);border-bottom:.5px solid var(--faint)}
+.pstat{flex:1;padding:10px 0;text-align:center}
+.pstat-v{font-size:16px;font-weight:500;color:var(--text)}
+.pstat-l{font-size:9px;color:var(--muted);margin-top:1px}
+.pstat-d{width:.5px;background:var(--faint)}
+
+.share-btn{width:calc(100% - 2rem);margin:0 1rem .75rem;padding:10px;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.share-btn:hover{border-color:var(--green);color:var(--green)}
+
+.recent-section{padding:0 1rem 1rem}
+.recent-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--faint)}
+.recent-thumb{width:32px;height:48px;border-radius:4px;overflow:hidden;flex-shrink:0}
+.recent-thumb img,.recent-thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+.recent-info{flex:1;min-width:0}
+.recent-name{font-size:12px;font-weight:500;color:var(--text)}
+.recent-meta{font-size:10px;color:var(--muted)}
+.recent-vc{font-size:11px;color:var(--green);font-weight:500;flex-shrink:0}
+
+/* EDIT MODAL PERFIL */
+.edit-sheet{background:var(--s1);border-radius:18px 18px 0 0;padding:1.25rem 1.25rem 2rem}
+.edit-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:1rem;text-align:center}
+.edit-label{font-size:10px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.edit-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:8px;padding:8px 10px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:.875rem}
+.edit-input:focus{border-color:var(--green)}
+.edit-save{width:100%;padding:11px;background:var(--green);color:#0f1117;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
+
+/* MODAL RESTAURANTE */
 .modal-back{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:50;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-tap{flex:1;cursor:pointer}
 .msheet{background:var(--s1);border-radius:18px 18px 0 0;max-height:86%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px}
@@ -132,8 +154,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .mtitle{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--text)}
 .msub{font-size:11px;color:var(--muted);margin-top:3px}
 .mposter{width:100px;height:150px;border-radius:8px;overflow:hidden;margin:.875rem auto;position:relative}
-.mposter img{width:100%;height:100%;object-fit:cover}
-.mposter svg{width:100%;height:100%;display:block}
+.mposter img,.mposter svg{width:100%;height:100%;object-fit:cover;display:block}
 .mribbon{position:absolute;top:9px;left:-20px;background:var(--green);color:#0f1117;font-size:8px;font-weight:700;padding:2px 24px;transform:rotate(-45deg)}
 .mactions{display:flex;justify-content:space-around;padding:.75rem 1.25rem;border-top:.5px solid var(--faint);border-bottom:.5px solid var(--faint)}
 .mact{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;cursor:pointer;padding:4px 8px}
@@ -176,26 +197,25 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .ach-desc{font-size:10px;color:var(--faint);line-height:1.4}
 .ach-sec{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:0 1rem .625rem}
 
-.toast{position:absolute;bottom:72px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--green);color:#0f1117;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:700;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;z-index:999;pointer-events:none;box-shadow:0 4px 20px rgba(74,222,128,.3)}
-.toast.show{transform:translateX(-50%) translateY(0)}
+/* TOAST — fora do flow do DOM para não ser afetado pelo render() */
+.toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#0f1117;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:700;transition:transform .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(74,222,128,.3);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
 .retry-btn{margin-top:10px;padding:8px 18px;background:#DA291C;color:white;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
 .divider{height:.5px;background:var(--faint);margin:0 1rem .75rem}
-
-/* dica coluna imagem */
-.img-tip{background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:.875rem 1rem;margin:.75rem 1rem 0;font-size:11px;color:var(--muted);line-height:1.6}
-.img-tip strong{color:var(--text)}
-.img-tip code{font-family:monospace;font-size:10px;background:var(--bg);padding:1px 5px;border-radius:4px;color:var(--green)}
 </style>
 </head>
 <body>
 <div class="shell">
   <div class="notch"></div>
   <div id="screen" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative"></div>
-  <div class="toast" id="toast"></div>
 </div>
+<!-- TOAST fora da shell para não ser destruído pelo render() -->
+<div class="toast" id="toast"></div>
+
 <script>
 const SHEET_URL="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VERSION="1.2.0";
+const VERSION="1.3.0";
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
 const BB={"mcdonald's":"#1a0000","burger king":"#1a0800","bob's":"#00081a","kfc":"#1a0000","subway":"#001a00","pizzaria":"#1a0800","hamburgueria":"#0f0800","bar":"#0a0014","outro":"#0f1117"};
@@ -210,14 +230,38 @@ function bemoji(r){return BEMOJI[bk(r)]||"🍽️"}
 
 const LOGO=`<svg class="logo-svg" viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg"><line x1="9" y1="1" x2="9" y2="15" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="1" x2="4" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="1" x2="14" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><path d="M4 8 Q9 13 14 8" fill="none" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="25" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="20" r="3.2" fill="#4ade80"/></svg>`;
 
-let S={nav:"home",v:{},rat:{},notes:{},likes:{},ach:{},modal:null,restaurants:[],loading:false,loadError:false,lastLoaded:null,query:""};
+let S={
+  nav:"home",v:{},rat:{},notes:{},likes:{},ach:{},modal:null,
+  restaurants:[],loading:false,loadError:false,lastLoaded:null,query:"",
+  profile:{name:"Explorador",bio:"Garfando a Paulista 🍴",avatar:""},
+  editingProfile:false
+};
+let toastTimer=null;
 
 function sk(k,v){try{localStorage.setItem("garfado_"+k,JSON.stringify(v))}catch(e){}}
 function lk(k,d){try{const r=localStorage.getItem("garfado_"+k);return r!==null?JSON.parse(r):d}catch{return d}}
-function saveLocal(){sk("v",S.v);sk("rat",S.rat);sk("notes",S.notes);sk("likes",S.likes);sk("ach",S.ach)}
-function loadLocal(){S.v=lk("v",{});S.rat=lk("rat",{});S.notes=lk("notes",{});S.likes=lk("likes",{});S.ach=lk("ach",{})}
+function saveLocal(){
+  sk("v",S.v);sk("rat",S.rat);sk("notes",S.notes);
+  sk("likes",S.likes);sk("ach",S.ach);sk("profile",S.profile);
+}
+function loadLocal(){
+  S.v=lk("v",{});S.rat=lk("rat",{});S.notes=lk("notes",{});
+  S.likes=lk("likes",{});S.ach=lk("ach",{});
+  S.profile=lk("profile",{name:"Explorador",bio:"Garfando a Paulista 🍴",avatar:""});
+}
 
-function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
+/* ── TOAST: fora do shell, nunca destruído pelo render ── */
+function toast(m){
+  const t=document.getElementById("toast");
+  if(!t)return;
+  if(toastTimer){clearTimeout(toastTimer);t.classList.remove("show");}
+  // pequeno delay para garantir re-trigger da animação
+  requestAnimationFrame(()=>{
+    t.textContent=m;
+    t.classList.add("show");
+    toastTimer=setTimeout(()=>{t.classList.remove("show");toastTimer=null;},2800);
+  });
+}
 
 async function fetchRestaurants(spin=true){
   if(spin){S.loading=true;S.loadError=false;render();}
@@ -234,25 +278,24 @@ async function fetchRestaurants(spin=true){
       rede:String(r.rede||"Outro").trim(),
       hours:String(r.horario||"–").trim(),
       rating:r.nota?parseFloat(r.nota):null,
-      // coluna "imagem" opcional — URL direta da foto
       img:String(r.imagem||"").trim()||null,
     }));
     S.loading=false;S.loadError=false;S.lastLoaded=new Date();
     toast("✓ "+S.restaurants.length+" restaurantes carregados!");
   }catch(e){
     S.loading=false;S.loadError=true;
+    toast("⚠ Erro ao carregar. Tente novamente.");
   }
   render();
   const btn2=document.getElementById("reload-btn");
   if(btn2)btn2.classList.remove("spinning");
 }
 
-/* ── POSTER SVG fallback ── */
-function mkSVG(r){
+function mkSVG(r,vb="0 0 200 300"){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
   const nm=r.name.length>14?r.name.slice(0,13)+"…":r.name;
   const ad=r.addr.length>17?r.addr.slice(0,16)+"…":r.addr;
-  return`<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
+  return`<svg viewBox="${vb}" xmlns="http://www.w3.org/2000/svg">
     <rect width="200" height="300" fill="${bg}"/>
     <text x="100" y="145" text-anchor="middle" font-family="Arial" font-size="58" fill="${col}" opacity="0.13">${ico}</text>
     <rect x="0" y="202" width="200" height="98" fill="rgba(0,0,0,0.76)"/>
@@ -275,28 +318,13 @@ function mkSVGSmall(r){
   </svg>`;
 }
 
-/* renderiza o poster: imagem real se tiver, SVG se não */
-function mkPoster(r){
-  if(r.img){
-    return`<img class="poster-img" src="${r.img}" alt="${r.name}" onerror="this.style.display='none';this.nextSibling.style.display='block'"/>
-    <div style="display:none;width:100%;height:100%">${mkSVG(r)}</div>
-    <div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`;
-  }
+function imgOrSVG(r){
+  if(r.img) return`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVG(r)}`;
   return mkSVG(r);
 }
-
-function mkPosterSmall(r){
-  if(r.img){
-    return`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.outerHTML='${mkSVGSmall(r).replace(/'/g,"\\'")}'"/>`;
-  }
+function imgOrSVGSmall(r){
+  if(r.img) return`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVGSmall(r)}`;
   return mkSVGSmall(r);
-}
-
-function mkThumb(r){
-  if(r.img){
-    return`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"/>`;
-  }
-  return mkSVG(r);
 }
 
 const CRIT=["Comida","Atendimento","Limpeza","Banheiro"];
@@ -307,10 +335,27 @@ function getRedes(){return[...new Set(S.restaurants.map(r=>bk(r.rede)).filter(Bo
 function addVisit(id,d){S.v[id]=Math.max(0,(S.v[id]||0)+d);saveLocal();checkAchs();render()}
 function toggleLike(id){S.likes[id]=!S.likes[id];saveLocal();render()}
 function setRat(rid,c,v){if(!S.rat[rid])S.rat[rid]={};S.rat[rid][c]=v;saveLocal();checkAchs();renderModal()}
-function openModal(id){S.modal=id;render()}
-function closeModal(){S.modal=null;render()}
-function setNav(n){S.nav=n;S.modal=null;S.query="";render()}
-function setQuery(q){S.query=q;renderSearchArea()}
+function openModal(id){S.modal=id;S.editingProfile=false;render()}
+function closeModal(){S.modal=null;S.editingProfile=false;render()}
+function setNav(n){S.nav=n;S.modal=null;S.editingProfile=false;S.query="";render()}
+function setQuery(q){
+  S.query=q;
+  const clr=document.getElementById("search-clear");
+  if(clr)clr.classList.toggle("show",!!q);
+  renderSearchArea();
+}
+function clearSearch(){
+  S.query="";
+  const inp=document.getElementById("search-input");
+  if(inp)inp.value="";
+  const clr=document.getElementById("search-clear");
+  if(clr)clr.classList.remove("show");
+  renderSearchArea();
+}
+function renderSearchArea(){
+  const a=document.getElementById("search-area");
+  if(a)a.innerHTML=S.query?renderSearchResults():renderMainContent();
+}
 
 function getSugestoes(){
   return S.restaurants.filter(r=>!(S.v[r.id]>0)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8);
@@ -341,12 +386,15 @@ function render(){
   if(S.nav==="home")      html=renderHome();
   else if(S.nav==="dest") html=renderDest();
   else if(S.nav==="hunter")html=renderHunter();
-  else if(S.nav==="ach")  html=renderAch();
+  else if(S.nav==="perfil")html=renderPerfil();
   html+=renderNav();
   scr.innerHTML=html;
   const ms=document.getElementById("modal-slot");
   if(ms)ms.innerHTML=S.modal!==null?renderModal():"";
-  // restaurar foco/valor do search
+  if(S.editingProfile){
+    const ms2=document.getElementById("modal-slot");
+    if(ms2)ms2.innerHTML=renderEditProfile();
+  }
   const inp=document.getElementById("search-input");
   if(inp&&S.query){inp.value=S.query;document.getElementById("search-clear").classList.add("show");}
 }
@@ -370,7 +418,7 @@ function renderNav(){
     {id:"home",  ico:"⊞", lbl:"visitados"},
     {id:"dest",  ico:"✦", lbl:"destaques"},
     {id:"hunter",ico:"🎯",lbl:"hunter"},
-    {id:"ach",   ico:"🏆",lbl:"conquistas"},
+    {id:"perfil",ico:"◉", lbl:"perfil"},
   ];
   return`<div class="bnav">${tabs.map(t=>`<button class="bntab${S.nav===t.id?" on":""}" onclick="setNav('${t.id}')"><span class="bnico">${t.ico}</span><span class="bnlbl">${t.lbl}</span></button>`).join("")}</div>`;
 }
@@ -391,78 +439,50 @@ function renderSearchBar(){
   return`<div class="search-wrap">
     <span class="search-icon">🔍</span>
     <input class="search-input" id="search-input" type="search" placeholder="Buscar por nome ou endereço…"
-      value="${S.query}"
-      oninput="onSearch(this.value)"
-      onkeydown="if(event.key==='Escape'){clearSearch()}"
-    />
-    <button class="search-clear${S.query?" show":""}" id="search-clear" onclick="clearSearch()">✕</button>
+      oninput="setQuery(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/>
+    <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
   </div>`;
-}
-
-function onSearch(q){
-  S.query=q;
-  const clr=document.getElementById("search-clear");
-  if(clr)clr.classList.toggle("show",!!q);
-  renderSearchArea();
-}
-
-function clearSearch(){
-  S.query="";
-  const inp=document.getElementById("search-input");
-  if(inp)inp.value="";
-  const clr=document.getElementById("search-clear");
-  if(clr)clr.classList.remove("show");
-  renderSearchArea();
-}
-
-function renderSearchArea(){
-  const area=document.getElementById("search-area");
-  if(!area)return;
-  area.innerHTML=S.query?renderSearchResults():renderGridContent();
 }
 
 function renderSearchResults(){
   const q=S.query.toLowerCase().trim();
-  const hits=S.restaurants.filter(r=>
-    r.name.toLowerCase().includes(q)||r.addr.toLowerCase().includes(q)||r.rede.toLowerCase().includes(q)
-  );
-  if(!hits.length) return`<div class="search-empty">Nenhum resultado para<br><strong>"${S.query}"</strong></div>`;
-  const col=r=>bc(r.rede);
+  const hits=S.restaurants.filter(r=>r.name.toLowerCase().includes(q)||r.addr.toLowerCase().includes(q)||r.rede.toLowerCase().includes(q));
+  if(!hits.length)return`<div class="search-empty">Nenhum resultado para<br><strong>"${S.query}"</strong></div>`;
   return`<div class="search-results">${hits.map(r=>{
     const v=(S.v[r.id]||0)>0;
+    const col=bc(r.rede);
     const nb=r.rede.charAt(0).toUpperCase()+r.rede.slice(1).split(" ")[0];
     return`<div class="search-item" onclick="openModal(${r.id})">
-      <div class="search-thumb">${mkThumb(r)}</div>
+      <div class="search-thumb">${imgOrSVG(r)}</div>
       <div class="search-info">
         <div class="search-name">${r.name}</div>
         <div class="search-addr">${r.addr}</div>
-        <span class="search-rede" style="background:${col(r)}22;color:${col(r)};border:.5px solid ${col(r)}44">${nb}</span>
+        <span class="search-rede" style="background:${col}22;color:${col};border:.5px solid ${col}44">${nb}</span>
       </div>
-      ${v?`<span class="search-check">✓</span>`:`<span style="font-size:12px;color:var(--faint)">◎</span>`}
+      ${v?`<span style="color:var(--green);font-size:16px">✓</span>`:`<span style="color:var(--faint);font-size:14px">◎</span>`}
     </div>`;
   }).join("")}</div>`;
 }
 
-function renderGridContent(){
+/* ── HOME ── */
+function renderMainContent(){
   const visited=S.restaurants.filter(r=>(S.v[r.id]||0)>0);
-  if(S.loadError) return`<div class="empty-state"><div class="empty-ico">⚠</div>Não foi possível carregar.<br><button class="retry-btn" onclick="fetchRestaurants()">↻ Tentar novamente</button></div>`;
-  if(!visited.length) return`<div class="empty-state"><div class="empty-ico">◎</div>${S.restaurants.length===0?"Nenhum restaurante na planilha ainda.":"Você ainda não garfou nenhum lugar.<br>Explore a aba <strong>destaques</strong>!"}</div>`;
+  if(S.loadError)return`<div class="empty-state"><div class="empty-ico">⚠</div>Não foi possível carregar.<br><button class="retry-btn" onclick="fetchRestaurants()">↻ Tentar</button></div>`;
+  if(!visited.length)return`<div class="empty-state"><div class="empty-ico">◎</div>${S.restaurants.length===0?"Nenhum restaurante na planilha.":"Você ainda não garfou nenhum lugar!"}</div>`;
   return`<div class="grid-3">${visited.map(r=>{
     const v=S.v[r.id]||0;
     const vals=Object.values(S.rat[r.id]||{});
     const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
-    return`<div class="pw" onclick="openModal(${r.id})">${mkPoster(r)}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
+    const content=r.img
+      ?`<img class="poster-img" src="${r.img}" alt="${r.name}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`
+      :mkSVG(r);
+    return`<div class="pw" onclick="openModal(${r.id})">${content}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
   }).join("")}</div>`;
 }
 
-/* ── HOME ── */
 function renderHome(){
-  const garf=garfCount();
-  const tot=totVisits();
-  const pend=S.restaurants.length-garf;
-  return`
-    ${renderTopbar()}
-    ${renderSearchBar()}
+  const garf=garfCount(),tot=totVisits(),pend=S.restaurants.length-garf;
+  return`${renderTopbar()}${renderSearchBar()}
     <div class="scroll-body">
       <div id="search-area">
         <div class="sec-head"><span class="sec-title">Visitados</span><span class="sec-sub">${garf} de ${S.restaurants.length}</span></div>
@@ -473,7 +493,7 @@ function renderHome(){
           <div class="stat-pill"><div class="stat-pill-v">${ACHS.filter(a=>S.ach[a.id]).length}</div><div class="stat-pill-l">conquistas</div></div>
         </div>
         <div class="divider"></div>
-        ${renderGridContent()}
+        ${renderMainContent()}
       </div>
       <div id="modal-slot"></div>
     </div>`;
@@ -483,32 +503,18 @@ function renderHome(){
 function renderDest(){
   const sugest=getSugestoes();
   const curtidos=S.restaurants.filter(r=>S.likes[r.id]);
-  const allList=S.restaurants;
-
-  const sugestH=!sugest.length
-    ?`<p class="dest-empty">Você já foi em todos! 🎉</p>`
-    :`<div class="cards-h">${sugest.map(r=>`<div class="dest-card" onclick="openModal(${r.id})">
-        <div class="dest-poster">${mkPosterSmall(r)}</div>
-        <div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div>
-      </div>`).join("")}</div>`;
-
-  const curtidosH=!curtidos.length
-    ?`<p class="dest-empty">Curta um lugar para ver aqui</p>`
-    :`<div class="cards-h">${curtidos.map(r=>`<div class="dest-card" onclick="openModal(${r.id})">
-        <div class="dest-poster">${mkPosterSmall(r)}</div>
-        <div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div>
-      </div>`).join("")}</div>`;
-
-  return`
-    ${renderTopbar()}
-    ${renderSearchBar()}
+  const destCard=r=>`<div class="dest-card" onclick="openModal(${r.id})">
+    <div class="dest-poster">${imgOrSVGSmall(r)}</div>
+    <div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div>
+  </div>`;
+  return`${renderTopbar()}${renderSearchBar()}
     <div class="scroll-body">
       <div id="search-area">
         <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
-        ${sugestH}
+        ${sugest.length?`<div class="cards-h">${sugest.map(destCard).join("")}</div>`:`<p class="dest-empty">Você já foi em todos! 🎉</p>`}
         <div class="divider"></div>
         <div class="sec-head"><span class="sec-title">Curtidos</span><span class="sec-sub">seus favoritos</span></div>
-        ${curtidosH}
+        ${curtidos.length?`<div class="cards-h">${curtidos.map(destCard).join("")}</div>`:`<p class="dest-empty">Curta um lugar para ver aqui</p>`}
       </div>
       <div id="modal-slot"></div>
     </div>`;
@@ -517,31 +523,25 @@ function renderDest(){
 /* ── HUNTER ── */
 function renderHunter(){
   const redes=getRedes();
-  if(!redes.length) return`${renderTopbar()}${renderSearchBar()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Nenhuma franquia encontrada.</div></div>`;
-
+  if(!redes.length)return`${renderTopbar()}${renderSearchBar()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Nenhuma franquia encontrada.</div></div>`;
+  const redesCompletas=redes.filter(rede=>{const t=S.restaurants.filter(r=>bk(r.rede)===rede);return t.length>0&&t.every(r=>(S.v[r.id]||0)>0)}).length;
   const franchiseH=redes.map(rede=>{
     const todos=S.restaurants.filter(r=>bk(r.rede)===rede);
     const garfados=todos.filter(r=>(S.v[r.id]||0)>0);
     const pct=todos.length?Math.round(garfados.length/todos.length*100):0;
-    const col=bc(rede);
-    const emoji=bemoji(rede);
+    const col=bc(rede),emoji=bemoji(rede);
     const nomeBonito=rede.charAt(0).toUpperCase()+rede.slice(1);
     const completo=garfados.length===todos.length&&todos.length>0;
     return`<div class="franchise-card" onclick="openFranchise('${rede}')">
       <div class="franchise-head">
         <div class="franchise-icon" style="background:${col}22;border:.5px solid ${col}44">${emoji}</div>
         <div class="franchise-info"><div class="franchise-name">${nomeBonito}</div><div class="franchise-count">${garfados.length} de ${todos.length} filial${todos.length>1?"is":""}</div></div>
-        <div class="franchise-right"><div class="franchise-pct" style="color:${completo?"var(--green)":col}">${pct}%</div>${completo?`<div class="franchise-check">✓</div>`:""}</div>
+        <div class="franchise-right"><div class="franchise-pct" style="color:${completo?"var(--green)":col}">${pct}%</div>${completo?`<div style="font-size:16px">✓</div>`:""}</div>
       </div>
       <div class="franchise-progress"><div class="franchise-prog-fill" style="width:${pct}%;background:${completo?"var(--green)":col}"></div></div>
     </div>`;
   }).join("");
-
-  const redesCompletas=redes.filter(rede=>{const t=S.restaurants.filter(r=>bk(r.rede)===rede);return t.length>0&&t.every(r=>(S.v[r.id]||0)>0)}).length;
-
-  return`
-    ${renderTopbar()}
-    ${renderSearchBar()}
+  return`${renderTopbar()}${renderSearchBar()}
     <div class="scroll-body">
       <div id="search-area">
         <div class="sec-head"><span class="sec-title">Hunter</span><span class="sec-sub">${redesCompletas}/${redes.length} completas</span></div>
@@ -553,23 +553,19 @@ function renderHunter(){
 
 function openFranchise(rede){
   const todos=S.restaurants.filter(r=>bk(r.rede)===rede);
-  const col=bc(rede);
   const nomeBonito=rede.charAt(0).toUpperCase()+rede.slice(1);
   const ms=document.getElementById("modal-slot");
   const listH=todos.map(r=>{
     const v=S.v[r.id]||0;
     return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer" onclick="openModal(${r.id})">
-      <div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;position:relative">${mkThumb(r)}</div>
+      <div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0">${imgOrSVG(r)}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
         <div style="font-size:10px;color:var(--muted)">${r.addr}</div>
         ${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}
       </div>
-      <div style="text-align:right;flex-shrink:0">
-        ${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>`
-             :`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint)"></div>`}
-        ${v>1?`<div style="font-size:9px;color:var(--gold);margin-top:2px">${v}x</div>`:""}
-      </div>
+      ${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>`
+           :`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint)"></div>`}
     </div>`;
   }).join("");
   ms.innerHTML=`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div>
@@ -579,43 +575,107 @@ function openFranchise(rede){
     </div></div>`;
 }
 
-/* ── CONQUISTAS ── */
-function renderAch(){
-  checkAchs();
-  const unlocked=ACHS.filter(a=>S.ach[a.id]),locked=ACHS.filter(a=>!S.ach[a.id]);
-  const pct=ACHS.length?Math.round(unlocked.length/ACHS.length*100):0;
-  const cards=list=>list.map(a=>`<div class="ach-card${S.ach[a.id]?" unlocked":""}"><div class="ach-ico">${a.ico}</div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>`).join("");
-  return`
-    ${renderTopbar()}
-    ${renderSearchBar()}
+/* ── PERFIL ── */
+function renderPerfil(){
+  const garf=garfCount(),tot=totVisits();
+  const achCount=ACHS.filter(a=>S.ach[a.id]).length;
+  const p=S.profile;
+  const initial=(p.name||"G").charAt(0).toUpperCase();
+  const avatarContent=p.avatar
+    ?`<img src="${p.avatar}" onerror="this.style.display='none'">${initial}`
+    :initial;
+  const visitados=S.restaurants.filter(r=>(S.v[r.id]||0)>0).slice(0,4);
+  const recentH=visitados.length
+    ?visitados.map(r=>`<div class="recent-item">
+        <div class="recent-thumb">${imgOrSVGSmall(r)}</div>
+        <div class="recent-info"><div class="recent-name">${r.name}</div><div class="recent-meta">${r.addr.split(",")[0]}</div></div>
+        <div class="recent-vc">${S.v[r.id]}x</div>
+      </div>`).join("")
+    :`<div style="padding:1rem 0;color:var(--faint);font-size:12px;text-align:center">Nenhuma visita ainda</div>`;
+
+  return`${renderTopbar()}
     <div class="scroll-body">
-      <div id="search-area">
-        <div class="sec-head"><span class="sec-title">Conquistas</span></div>
-        <div class="ach-prog">
-          <div class="ach-prog-top"><span class="ach-prog-title">progresso</span><span class="ach-prog-pct">${unlocked.length}/${ACHS.length} · ${pct}%</span></div>
-          <div class="ach-bar"><div class="ach-bar-fill" style="width:${pct}%"></div></div>
+      <div class="profile-hero">
+        <div class="avatar-wrap" onclick="S.editingProfile=true;render()">
+          <div class="avatar-circle">${avatarContent}</div>
+          <div class="avatar-edit">✎</div>
         </div>
-        ${unlocked.length?`<div class="ach-sec">desbloqueadas</div><div class="ach-grid">${cards(unlocked)}</div><div class="ach-sec">bloqueadas</div>`:`<div class="ach-sec">todas as conquistas</div>`}
-        <div class="ach-grid">${cards(locked)}</div>
+        <div class="profile-name-wrap">
+          <div class="profile-name">${p.name||"Explorador"}</div>
+          <button class="profile-edit-ico" onclick="S.editingProfile=true;render()">✎</button>
+        </div>
+        <div class="profile-bio">${p.bio||""}</div>
+        <div class="profile-stats">
+          <div class="pstat"><div class="pstat-v" style="color:var(--green)">${garf}</div><div class="pstat-l">garfados</div></div>
+          <div class="pstat-d"></div>
+          <div class="pstat"><div class="pstat-v">${tot}</div><div class="pstat-l">visitas</div></div>
+          <div class="pstat-d"></div>
+          <div class="pstat"><div class="pstat-v" style="color:var(--gold)">${achCount}</div><div class="pstat-l">conquistas</div></div>
+        </div>
+      </div>
+
+      <button class="share-btn" onclick="shareProgress()">📤 Compartilhar progresso</button>
+
+      <div class="sec-head"><span class="sec-title">Últimas garfadas</span></div>
+      <div class="recent-section">${recentH}</div>
+
+      <div class="sec-head"><span class="sec-title">Conquistas</span><span class="sec-sub">${achCount}/${ACHS.length}</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 1rem 1rem">
+        ${ACHS.map(a=>`<div title="${a.name}" style="width:38px;height:38px;border-radius:9px;background:var(--s2);border:.5px solid ${S.ach[a.id]?"var(--gold)":"var(--faint)"};display:flex;align-items:center;justify-content:center;font-size:19px;filter:${S.ach[a.id]?"none":"grayscale(1) opacity(.2)"}">${a.ico}</div>`).join("")}
       </div>
       <div id="modal-slot"></div>
     </div>`;
 }
 
-/* ── MODAL ── */
+function renderEditProfile(){
+  const p=S.profile;
+  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div>
+    <div class="msheet">
+      <div class="mhandle"></div>
+      <div class="edit-sheet">
+        <div class="edit-title">Editar perfil</div>
+        <div class="edit-label">Nome</div>
+        <input class="edit-input" id="ep-name" placeholder="Seu nome" value="${p.name||""}"/>
+        <div class="edit-label">Bio</div>
+        <input class="edit-input" id="ep-bio" placeholder="Uma frase sobre você" value="${p.bio||""}"/>
+        <div class="edit-label">URL da foto de perfil (opcional)</div>
+        <input class="edit-input" id="ep-avatar" placeholder="https://..." value="${p.avatar||""}"/>
+        <button class="edit-save" onclick="saveProfile()">Salvar</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function saveProfile(){
+  S.profile.name=document.getElementById("ep-name").value.trim()||"Explorador";
+  S.profile.bio=document.getElementById("ep-bio").value.trim();
+  S.profile.avatar=document.getElementById("ep-avatar").value.trim();
+  S.editingProfile=false;S.modal=null;
+  saveLocal();render();toast("✓ Perfil atualizado!");
+}
+
+function shareProgress(){
+  const garf=garfCount();
+  const tot=totVisits();
+  const txt=`🍴 Garfado\n${S.profile.name||"Explorador"} garfou ${garf} de ${S.restaurants.length} lugares na Paulista!\n${tot} visitas · ${ACHS.filter(a=>S.ach[a.id]).length} conquistas desbloqueadas`;
+  if(navigator.share){navigator.share({title:"Garfado",text:txt}).catch(()=>{})}
+  else if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>toast("✓ Copiado para o clipboard!"));}
+}
+
+/* ── MODAL RESTAURANTE ── */
 function renderModal(){
   if(S.modal===null)return"";
   const r=S.restaurants.find(x=>x.id===S.modal);
   if(!r)return"";
   const v=S.v[r.id]||0,liked=S.likes[r.id],myR=S.rat[r.id]||{},note=S.notes[r.id]||"";
   const critH=CRIT.map(c=>{const cur=myR[c]||0;return`<div class="crow"><span class="clbl">${c}</span><div class="srow">${[1,2,3,4,5].map(n=>`<button class="sbtn${n<=cur?" lit":""}" onclick="setRat(${r.id},'${c}',${n})">★</button>`).join("")}</div>${cur?`<span style="font-size:11px;color:var(--muted);margin-left:5px">${cur}.0</span>`:""}</div>`;}).join("");
-  const posterHTML=r.img
-    ?`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><div style="display:none;width:100%;height:100%">${mkSVG(r)}</div>`
+  const posterContent=r.img
+    ?`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVG(r)}`
     :mkSVG(r);
   return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet">
     <div class="mhandle"></div>
     <div class="mhead"><div class="mtitle">${r.name}</div><div class="msub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div></div>
-    <div class="mposter">${posterHTML}${v>0?'<div class="mribbon">garfado</div>':""}</div>
+    <div class="mposter">${posterContent}${v>0?'<div class="mribbon">garfado</div>':""}</div>
     <div class="mactions">
       <button class="mact" onclick="addVisit(${r.id},1)"><span class="mact-ico${v>0?" aw":""}">◎</span><span class="mact-lbl">${v>0?v+"x garfado":"Garfar"}</span></button>
       <button class="mact" onclick="toggleLike(${r.id})"><span class="mact-ico${liked?" al":""}">${liked?"♥":"♡"}</span><span class="mact-lbl">Curtir</span></button>
@@ -636,6 +696,8 @@ function renderModal(){
     </div>
   </div></div>`;
 }
+
+/* ── CONQUISTAS saiu da nav → perfil tem resumo ── */
 
 loadLocal();
 fetchRestaurants();
