@@ -47,53 +47,58 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .sec-sub{font-size:10px;color:var(--muted)}
 
 /* GRID */
+/* ── POSTER UNIVERSAL: proporção 2:3 em todos os contextos ── */
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 3px}
-.pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:5px;overflow:hidden;touch-action:manipulation}
+
+/* pw = poster no grid (ocupa célula inteira) */
+.pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:6px;overflow:hidden;touch-action:manipulation}
 .pw:active{opacity:.75}
 .pw svg,.pw img.pi{width:100%;height:100%;object-fit:cover;display:block}
-.pvc{position:absolute;top:5px;right:5px;background:var(--green);color:#0f1117;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none}
-.pvn{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px;pointer-events:none}
-.pmr{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px;pointer-events:none}
-.pw-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);padding:20px 6px 6px;pointer-events:none}
-.pw-label-name{font-size:10px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* pw-md = poster médio: carrosséis e destaques (largura fixa, 2:3) */
+.pw-md{position:relative;width:110px;flex-shrink:0;aspect-ratio:2/3;cursor:pointer;border-radius:6px;overflow:hidden;touch-action:manipulation;border:.5px solid var(--faint)}
+.pw-md:active{opacity:.75}
+.pw-md svg,.pw-md img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* pw-sm = poster pequeno: listas inline (largura fixa, 2:3) */
+.pw-sm{position:relative;width:40px;flex-shrink:0;aspect-ratio:2/3;border-radius:4px;overflow:hidden}
+.pw-sm svg,.pw-sm img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* overlays comuns */
+.pvc{position:absolute;top:4px;right:4px;background:var(--green);color:#0f1117;font-size:8px;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.pvn{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.8);color:var(--gold);font-size:8px;padding:1px 4px;border-radius:99px;pointer-events:none}
+.pmr{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.8);color:var(--gold);font-size:8px;padding:1px 4px;border-radius:99px;pointer-events:none}
+.pw-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 100%);padding:18px 5px 5px;pointer-events:none}
+.pw-overlay-name{font-size:9px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pw-overlay-sub{font-size:7px;color:var(--green);margin-top:1px}
 
 /* CHECK-IN CTA */
 .checkin-cta{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:6px;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 50%);pointer-events:none}
 .checkin-label{font-size:8px;color:var(--green);text-align:center;line-height:1.3;font-weight:500}
 
-/* FRIEND STRIP */
-.friend-strip{display:flex;gap:3px;padding:0 3px 6px;overflow-x:auto}
+/* FRIEND STRIP — usa pw-md */
+.friend-strip{display:flex;gap:6px;padding:0 12px 6px;overflow-x:auto}
 .friend-strip::-webkit-scrollbar{display:none}
-.friend-pw{position:relative;width:90px;flex-shrink:0;aspect-ratio:2/3;cursor:pointer;border-radius:5px;overflow:hidden;border:.5px solid var(--faint);touch-action:manipulation}
-.friend-pw svg,.friend-pw img{width:100%;height:100%;object-fit:cover;display:block}
-.friend-pw-avatar{position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:var(--green);font-size:8px;font-weight:700;color:#0f1117;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg);overflow:hidden;pointer-events:none}
-.friend-pw-avatar img{width:100%;height:100%;object-fit:cover}
-.friend-pw-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);padding:14px 4px 4px;pointer-events:none}
-.friend-pw-name{font-size:8px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.friend-pw-who{font-size:7px;color:var(--green)}
+.friend-av-badge{position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:var(--green);font-size:8px;font-weight:700;color:#0f1117;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg);overflow:hidden;pointer-events:none;z-index:2}
+.friend-av-badge img{width:100%;height:100%;object-fit:cover}
 
 /* SEARCH */
 .search-results{padding:0 8px}
 .search-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px;touch-action:manipulation}
 .search-item:active{background:var(--s2)}
-.search-thumb{width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;pointer-events:none}
-.search-thumb img,.search-thumb svg{width:100%;height:100%;object-fit:cover;display:block}
+.search-thumb{pointer-events:none;flex-shrink:0}
 .search-info{flex:1;min-width:0;pointer-events:none}
 .search-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .search-addr{font-size:10px;color:var(--muted);margin-top:1px}
 .search-rede{font-size:9px;padding:1px 6px;border-radius:99px;margin-top:3px;display:inline-block}
 
-/* DESTAQUES */
-.cards-h{display:flex;gap:10px;padding:0 1rem .75rem;overflow-x:auto}
+/* DESTAQUES — carrossel usa pw-md diretamente */
+.cards-h{display:flex;gap:8px;padding:0 12px .875rem;overflow-x:auto}
 .cards-h::-webkit-scrollbar{display:none}
-.dest-card{width:130px;flex-shrink:0;cursor:pointer;border-radius:10px;overflow:hidden;background:var(--s2);border:.5px solid var(--faint);touch-action:manipulation}
-.dest-card:active{opacity:.75}
-.dest-poster{width:100%;height:100px;overflow:hidden;pointer-events:none}
-.dest-poster img,.dest-poster svg{width:100%;height:100%;object-fit:cover;display:block}
-.dest-info{padding:6px 8px 8px;pointer-events:none}
-.dest-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dest-meta{font-size:9px;color:var(--muted)}
-.dest-rating{color:var(--gold);font-size:9px}
+.pw-md-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88),transparent);padding:22px 6px 6px;pointer-events:none}
+.pw-md-name{font-size:10px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pw-md-meta{font-size:8px;color:#aabbcc;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pw-md-rating{color:var(--gold);font-size:8px;margin-top:1px}
 
 /* HUNTER — pointer-events corretos */
 .franchise-list{padding:0 1rem;display:flex;flex-direction:column;gap:8px;padding-bottom:1rem}
@@ -117,7 +122,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .feed-text{font-size:12px;color:var(--text);line-height:1.5}
 .feed-name-link{color:var(--green);cursor:pointer;font-weight:600;background:none;border:none;font-size:12px;font-family:inherit;padding:0;touch-action:manipulation}
 .feed-time{font-size:10px;color:var(--faint);margin-top:2px}
-.feed-thumb{width:32px;height:48px;border-radius:4px;overflow:hidden;flex-shrink:0;cursor:pointer;touch-action:manipulation}
+.feed-thumb{width:32px;aspect-ratio:2/3;border-radius:4px;overflow:hidden;flex-shrink:0;cursor:pointer;touch-action:manipulation}
 .feed-thumb img,.feed-thumb svg{width:100%;height:100%;object-fit:cover;display:block}
 
 .follower-row{display:flex;align-items:center;gap:10px;padding:10px 1rem;border-bottom:.5px solid var(--faint)}
@@ -173,7 +178,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .mhead{padding:.75rem 1.25rem 0;text-align:center}
 .mtitle{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--text)}
 .msub{font-size:11px;color:var(--muted);margin-top:3px}
-.mposter{width:100px;height:150px;border-radius:8px;overflow:hidden;margin:.875rem auto;position:relative}
+.mposter{width:100px;aspect-ratio:2/3;border-radius:8px;overflow:hidden;margin:.875rem auto;position:relative}
 .mposter img,.mposter svg{width:100%;height:100%;object-fit:cover;display:block}
 .mribbon{position:absolute;top:9px;left:-20px;background:var(--green);color:#0f1117;font-size:8px;font-weight:700;padding:2px 24px;transform:rotate(-45deg);pointer-events:none}
 .mactions{display:flex;justify-content:space-around;padding:.75rem 1.25rem;border-top:.5px solid var(--faint);border-bottom:.5px solid var(--faint)}
@@ -672,7 +677,7 @@ function rSearchRes(){
   const q=A.query.toLowerCase();
   const hits=A.restaurants.filter(r=>r.name.toLowerCase().includes(q)||r.addr.toLowerCase().includes(q)||r.rede.toLowerCase().includes(q));
   if(!hits.length)return`<div style="text-align:center;padding:2rem 1rem;color:var(--faint);font-size:12px">Nenhum resultado para "<strong>${A.query}</strong>"</div>`;
-  return`<div class="search-results">${hits.map(r=>{const v=(A.visits[r.id]||0)>0,col=bc(r.rede),nb=r.rede.charAt(0).toUpperCase()+r.rede.slice(1).split(" ")[0];return`<div class="search-item" onclick="openModal(${r.id})"><div class="search-thumb">${posterPlain(r)}</div><div class="search-info"><div class="search-name">${r.name}</div><div class="search-addr">${r.addr}</div><span class="search-rede" style="background:${col}22;color:${col};border:.5px solid ${col}44">${nb}</span></div>${v?`<span style="color:var(--green);font-size:16px;pointer-events:none">✓</span>`:`<span style="color:var(--faint);font-size:14px;pointer-events:none">◎</span>`}</div>`;}).join("")}</div>`;
+  return`<div class="search-results">${hits.map(r=>{const v=(A.visits[r.id]||0)>0,col=bc(r.rede),nb=r.rede.charAt(0).toUpperCase()+r.rede.slice(1).split(" ")[0];return`<div class="search-item" onclick="openModal(${r.id})"><div class="pw-sm search-thumb">${posterPlain(r)}</div><div class="search-info"><div class="search-name">${r.name}</div><div class="search-addr">${r.addr}</div><span class="search-rede" style="background:${col}22;color:${col};border:.5px solid ${col}44">${nb}</span></div>${v?`<span style="color:var(--green);font-size:16px;pointer-events:none">✓</span>`:`<span style="color:var(--faint);font-size:14px;pointer-events:none">◎</span>`}</div>`;}).join("")}</div>`;
 }
 
 /* strip de amigos */
@@ -681,10 +686,10 @@ function rFriendStrip(){
   if(!cands.length)return"";
   const cards=cands.map(r=>{
     const fw=friendsWho(r.id),f=fw[0],ini=(f.name||"?").charAt(0).toUpperCase();
-    return`<div class="friend-pw" onclick="openModal(${r.id})" type="button">
+    return`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
       ${posterPlain(r)}
-      <div class="friend-pw-avatar">${f.avatar?`<img src="${f.avatar}" onerror="this.style.display='none'">${ini}`:ini}</div>
-      <div class="friend-pw-label"><div class="friend-pw-name">${r.name}</div><div class="friend-pw-who">${fw.length===1?f.name.split(" ")[0]:`${fw.length} amigos`}</div></div>
+      <div class="friend-av-badge">${f.avatar?`<img src="${f.avatar}" onerror="this.style.display='none'">${ini}`:ini}</div>
+      <div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div><div class="pw-overlay-sub">${fw.length===1?f.name.split(" ")[0]:`${fw.length} amigos`}</div></div>
     </div>`;
   }).join("");
   return`<div class="sec-head"><span class="sec-title">Amigos foram aqui</span><span class="sec-sub">você ainda não foi</span></div><div class="friend-strip">${cards}</div><div class="divider"></div>`;
@@ -697,7 +702,7 @@ function rMainContent(){
     const v=A.visits[r.id]||0;
     const vals=Object.values(A.ratings[r.id]||{}).filter(x=>typeof x==="number");
     const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
-    const c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`:mkSVG(r);
+    const c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div></div>`:mkSVG(r);
     return`<div class="pw" onclick="openModal(${r.id})">${c}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
   }).join("")}</div>`;
 }
@@ -716,7 +721,15 @@ function rHome(){
 function rDest(){
   const sg=A.restaurants.filter(r=>!(A.visits[r.id]>0)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8);
   const fav=A.restaurants.filter(r=>A.likes[r.id]);
-  const dc=r=>`<div class="dest-card" onclick="openModal(${r.id})"><div class="dest-poster">${posterSm(r)}</div><div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div></div>`;
+  const dc=r=>`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
+    ${posterPlain(r)}
+    <div class="pw-md-label">
+      <div class="pw-md-name">${r.name}</div>
+      <div class="pw-md-meta">${r.addr.split(",")[0]}</div>
+      ${r.rating?`<div class="pw-md-rating">★ ${r.rating}</div>`:""}
+    </div>
+    ${(A.visits[r.id]||0)>0?`<div class="pvc">✓</div>`:""}
+  </div>`;
   return`${rMainTopbar()}${rSearch()}
     <div class="scroll-body"><div id="search-area">
       <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
@@ -757,7 +770,7 @@ function rHunter(){
 function openFr(rede){
   const todos=A.restaurants.filter(r=>bk(r.rede)===rede),nome=rede.charAt(0).toUpperCase()+rede.slice(1);
   const ms=document.getElementById("modal-slot");if(!ms)return;
-  const lH=todos.map(r=>{const v=A.visits[r.id]||0;return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="openModal(${r.id})"><div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;pointer-events:none">${posterPlain(r)}</div><div style="flex:1;min-width:0;pointer-events:none"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr}</div>${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}</div>${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;pointer-events:none">✓</div>`:`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint);pointer-events:none"></div>`}</div>`;}).join("");
+  const lH=todos.map(r=>{const v=A.visits[r.id]||0;return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="openModal(${r.id})"><div class="pw-sm" style="pointer-events:none">${posterPlain(r)}</div><div style="flex:1;min-width:0;pointer-events:none"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr}</div>${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}</div>${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;pointer-events:none">✓</div>`:`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint);pointer-events:none"></div>`}</div>`;}).join("");
   ms.innerHTML=`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet"><div class="mhandle"></div><div class="mhead"><div class="mtitle">${nome}</div><div class="msub">${todos.filter(r=>(A.visits[r.id]||0)>0).length} de ${todos.length} garfadas</div></div><div style="padding:.75rem 1.25rem">${lH}</div></div></div>`;
   setTimeout(()=>initSwipe(),50);
 }
@@ -785,7 +798,7 @@ function rAmigos(){
             <div class="feed-text"><button class="feed-name-link" onclick="viewUserProfile('${pr.id}')" type="button">${pr.name||pr.username||"Alguém"}</button> garfou <strong>${v.restaurant_name}</strong>${v.count>1?` <span style="color:var(--gold)">${v.count}x</span>`:""}</div>
             <div class="feed-time">${tAgo(v.updated_at)}</div>
           </div>
-          ${r?`<div class="feed-thumb" onclick="openModal(${r.id})">${posterSm(r)}</div>`:""}
+          ${r?`<div class="feed-thumb pw-sm" onclick="openModal(${r.id})" style="width:32px;cursor:pointer;touch-action:manipulation">${posterSm(r)}</div>`:""}
         </div>`;
       }).join("");
 
@@ -816,7 +829,7 @@ function rPerfil(){
   if(A.profileView)return rProfileSubview(A.profileView);
   const pr=A.profile||{},ini=(pr.name||"G").charAt(0).toUpperCase(),g=garfCount();
   const vis=A.restaurants.filter(r=>(A.visits[r.id]||0)>0).slice(0,4);
-  const recH=vis.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="openModal(${r.id})"><div style="width:32px;height:48px;border-radius:4px;overflow:hidden;flex-shrink:0;pointer-events:none">${posterSm(r)}</div><div style="flex:1;min-width:0;pointer-events:none"><div style="font-size:12px;font-weight:500;color:var(--text)">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr.split(",")[0]}</div></div><div style="font-size:11px;color:var(--gold);font-weight:500;pointer-events:none">${A.visits[r.id]}x</div></div>`).join("");
+  const recH=vis.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="openModal(${r.id})"><div class="pw-sm" style="width:32px;pointer-events:none">${posterSm(r)}</div><div style="flex:1;min-width:0;pointer-events:none"><div style="font-size:12px;font-weight:500;color:var(--text)">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr.split(",")[0]}</div></div><div style="font-size:11px;color:var(--gold);font-weight:500;pointer-events:none">${A.visits[r.id]}x</div></div>`).join("");
   return`${rMainTopbar()}
     <div class="scroll-body">
       <div class="profile-hero">
@@ -848,7 +861,7 @@ function rProfileSubview(view){
   if(view==="garfados"){
     title=`Garfados (${garfCount()})`;
     const vis=A.restaurants.filter(r=>(A.visits[r.id]||0)>0);
-    content=vis.length?`<div class="grid-3" style="padding:3px">${vis.map(r=>{const v=A.visits[r.id]||0,c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}<div class="pvc">✓</div>${v>1?`<div class="pvn">${v}x</div>`:""}</div>`;}).join("")}</div>`:`<div class="empty-state"><div class="empty-ico">◎</div>Nenhum lugar garfado ainda.</div>`;
+    content=vis.length?`<div class="grid-3" style="padding:3px">${vis.map(r=>{const v=A.visits[r.id]||0,c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}<div class="pvc">✓</div>${v>1?`<div class="pvn">${v}x</div>`:""}</div>`;}).join("")}</div>`:`<div class="empty-state"><div class="empty-ico">◎</div>Nenhum lugar garfado ainda.</div>`;
   }else if(view==="conquistas"){
     title=`Conquistas (${A.achs.size}/${ADEFS.length})`;
     const ul=ADEFS.filter(a=>A.achs.has(a.id)),lk=ADEFS.filter(a=>!A.achs.has(a.id));
@@ -888,10 +901,10 @@ function rUserProfile(){
   const favoritos=A.restaurants.filter(r=>likes[r.id]);
 
   const garfH=garfados.length
-    ?`<div class="grid-3">${garfados.map(r=>{const v=visits[r.id]||0,c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}<div class="pvc">✓</div>${v>1?`<div class="pvn">${v}x</div>`:""}</div>`;}).join("")}</div>`
+    ?`<div class="grid-3">${garfados.map(r=>{const v=visits[r.id]||0,c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}<div class="pvc">✓</div>${v>1?`<div class="pvn">${v}x</div>`:""}</div>`;}).join("")}</div>`
     :`<p style="font-size:11px;color:var(--faint);text-align:center;padding:1rem 0">Nenhum lugar garfado</p>`;
   const favH=favoritos.length
-    ?`<div class="cards-h">${favoritos.map(r=>`<div class="dest-card" onclick="openModal(${r.id})"><div class="dest-poster">${posterSm(r)}</div><div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div></div></div>`).join("")}</div>`
+    ?`<div class="cards-h">${favoritos.map(r=>`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">${posterPlain(r)}<div class="pw-md-label"><div class="pw-md-name">${r.name}</div><div class="pw-md-meta">${r.addr.split(",")[0]}</div></div></div>`).join("")}</div>`
     :`<p style="font-size:11px;color:var(--faint);text-align:center;padding:.5rem 1rem 1rem">Nenhum favorito ainda</p>`;
   const achH=ADEFS.map(a=>`<div title="${a.name}" style="width:36px;height:36px;border-radius:9px;background:var(--s2);border:.5px solid ${achs.has(a.id)?"var(--gold)":"var(--faint)"};display:flex;align-items:center;justify-content:center;font-size:18px;filter:${achs.has(a.id)?"none":"grayscale(1) opacity(.2)"}">${a.ico}</div>`).join("");
 
