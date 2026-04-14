@@ -17,7 +17,6 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 
 .notch{width:80px;height:20px;background:var(--s1);border-radius:0 0 14px 14px;margin:0 auto;flex-shrink:0}
 
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 6px;border-bottom:.5px solid var(--faint);flex-shrink:0}
 .logo-row{display:flex;align-items:center;gap:8px}
 .logo-svg{width:18px;height:26px}
@@ -30,35 +29,14 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 @keyframes spin{to{transform:rotate(360deg)}}
 .ver{font-size:9px;color:var(--faint);background:var(--s2);padding:2px 8px;border-radius:99px;border:.5px solid var(--faint)}
 
-/* BARRA DE PESQUISA */
-.search-bar{padding:8px 12px;flex-shrink:0;border-bottom:.5px solid var(--faint);background:var(--bg)}
-.search-wrap{display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:10px;padding:0 12px;border:.5px solid var(--faint);transition:border-color .15s}
-.search-wrap:focus-within{border-color:var(--green)}
-.search-ico{font-size:14px;color:var(--muted);flex-shrink:0}
-.search-input{flex:1;background:transparent;border:none;outline:none;font-size:13px;color:var(--text);padding:9px 0;font-family:inherit}
+/* SEARCH BAR */
+.search-wrap{padding:8px 12px;border-bottom:.5px solid var(--faint);flex-shrink:0;position:relative}
+.search-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:8px 36px 8px 34px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--green)}
 .search-input::placeholder{color:var(--faint)}
-.search-clear{background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;padding:4px;border-radius:50%;line-height:1;display:none;transition:color .15s}
-.search-clear:hover{color:var(--text)}
-.search-clear.visible{display:block}
-
-/* RESULTADOS DE PESQUISA */
-.search-results{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.search-results::-webkit-scrollbar{display:none}
-.search-result-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:.5px solid var(--faint);cursor:pointer;transition:background .15s}
-.search-result-item:active{background:var(--s2)}
-.sr-poster{width:38px;height:57px;border-radius:4px;overflow:hidden;flex-shrink:0}
-.sr-poster svg{width:100%;height:100%;display:block}
-.sr-info{flex:1;min-width:0}
-.sr-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sr-addr{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
-.sr-meta{display:flex;align-items:center;gap:6px;margin-top:4px}
-.sr-badge{font-size:9px;padding:1px 6px;border-radius:99px}
-.sr-rating{font-size:10px;color:var(--gold)}
-.sr-check{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
-.sr-check.done{background:var(--green);color:#0f1117}
-.sr-check.pending{border:.5px solid var(--faint)}
-.search-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 1.5rem;color:var(--faint);font-size:12px;text-align:center;line-height:1.8}
-.search-empty-ico{font-size:32px;margin-bottom:8px;opacity:.3}
+.search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--faint);font-size:15px;pointer-events:none}
+.search-clear{position:absolute;right:22px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--faint);font-size:16px;padding:2px;line-height:1;display:none}
+.search-clear.show{display:block}
 
 /* BOTTOM NAV */
 .bnav{display:flex;border-top:.5px solid var(--faint);background:var(--bg);flex-shrink:0}
@@ -68,43 +46,58 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .bntab.on{border-top-color:var(--green)}
 .bntab.on .bnico,.bntab.on .bnlbl{color:var(--green)}
 
-/* LOADING */
 .loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px}
 .loading-txt{font-size:13px;color:var(--muted)}
 .loading-dots::after{content:"...";animation:dots 1.2s steps(4,end) infinite}
 @keyframes dots{0%,20%{content:"."}40%{content:".."}60%,100%{content:"..."}}
 
-/* SCROLL CONTAINER */
 .scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .scroll-body::-webkit-scrollbar{display:none}
 
-/* SECTION HEADER */
 .sec-head{padding:1rem 1rem .5rem;display:flex;align-items:baseline;justify-content:space-between}
 .sec-title{font-family:Georgia,serif;font-size:15px;font-weight:700;color:var(--text)}
 .sec-sub{font-size:10px;color:var(--muted)}
 
-/* STATS ROW */
 .stats-row{display:flex;gap:8px;padding:0 1rem .75rem;overflow-x:auto}
 .stats-row::-webkit-scrollbar{display:none}
 .stat-pill{background:var(--s2);border-radius:12px;padding:8px 12px;flex-shrink:0;text-align:center;min-width:64px}
 .stat-pill-v{font-size:18px;font-weight:500;color:var(--text)}
 .stat-pill-l{font-size:9px;color:var(--muted);margin-top:1px}
 
-/* GRID */
+/* POSTER GRID */
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 3px}
 .pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:5px;overflow:hidden;transition:opacity .15s}
 .pw:active{opacity:.75}
 .pw svg{width:100%;height:100%;display:block}
+.pw img.poster-img{width:100%;height:100%;object-fit:cover;display:block}
 .pvc{position:absolute;top:5px;right:5px;background:var(--green);color:#0f1117;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
 .pvn{position:absolute;bottom:5px;right:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px}
 .pmr{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px}
+/* overlay de nome no poster com imagem */
+.pw-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 100%);padding:20px 6px 6px;pointer-events:none}
+.pw-label-name{font-size:10px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* SEARCH RESULTS */
+.search-results{padding:0 3px}
+.search-item{display:flex;align-items:center;gap:10px;padding:8px 8px;border-radius:8px;cursor:pointer;transition:background .15s;margin-bottom:4px}
+.search-item:hover,.search-item:active{background:var(--s2)}
+.search-thumb{width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;position:relative}
+.search-thumb img{width:100%;height:100%;object-fit:cover}
+.search-thumb svg{width:100%;height:100%;display:block}
+.search-info{flex:1;min-width:0}
+.search-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-addr{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-rede{font-size:9px;padding:1px 6px;border-radius:99px;margin-top:3px;display:inline-block}
+.search-check{font-size:14px;color:var(--green);flex-shrink:0}
+.search-empty{text-align:center;padding:2rem 1rem;color:var(--faint);font-size:12px;line-height:1.7}
 
 /* DESTAQUES */
 .cards-h{display:flex;gap:10px;padding:0 1rem .75rem;overflow-x:auto}
 .cards-h::-webkit-scrollbar{display:none}
 .dest-card{width:130px;flex-shrink:0;cursor:pointer;border-radius:10px;overflow:hidden;background:var(--s2);border:.5px solid var(--faint);transition:opacity .15s}
 .dest-card:active{opacity:.75}
-.dest-poster{width:100%;height:100px;overflow:hidden}
+.dest-poster{width:100%;height:100px;overflow:hidden;position:relative}
+.dest-poster img{width:100%;height:100%;object-fit:cover}
 .dest-poster svg{width:100%;height:100%;display:block}
 .dest-info{padding:6px 8px 8px}
 .dest-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -125,8 +118,8 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .franchise-prog-fill{height:3px;border-radius:99px;transition:width .4s}
 .franchise-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
 .franchise-pct{font-size:13px;font-weight:500}
+.franchise-check{font-size:16px}
 
-/* EMPTY */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;color:var(--faint);font-size:12px;text-align:center;line-height:1.8}
 .empty-ico{font-size:32px;margin-bottom:8px;opacity:.3}
 
@@ -139,6 +132,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .mtitle{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--text)}
 .msub{font-size:11px;color:var(--muted);margin-top:3px}
 .mposter{width:100px;height:150px;border-radius:8px;overflow:hidden;margin:.875rem auto;position:relative}
+.mposter img{width:100%;height:100%;object-fit:cover}
 .mposter svg{width:100%;height:100%;display:block}
 .mribbon{position:absolute;top:9px;left:-20px;background:var(--green);color:#0f1117;font-size:8px;font-weight:700;padding:2px 24px;transform:rotate(-45deg)}
 .mactions{display:flex;justify-content:space-around;padding:.75rem 1.25rem;border-top:.5px solid var(--faint);border-bottom:.5px solid var(--faint)}
@@ -182,11 +176,15 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .ach-desc{font-size:10px;color:var(--faint);line-height:1.4}
 .ach-sec{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:0 1rem .625rem}
 
-/* TOAST */
 .toast{position:absolute;bottom:72px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--green);color:#0f1117;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:700;transition:transform .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;z-index:999;pointer-events:none;box-shadow:0 4px 20px rgba(74,222,128,.3)}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .retry-btn{margin-top:10px;padding:8px 18px;background:#DA291C;color:white;border:none;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
 .divider{height:.5px;background:var(--faint);margin:0 1rem .75rem}
+
+/* dica coluna imagem */
+.img-tip{background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:.875rem 1rem;margin:.75rem 1rem 0;font-size:11px;color:var(--muted);line-height:1.6}
+.img-tip strong{color:var(--text)}
+.img-tip code{font-family:monospace;font-size:10px;background:var(--bg);padding:1px 5px;border-radius:4px;color:var(--green)}
 </style>
 </head>
 <body>
@@ -208,7 +206,7 @@ function bk(r){return(r||"outro").toLowerCase().trim()}
 function bc(r){return BC[bk(r)]||"#4ade80"}
 function bb(r){return BB[bk(r)]||"#0f1117"}
 function bi(r){return BI[bk(r)]||"◎"}
-function be(r){return BEMOJI[bk(r)]||"🍽️"}
+function bemoji(r){return BEMOJI[bk(r)]||"🍽️"}
 
 const LOGO=`<svg class="logo-svg" viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg"><line x1="9" y1="1" x2="9" y2="15" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="1" x2="4" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="1" x2="14" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><path d="M4 8 Q9 13 14 8" fill="none" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="25" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="20" r="3.2" fill="#4ade80"/></svg>`;
 
@@ -236,6 +234,8 @@ async function fetchRestaurants(spin=true){
       rede:String(r.rede||"Outro").trim(),
       hours:String(r.horario||"–").trim(),
       rating:r.nota?parseFloat(r.nota):null,
+      // coluna "imagem" opcional — URL direta da foto
+      img:String(r.imagem||"").trim()||null,
     }));
     S.loading=false;S.loadError=false;S.lastLoaded=new Date();
     toast("✓ "+S.restaurants.length+" restaurantes carregados!");
@@ -247,7 +247,8 @@ async function fetchRestaurants(spin=true){
   if(btn2)btn2.classList.remove("spinning");
 }
 
-function mkPoster(r){
+/* ── POSTER SVG fallback ── */
+function mkSVG(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
   const nm=r.name.length>14?r.name.slice(0,13)+"…":r.name;
   const ad=r.addr.length>17?r.addr.slice(0,16)+"…":r.addr;
@@ -262,7 +263,7 @@ function mkPoster(r){
   </svg>`;
 }
 
-function mkPosterSmall(r){
+function mkSVGSmall(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
   const nm=r.name.length>13?r.name.slice(0,12)+"…":r.name;
   return`<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
@@ -274,11 +275,34 @@ function mkPosterSmall(r){
   </svg>`;
 }
 
+/* renderiza o poster: imagem real se tiver, SVG se não */
+function mkPoster(r){
+  if(r.img){
+    return`<img class="poster-img" src="${r.img}" alt="${r.name}" onerror="this.style.display='none';this.nextSibling.style.display='block'"/>
+    <div style="display:none;width:100%;height:100%">${mkSVG(r)}</div>
+    <div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`;
+  }
+  return mkSVG(r);
+}
+
+function mkPosterSmall(r){
+  if(r.img){
+    return`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.outerHTML='${mkSVGSmall(r).replace(/'/g,"\\'")}'"/>`;
+  }
+  return mkSVGSmall(r);
+}
+
+function mkThumb(r){
+  if(r.img){
+    return`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"/>`;
+  }
+  return mkSVG(r);
+}
+
 const CRIT=["Comida","Atendimento","Limpeza","Banheiro"];
 function totVisits(){return Object.values(S.v).reduce((a,b)=>a+b,0)}
 function garfCount(){return S.restaurants.filter(r=>(S.v[r.id]||0)>0).length}
 function getRedes(){return[...new Set(S.restaurants.map(r=>bk(r.rede)).filter(Boolean))]}
-function getSugestoes(){return S.restaurants.filter(r=>!(S.v[r.id]>0)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8)}
 
 function addVisit(id,d){S.v[id]=Math.max(0,(S.v[id]||0)+d);saveLocal();checkAchs();render()}
 function toggleLike(id){S.likes[id]=!S.likes[id];saveLocal();render()}
@@ -286,54 +310,10 @@ function setRat(rid,c,v){if(!S.rat[rid])S.rat[rid]={};S.rat[rid][c]=v;saveLocal(
 function openModal(id){S.modal=id;render()}
 function closeModal(){S.modal=null;render()}
 function setNav(n){S.nav=n;S.modal=null;S.query="";render()}
+function setQuery(q){S.query=q;renderSearchArea()}
 
-/* PESQUISA */
-function onSearch(val){
-  S.query=val;
-  const clr=document.getElementById("search-clear");
-  if(clr)clr.classList.toggle("visible",val.length>0);
-  const res=document.getElementById("search-results-wrap");
-  if(res)res.innerHTML=val.trim().length>0?renderSearchResults():"";
-}
-function clearSearch(){
-  S.query="";
-  const inp=document.getElementById("search-input");
-  if(inp){inp.value="";inp.focus();}
-  const clr=document.getElementById("search-clear");
-  if(clr)clr.classList.remove("visible");
-  const res=document.getElementById("search-results-wrap");
-  if(res)res.innerHTML="";
-}
-function renderSearchResults(){
-  const q=S.query.toLowerCase().trim();
-  if(!q)return"";
-  const matches=S.restaurants.filter(r=>
-    r.name.toLowerCase().includes(q)||
-    r.addr.toLowerCase().includes(q)||
-    r.rede.toLowerCase().includes(q)
-  );
-  if(!matches.length){
-    return`<div class="search-empty"><div class="search-empty-ico">🔍</div>Nenhum resultado para<br><strong style="color:var(--text)">"${S.query}"</strong></div>`;
-  }
-  return matches.map(r=>{
-    const v=S.v[r.id]||0;
-    const col=bc(r.rede);
-    const done=v>0;
-    const nm=r.rede.charAt(0).toUpperCase()+r.rede.slice(1);
-    return`<div class="search-result-item" onclick="openModal(${r.id})">
-      <div class="sr-poster">${mkPoster(r)}</div>
-      <div class="sr-info">
-        <div class="sr-name">${r.name}</div>
-        <div class="sr-addr">${r.addr}</div>
-        <div class="sr-meta">
-          <span class="sr-badge" style="background:${col}22;color:${col};border:.5px solid ${col}44">${nm}</span>
-          ${r.rating?`<span class="sr-rating">★ ${r.rating}</span>`:""}
-          ${r.hours&&r.hours!=="–"?`<span style="font-size:9px;color:var(--muted)">${r.hours}</span>`:""}
-        </div>
-      </div>
-      <div class="sr-check ${done?"done":"pending"}">${done?"✓":""}</div>
-    </div>`;
-  }).join("");
+function getSugestoes(){
+  return S.restaurants.filter(r=>!(S.v[r.id]>0)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8);
 }
 
 const ACHS=[
@@ -366,14 +346,9 @@ function render(){
   scr.innerHTML=html;
   const ms=document.getElementById("modal-slot");
   if(ms)ms.innerHTML=S.modal!==null?renderModal():"";
-  /* restaurar query no input após render */
+  // restaurar foco/valor do search
   const inp=document.getElementById("search-input");
-  if(inp&&S.query){
-    inp.value=S.query;
-    document.getElementById("search-clear")?.classList.add("visible");
-    const res=document.getElementById("search-results-wrap");
-    if(res)res.innerHTML=renderSearchResults();
-  }
+  if(inp&&S.query){inp.value=S.query;document.getElementById("search-clear").classList.add("show");}
 }
 
 function renderLoading(){
@@ -406,156 +381,205 @@ function renderTopbar(){
     <div class="logo-row">${LOGO}<span class="wm">garfado</span></div>
     <div class="topbar-right">
       <span class="last-time">${lastTxt}</span>
-      <button class="reload-btn" id="reload-btn" onclick="fetchRestaurants(false)" title="Atualizar">↻</button>
+      <button class="reload-btn" id="reload-btn" onclick="fetchRestaurants(false)">↻</button>
       <span class="ver">v${VERSION}</span>
     </div>
   </div>`;
 }
 
 function renderSearchBar(){
-  return`<div class="search-bar">
-    <div class="search-wrap">
-      <span class="search-ico">🔍</span>
-      <input
-        class="search-input"
-        id="search-input"
-        type="search"
-        placeholder="Buscar por nome, endereço ou rede..."
-        autocomplete="off"
-        oninput="onSearch(this.value)"
-      />
-      <button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button>
-    </div>
-  </div>
-  <div class="search-results" id="search-results-wrap" style="display:contents"></div>`;
+  return`<div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="search-input" type="search" placeholder="Buscar por nome ou endereço…"
+      value="${S.query}"
+      oninput="onSearch(this.value)"
+      onkeydown="if(event.key==='Escape'){clearSearch()}"
+    />
+    <button class="search-clear${S.query?" show":""}" id="search-clear" onclick="clearSearch()">✕</button>
+  </div>`;
 }
 
-/* ─── HOME ─── */
-function renderHome(){
-  const visited=S.restaurants.filter(r=>(S.v[r.id]||0)>0);
-  const garf=garfCount();
-  const pend=S.restaurants.length-garf;
+function onSearch(q){
+  S.query=q;
+  const clr=document.getElementById("search-clear");
+  if(clr)clr.classList.toggle("show",!!q);
+  renderSearchArea();
+}
 
-  let gridH="";
-  if(S.loadError){
-    gridH=`<div class="empty-state"><div class="empty-ico">⚠</div>Não foi possível carregar.<br><button class="retry-btn" onclick="fetchRestaurants()">↻ Tentar novamente</button></div>`;
-  }else if(!visited.length){
-    gridH=`<div class="empty-state"><div class="empty-ico">◎</div>${S.restaurants.length===0?"Nenhum restaurante na planilha ainda.":"Você ainda não garfou nenhum lugar.<br>Explore a aba <strong>destaques</strong>!"}</div>`;
-  }else{
-    gridH=`<div class="grid-3">${visited.map(r=>{
-      const v=S.v[r.id]||0;
-      const vals=Object.values(S.rat[r.id]||{});
-      const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
-      return`<div class="pw" onclick="openModal(${r.id})">${mkPoster(r)}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
-    }).join("")}</div>`;
-  }
+function clearSearch(){
+  S.query="";
+  const inp=document.getElementById("search-input");
+  if(inp)inp.value="";
+  const clr=document.getElementById("search-clear");
+  if(clr)clr.classList.remove("show");
+  renderSearchArea();
+}
 
-  return`
-    ${renderTopbar()}
-    ${renderSearchBar()}
-    <div class="scroll-body" id="home-scroll">
-      <div class="sec-head"><span class="sec-title">Visitados</span><span class="sec-sub">${garf} de ${S.restaurants.length} lugares</span></div>
-      <div class="stats-row">
-        <div class="stat-pill"><div class="stat-pill-v" style="color:var(--green)">${garf}</div><div class="stat-pill-l">garfados</div></div>
-        <div class="stat-pill"><div class="stat-pill-v" style="color:var(--gold)">${pend}</div><div class="stat-pill-l">faltam</div></div>
-        <div class="stat-pill"><div class="stat-pill-v">${totVisits()}</div><div class="stat-pill-l">visitas</div></div>
-        <div class="stat-pill"><div class="stat-pill-v">${ACHS.filter(a=>S.ach[a.id]).length}</div><div class="stat-pill-l">conquistas</div></div>
+function renderSearchArea(){
+  const area=document.getElementById("search-area");
+  if(!area)return;
+  area.innerHTML=S.query?renderSearchResults():renderGridContent();
+}
+
+function renderSearchResults(){
+  const q=S.query.toLowerCase().trim();
+  const hits=S.restaurants.filter(r=>
+    r.name.toLowerCase().includes(q)||r.addr.toLowerCase().includes(q)||r.rede.toLowerCase().includes(q)
+  );
+  if(!hits.length) return`<div class="search-empty">Nenhum resultado para<br><strong>"${S.query}"</strong></div>`;
+  const col=r=>bc(r.rede);
+  return`<div class="search-results">${hits.map(r=>{
+    const v=(S.v[r.id]||0)>0;
+    const nb=r.rede.charAt(0).toUpperCase()+r.rede.slice(1).split(" ")[0];
+    return`<div class="search-item" onclick="openModal(${r.id})">
+      <div class="search-thumb">${mkThumb(r)}</div>
+      <div class="search-info">
+        <div class="search-name">${r.name}</div>
+        <div class="search-addr">${r.addr}</div>
+        <span class="search-rede" style="background:${col(r)}22;color:${col(r)};border:.5px solid ${col(r)}44">${nb}</span>
       </div>
-      <div class="divider"></div>
-      ${gridH}
-      <div id="modal-slot"></div>
+      ${v?`<span class="search-check">✓</span>`:`<span style="font-size:12px;color:var(--faint)">◎</span>`}
     </div>`;
+  }).join("")}</div>`;
 }
 
-/* ─── DESTAQUES ─── */
-function renderDest(){
-  const sugest=getSugestoes();
-  const curtidos=S.restaurants.filter(r=>S.likes[r.id]);
-  const sugestH=!sugest.length
-    ?`<p class="dest-empty">Você já foi em todos! 🎉</p>`
-    :`<div class="cards-h">${sugest.map(r=>`<div class="dest-card" onclick="openModal(${r.id})"><div class="dest-poster">${mkPosterSmall(r)}</div><div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div></div>`).join("")}</div>`;
-  const curtidosH=!curtidos.length
-    ?`<p class="dest-empty">Curta um lugar para ver aqui ♥</p>`
-    :`<div class="cards-h">${curtidos.map(r=>`<div class="dest-card" onclick="openModal(${r.id})"><div class="dest-poster">${mkPosterSmall(r)}</div><div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div></div>`).join("")}</div>`;
+function renderGridContent(){
+  const visited=S.restaurants.filter(r=>(S.v[r.id]||0)>0);
+  if(S.loadError) return`<div class="empty-state"><div class="empty-ico">⚠</div>Não foi possível carregar.<br><button class="retry-btn" onclick="fetchRestaurants()">↻ Tentar novamente</button></div>`;
+  if(!visited.length) return`<div class="empty-state"><div class="empty-ico">◎</div>${S.restaurants.length===0?"Nenhum restaurante na planilha ainda.":"Você ainda não garfou nenhum lugar.<br>Explore a aba <strong>destaques</strong>!"}</div>`;
+  return`<div class="grid-3">${visited.map(r=>{
+    const v=S.v[r.id]||0;
+    const vals=Object.values(S.rat[r.id]||{});
+    const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
+    return`<div class="pw" onclick="openModal(${r.id})">${mkPoster(r)}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
+  }).join("")}</div>`;
+}
+
+/* ── HOME ── */
+function renderHome(){
+  const garf=garfCount();
+  const tot=totVisits();
+  const pend=S.restaurants.length-garf;
   return`
     ${renderTopbar()}
     ${renderSearchBar()}
     <div class="scroll-body">
-      <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
-      ${sugestH}
-      <div class="divider"></div>
-      <div class="sec-head"><span class="sec-title">Curtidos</span><span class="sec-sub">seus favoritos</span></div>
-      ${curtidosH}
+      <div id="search-area">
+        <div class="sec-head"><span class="sec-title">Visitados</span><span class="sec-sub">${garf} de ${S.restaurants.length}</span></div>
+        <div class="stats-row">
+          <div class="stat-pill"><div class="stat-pill-v" style="color:var(--green)">${garf}</div><div class="stat-pill-l">garfados</div></div>
+          <div class="stat-pill"><div class="stat-pill-v" style="color:var(--gold)">${pend}</div><div class="stat-pill-l">faltam</div></div>
+          <div class="stat-pill"><div class="stat-pill-v">${tot}</div><div class="stat-pill-l">visitas</div></div>
+          <div class="stat-pill"><div class="stat-pill-v">${ACHS.filter(a=>S.ach[a.id]).length}</div><div class="stat-pill-l">conquistas</div></div>
+        </div>
+        <div class="divider"></div>
+        ${renderGridContent()}
+      </div>
       <div id="modal-slot"></div>
     </div>`;
 }
 
-/* ─── HUNTER ─── */
+/* ── DESTAQUES ── */
+function renderDest(){
+  const sugest=getSugestoes();
+  const curtidos=S.restaurants.filter(r=>S.likes[r.id]);
+  const allList=S.restaurants;
+
+  const sugestH=!sugest.length
+    ?`<p class="dest-empty">Você já foi em todos! 🎉</p>`
+    :`<div class="cards-h">${sugest.map(r=>`<div class="dest-card" onclick="openModal(${r.id})">
+        <div class="dest-poster">${mkPosterSmall(r)}</div>
+        <div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div>
+      </div>`).join("")}</div>`;
+
+  const curtidosH=!curtidos.length
+    ?`<p class="dest-empty">Curta um lugar para ver aqui</p>`
+    :`<div class="cards-h">${curtidos.map(r=>`<div class="dest-card" onclick="openModal(${r.id})">
+        <div class="dest-poster">${mkPosterSmall(r)}</div>
+        <div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div>
+      </div>`).join("")}</div>`;
+
+  return`
+    ${renderTopbar()}
+    ${renderSearchBar()}
+    <div class="scroll-body">
+      <div id="search-area">
+        <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
+        ${sugestH}
+        <div class="divider"></div>
+        <div class="sec-head"><span class="sec-title">Curtidos</span><span class="sec-sub">seus favoritos</span></div>
+        ${curtidosH}
+      </div>
+      <div id="modal-slot"></div>
+    </div>`;
+}
+
+/* ── HUNTER ── */
 function renderHunter(){
   const redes=getRedes();
-  if(!redes.length){
-    return`${renderTopbar()}${renderSearchBar()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Nenhuma franquia encontrada.</div></div>`;
-  }
-  const redesCompletas=redes.filter(rede=>{
-    const todos=S.restaurants.filter(r=>bk(r.rede)===rede);
-    return todos.length>0&&todos.every(r=>(S.v[r.id]||0)>0);
-  }).length;
+  if(!redes.length) return`${renderTopbar()}${renderSearchBar()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Nenhuma franquia encontrada.</div></div>`;
+
   const franchiseH=redes.map(rede=>{
     const todos=S.restaurants.filter(r=>bk(r.rede)===rede);
     const garfados=todos.filter(r=>(S.v[r.id]||0)>0);
     const pct=todos.length?Math.round(garfados.length/todos.length*100):0;
     const col=bc(rede);
-    const emoji=be(rede);
-    const nome=rede.charAt(0).toUpperCase()+rede.slice(1);
+    const emoji=bemoji(rede);
+    const nomeBonito=rede.charAt(0).toUpperCase()+rede.slice(1);
     const completo=garfados.length===todos.length&&todos.length>0;
     return`<div class="franchise-card" onclick="openFranchise('${rede}')">
       <div class="franchise-head">
         <div class="franchise-icon" style="background:${col}22;border:.5px solid ${col}44">${emoji}</div>
-        <div class="franchise-info"><div class="franchise-name">${nome}</div><div class="franchise-count">${garfados.length} de ${todos.length} filial${todos.length>1?"is":""}</div></div>
-        <div class="franchise-right">
-          <div class="franchise-pct" style="color:${completo?"var(--green)":col}">${pct}%</div>
-          ${completo?`<div style="font-size:14px">✓</div>`:""}
-        </div>
+        <div class="franchise-info"><div class="franchise-name">${nomeBonito}</div><div class="franchise-count">${garfados.length} de ${todos.length} filial${todos.length>1?"is":""}</div></div>
+        <div class="franchise-right"><div class="franchise-pct" style="color:${completo?"var(--green)":col}">${pct}%</div>${completo?`<div class="franchise-check">✓</div>`:""}</div>
       </div>
       <div class="franchise-progress"><div class="franchise-prog-fill" style="width:${pct}%;background:${completo?"var(--green)":col}"></div></div>
     </div>`;
   }).join("");
+
+  const redesCompletas=redes.filter(rede=>{const t=S.restaurants.filter(r=>bk(r.rede)===rede);return t.length>0&&t.every(r=>(S.v[r.id]||0)>0)}).length;
+
   return`
     ${renderTopbar()}
     ${renderSearchBar()}
     <div class="scroll-body">
-      <div class="sec-head"><span class="sec-title">Hunter</span><span class="sec-sub">${redesCompletas}/${redes.length} franquias completas</span></div>
-      <div class="franchise-list">${franchiseH}</div>
+      <div id="search-area">
+        <div class="sec-head"><span class="sec-title">Hunter</span><span class="sec-sub">${redesCompletas}/${redes.length} completas</span></div>
+        <div class="franchise-list">${franchiseH}</div>
+      </div>
       <div id="modal-slot"></div>
     </div>`;
 }
 
 function openFranchise(rede){
   const todos=S.restaurants.filter(r=>bk(r.rede)===rede);
-  const nome=rede.charAt(0).toUpperCase()+rede.slice(1);
+  const col=bc(rede);
+  const nomeBonito=rede.charAt(0).toUpperCase()+rede.slice(1);
   const ms=document.getElementById("modal-slot");
   const listH=todos.map(r=>{
     const v=S.v[r.id]||0;
     return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer" onclick="openModal(${r.id})">
-      <div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0">${mkPoster(r)}</div>
+      <div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;position:relative">${mkThumb(r)}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
         <div style="font-size:10px;color:var(--muted)">${r.addr}</div>
         ${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}
       </div>
-      <div>${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>`:
-      `<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint)"></div>`}
-      ${v>1?`<div style="font-size:9px;color:var(--gold);text-align:center;margin-top:2px">${v}x</div>`:""}</div>
+      <div style="text-align:right;flex-shrink:0">
+        ${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>`
+             :`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint)"></div>`}
+        ${v>1?`<div style="font-size:9px;color:var(--gold);margin-top:2px">${v}x</div>`:""}
+      </div>
     </div>`;
   }).join("");
   ms.innerHTML=`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div>
     <div class="msheet"><div class="mhandle"></div>
-      <div class="mhead"><div class="mtitle">${nome}</div><div class="msub">${todos.filter(r=>(S.v[r.id]||0)>0).length} de ${todos.length} filiais garfadas</div></div>
+      <div class="mhead"><div class="mtitle">${nomeBonito}</div><div class="msub">${todos.filter(r=>(S.v[r.id]||0)>0).length} de ${todos.length} garfadas</div></div>
       <div style="padding:.75rem 1.25rem">${listH}</div>
     </div></div>`;
 }
 
-/* ─── CONQUISTAS ─── */
+/* ── CONQUISTAS ── */
 function renderAch(){
   checkAchs();
   const unlocked=ACHS.filter(a=>S.ach[a.id]),locked=ACHS.filter(a=>!S.ach[a.id]);
@@ -565,28 +589,33 @@ function renderAch(){
     ${renderTopbar()}
     ${renderSearchBar()}
     <div class="scroll-body">
-      <div class="sec-head"><span class="sec-title">Conquistas</span></div>
-      <div class="ach-prog">
-        <div class="ach-prog-top"><span class="ach-prog-title">progresso</span><span class="ach-prog-pct">${unlocked.length}/${ACHS.length} · ${pct}%</span></div>
-        <div class="ach-bar"><div class="ach-bar-fill" style="width:${pct}%"></div></div>
+      <div id="search-area">
+        <div class="sec-head"><span class="sec-title">Conquistas</span></div>
+        <div class="ach-prog">
+          <div class="ach-prog-top"><span class="ach-prog-title">progresso</span><span class="ach-prog-pct">${unlocked.length}/${ACHS.length} · ${pct}%</span></div>
+          <div class="ach-bar"><div class="ach-bar-fill" style="width:${pct}%"></div></div>
+        </div>
+        ${unlocked.length?`<div class="ach-sec">desbloqueadas</div><div class="ach-grid">${cards(unlocked)}</div><div class="ach-sec">bloqueadas</div>`:`<div class="ach-sec">todas as conquistas</div>`}
+        <div class="ach-grid">${cards(locked)}</div>
       </div>
-      ${unlocked.length?`<div class="ach-sec">desbloqueadas</div><div class="ach-grid">${cards(unlocked)}</div><div class="ach-sec">bloqueadas</div>`:`<div class="ach-sec">todas as conquistas</div>`}
-      <div class="ach-grid">${cards(locked)}</div>
       <div id="modal-slot"></div>
     </div>`;
 }
 
-/* ─── MODAL ─── */
+/* ── MODAL ── */
 function renderModal(){
   if(S.modal===null)return"";
   const r=S.restaurants.find(x=>x.id===S.modal);
   if(!r)return"";
   const v=S.v[r.id]||0,liked=S.likes[r.id],myR=S.rat[r.id]||{},note=S.notes[r.id]||"";
   const critH=CRIT.map(c=>{const cur=myR[c]||0;return`<div class="crow"><span class="clbl">${c}</span><div class="srow">${[1,2,3,4,5].map(n=>`<button class="sbtn${n<=cur?" lit":""}" onclick="setRat(${r.id},'${c}',${n})">★</button>`).join("")}</div>${cur?`<span style="font-size:11px;color:var(--muted);margin-left:5px">${cur}.0</span>`:""}</div>`;}).join("");
+  const posterHTML=r.img
+    ?`<img src="${r.img}" alt="${r.name}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none';this.nextSibling.style.display='block'"/><div style="display:none;width:100%;height:100%">${mkSVG(r)}</div>`
+    :mkSVG(r);
   return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet">
     <div class="mhandle"></div>
     <div class="mhead"><div class="mtitle">${r.name}</div><div class="msub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div></div>
-    <div class="mposter">${mkPoster(r)}${v>0?'<div class="mribbon">garfado</div>':""}</div>
+    <div class="mposter">${posterHTML}${v>0?'<div class="mribbon">garfado</div>':""}</div>
     <div class="mactions">
       <button class="mact" onclick="addVisit(${r.id},1)"><span class="mact-ico${v>0?" aw":""}">◎</span><span class="mact-lbl">${v>0?v+"x garfado":"Garfar"}</span></button>
       <button class="mact" onclick="toggleLike(${r.id})"><span class="mact-ico${liked?" al":""}">${liked?"♥":"♡"}</span><span class="mact-lbl">Curtir</span></button>
