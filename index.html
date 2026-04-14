@@ -13,6 +13,7 @@ html,body{height:100%;background:#0a0d10;font-family:-apple-system,BlinkMacSyste
 body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
 .shell{width:100%;max-width:390px;background:var(--bg);border-radius:32px;border:4px solid var(--s1);overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 32px);max-height:780px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.6)}
 @media(max-width:430px){body{padding:0;align-items:stretch}.shell{max-width:100%;border-radius:0;border:none;height:100vh;max-height:none}}
+
 .notch{width:80px;height:20px;background:var(--s1);border-radius:0 0 14px 14px;margin:0 auto;flex-shrink:0}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 6px;border-bottom:.5px solid var(--faint);flex-shrink:0}
 .logo-row{display:flex;align-items:center;gap:8px}
@@ -23,6 +24,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .reload-btn.spinning{animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ver{font-size:9px;color:var(--faint);background:var(--s2);padding:2px 8px;border-radius:99px;border:.5px solid var(--faint)}
+
 .search-wrap{padding:8px 12px;border-bottom:.5px solid var(--faint);flex-shrink:0;position:relative;display:flex;align-items:center}
 .search-icon{position:absolute;left:22px;color:var(--faint);font-size:15px;pointer-events:none}
 .search-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:8px 36px 8px 34px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:border-color .15s}
@@ -30,22 +32,21 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .search-input::placeholder{color:var(--faint)}
 .search-clear{position:absolute;right:22px;background:none;border:none;cursor:pointer;color:var(--faint);font-size:16px;padding:2px;display:none}
 .search-clear.show{display:block}
+
 .bnav{display:flex;border-top:.5px solid var(--faint);background:var(--bg);flex-shrink:0}
 .bntab{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 9px;background:none;border:none;cursor:pointer;border-top:2px solid transparent;margin-top:-1px}
 .bnico{font-size:17px;color:var(--faint)}
 .bnlbl{font-size:7px;color:var(--faint);letter-spacing:.3px}
 .bntab.on{border-top-color:var(--green)}
 .bntab.on .bnico,.bntab.on .bnlbl{color:var(--green)}
+
 .scroll-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .scroll-body::-webkit-scrollbar{display:none}
 .sec-head{padding:1rem 1rem .5rem;display:flex;align-items:baseline;justify-content:space-between}
 .sec-title{font-family:Georgia,serif;font-size:15px;font-weight:700;color:var(--text)}
 .sec-sub{font-size:10px;color:var(--muted)}
-.stats-row{display:flex;gap:8px;padding:0 1rem .75rem;overflow-x:auto}
-.stats-row::-webkit-scrollbar{display:none}
-.stat-pill{background:var(--s2);border-radius:12px;padding:8px 12px;flex-shrink:0;text-align:center;min-width:64px}
-.stat-pill-v{font-size:18px;font-weight:500;color:var(--text)}
-.stat-pill-l{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* GRID */
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 3px}
 .pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:5px;overflow:hidden}
 .pw:active{opacity:.75}
@@ -55,6 +56,19 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .pmr{position:absolute;bottom:5px;left:5px;background:rgba(0,0,0,.8);color:var(--gold);font-size:9px;padding:1px 5px;border-radius:99px}
 .pw-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);padding:20px 6px 6px;pointer-events:none}
 .pw-label-name{font-size:10px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* FRIEND STRIP — visitados */
+.friend-strip{display:flex;gap:3px;padding:0 3px 6px;overflow-x:auto}
+.friend-strip::-webkit-scrollbar{display:none}
+.friend-pw{position:relative;width:90px;flex-shrink:0;aspect-ratio:2/3;cursor:pointer;border-radius:5px;overflow:hidden;border:.5px solid var(--faint)}
+.friend-pw svg,.friend-pw img{width:100%;height:100%;object-fit:cover;display:block}
+.friend-pw-avatar{position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:var(--green);font-size:8px;font-weight:700;color:#0f1117;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg);overflow:hidden}
+.friend-pw-avatar img{width:100%;height:100%;object-fit:cover}
+.friend-pw-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.9),transparent);padding:14px 4px 4px}
+.friend-pw-name{font-size:8px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.friend-pw-who{font-size:7px;color:var(--green)}
+
+/* SEARCH */
 .search-results{padding:0 8px}
 .search-item{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;cursor:pointer;margin-bottom:4px}
 .search-item:active{background:var(--s2)}
@@ -64,6 +78,8 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .search-name{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .search-addr{font-size:10px;color:var(--muted);margin-top:1px}
 .search-rede{font-size:9px;padding:1px 6px;border-radius:99px;margin-top:3px;display:inline-block}
+
+/* DESTAQUES */
 .cards-h{display:flex;gap:10px;padding:0 1rem .75rem;overflow-x:auto}
 .cards-h::-webkit-scrollbar{display:none}
 .dest-card{width:130px;flex-shrink:0;cursor:pointer;border-radius:10px;overflow:hidden;background:var(--s2);border:.5px solid var(--faint)}
@@ -74,6 +90,8 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .dest-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dest-meta{font-size:9px;color:var(--muted)}
 .dest-rating{color:var(--gold);font-size:9px}
+
+/* HUNTER */
 .franchise-list{padding:0 1rem;display:flex;flex-direction:column;gap:8px;padding-bottom:1rem}
 .franchise-card{background:var(--s2);border-radius:12px;border:.5px solid var(--faint);overflow:hidden;cursor:pointer}
 .franchise-card:active{opacity:.75}
@@ -86,6 +104,8 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .franchise-prog-fill{height:3px;border-radius:99px}
 .franchise-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
 .franchise-pct{font-size:13px;font-weight:500}
+
+/* AMIGOS / FEED */
 .feed-item{display:flex;align-items:flex-start;gap:10px;padding:10px 1rem;border-bottom:.5px solid var(--faint)}
 .feed-avatar{width:36px;height:36px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#0f1117;flex-shrink:0;overflow:hidden}
 .feed-avatar img{width:100%;height:100%;object-fit:cover}
@@ -95,30 +115,43 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .feed-time{font-size:10px;color:var(--faint);margin-top:2px}
 .feed-thumb{width:32px;height:48px;border-radius:4px;overflow:hidden;flex-shrink:0}
 .feed-thumb img,.feed-thumb svg{width:100%;height:100%;object-fit:cover;display:block}
-.friend-row{display:flex;align-items:center;gap:10px;padding:10px 1rem;border-bottom:.5px solid var(--faint)}
-.friend-av{width:40px;height:40px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:var(--text);overflow:hidden;flex-shrink:0}
-.friend-av img{width:100%;height:100%;object-fit:cover}
-.friend-info{flex:1;min-width:0}
-.friend-name{font-size:13px;font-weight:500;color:var(--text)}
-.friend-meta{font-size:10px;color:var(--muted)}
-.follow-btn{padding:5px 12px;border-radius:99px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;border:.5px solid var(--green);color:var(--green);background:transparent}
+
+/* followers list */
+.follower-row{display:flex;align-items:center;gap:10px;padding:10px 1rem;border-bottom:.5px solid var(--faint)}
+.follower-av{width:36px;height:36px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--text);overflow:hidden;flex-shrink:0}
+.follower-av img{width:100%;height:100%;object-fit:cover}
+.follower-info{flex:1;min-width:0}
+.follower-name{font-size:13px;font-weight:500;color:var(--text)}
+.follower-meta{font-size:10px;color:var(--muted)}
+.follow-btn{padding:5px 12px;border-radius:99px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:500;border:.5px solid var(--green);color:var(--green);background:transparent;white-space:nowrap}
 .follow-btn.following{background:var(--green);color:#0f1117}
+
 .search-user-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:9px 12px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:10px}
 .search-user-input:focus{border-color:var(--green)}
 .search-user-input::placeholder{color:var(--faint)}
+
+/* PERFIL */
 .profile-hero{padding:1.25rem 1rem 1rem;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
-.avatar-circle{width:68px;height:68px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:26px;font-weight:700;color:#0f1117;overflow:hidden;border:3px solid var(--s2);cursor:pointer}
+.avatar-wrap{position:relative;cursor:pointer}
+.avatar-circle{width:72px;height:72px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:Georgia,serif;font-size:28px;font-weight:700;color:#0f1117;overflow:hidden;border:3px solid var(--s2)}
 .avatar-circle img{width:100%;height:100%;object-fit:cover}
+.avatar-edit-badge{position:absolute;bottom:2px;right:2px;width:22px;height:22px;border-radius:50%;background:var(--s1);border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px}
 .profile-name{font-family:Georgia,serif;font-size:17px;font-weight:700;color:var(--text)}
 .profile-bio{font-size:11px;color:var(--muted);max-width:220px;line-height:1.5}
 .profile-username{font-size:10px;color:var(--faint);margin-top:-4px}
+
+/* stats clickáveis */
 .profile-stats{display:flex;width:100%;margin-top:4px;border-top:.5px solid var(--faint);border-bottom:.5px solid var(--faint)}
-.pstat{flex:1;padding:10px 0;text-align:center}
+.pstat{flex:1;padding:10px 0;text-align:center;cursor:pointer;transition:background .15s;border-radius:0}
+.pstat:active{background:var(--s2)}
 .pstat-v{font-size:16px;font-weight:500;color:var(--text)}
 .pstat-l{font-size:9px;color:var(--muted);margin-top:1px}
 .pstat-d{width:.5px;background:var(--faint)}
+
 .logout-btn{width:calc(100% - 2rem);margin:0 1rem .75rem;padding:10px;background:transparent;border:.5px solid var(--faint);border-radius:10px;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit}
 .logout-btn:hover{border-color:#e05;color:#e05}
+
+/* AUTH */
 .auth-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center}
 .auth-title{font-family:Georgia,serif;font-size:24px;font-weight:700;color:var(--text);margin-bottom:4px;margin-top:1rem}
 .auth-sub{font-size:13px;color:var(--muted);margin-bottom:2rem;line-height:1.5}
@@ -131,10 +164,12 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .auth-switch{font-size:12px;color:var(--muted);margin-top:1rem}
 .auth-switch button{background:none;border:none;cursor:pointer;color:var(--green);font-size:12px;font-family:inherit;text-decoration:underline}
 .auth-err{font-size:11px;color:#ff7c7c;text-align:center;min-height:16px}
+
+/* MODAL com swipe down */
 .modal-back{position:absolute;inset:0;background:rgba(0,0,0,.88);z-index:50;display:flex;flex-direction:column;justify-content:flex-end}
 .modal-tap{flex:1;cursor:pointer}
-.msheet{background:var(--s1);border-radius:18px 18px 0 0;max-height:88%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px}
-.mhandle{width:36px;height:4px;background:var(--faint);border-radius:99px;margin:10px auto}
+.msheet{background:var(--s1);border-radius:18px 18px 0 0;max-height:88%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:20px;touch-action:pan-y;user-select:none}
+.mhandle{width:36px;height:4px;background:var(--faint);border-radius:99px;margin:10px auto;cursor:grab}
 .mhead{padding:.75rem 1.25rem 0;text-align:center}
 .mtitle{font-family:Georgia,serif;font-size:16px;font-weight:700;color:var(--text)}
 .msub{font-size:11px;color:var(--muted);margin-top:3px}
@@ -169,6 +204,13 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .edit-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:8px;padding:9px 10px;font-size:13px;color:var(--text);font-family:inherit;outline:none;margin-bottom:.875rem}
 .edit-input:focus{border-color:var(--green)}
 .edit-save{width:100%;padding:11px;background:var(--green);color:#0f1117;font-size:13px;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-family:inherit}
+
+/* Avatar upload */
+.avatar-upload-btn{width:100%;padding:10px;background:var(--s2);border:.5px solid var(--faint);border-radius:8px;font-size:12px;color:var(--muted);cursor:pointer;font-family:inherit;text-align:center;margin-bottom:.875rem;display:flex;align-items:center;justify-content:center;gap:6px}
+.avatar-upload-btn:hover{border-color:var(--green);color:var(--green)}
+.avatar-preview{width:56px;height:56px;border-radius:50%;overflow:hidden;margin:0 auto .875rem;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--text)}
+.avatar-preview img{width:100%;height:100%;object-fit:cover}
+
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;color:var(--faint);font-size:12px;text-align:center;line-height:1.8}
 .empty-ico{font-size:32px;margin-bottom:8px;opacity:.3}
 .loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px}
@@ -176,6 +218,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .loading-dots::after{content:"...";animation:dots 1.2s steps(4,end) infinite}
 @keyframes dots{0%,20%{content:"."}40%{content:".."}60%,100%{content:"..."}}
 .divider{height:.5px;background:var(--faint);margin:0 1rem .75rem}
+
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:#0f1117;padding:9px 18px;border-radius:99px;font-size:12px;font-weight:700;transition:transform .4s cubic-bezier(.34,1.56,.64,1),opacity .4s;white-space:nowrap;z-index:9999;pointer-events:none;box-shadow:0 4px 20px rgba(74,222,128,.3);opacity:0}
 .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
 </style>
@@ -186,29 +229,38 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
   <div id="screen" style="flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative"></div>
 </div>
 <div class="toast" id="toast"></div>
+<input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="handleAvatarFile(this)"/>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.0.0";
+const VER="2.1.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
 const BB={"mcdonald's":"#1a0000","burger king":"#1a0800","bob's":"#00081a","kfc":"#1a0000","subway":"#001a00","pizzaria":"#1a0800","hamburgueria":"#0f0800","bar":"#0a0014","outro":"#0f1117"};
 const BI={"mcdonald's":"✦","burger king":"♨","bob's":"◈","kfc":"☖","subway":"≋","pizzaria":"✿","hamburgueria":"☀","bar":"◉","outro":"◎"};
-const BE={"mcdonald's":"🍔","burger king":"👑","bob's":"🧃","kfc":"🍗","subway":"🥖","pizzaria":"🍕","hamburgueria":"🍔","bar":"🍺","outro":"🍽️"};
+const BE={"mcdonald's":"🍔","burger king":"👑","bob's":"🧃","kfc":"🍗","subway":"🥖","pizzaria":"🍕","hamburgueria":"🍔","bar":"🍺"};
+
 function bk(r){return(r||"outro").toLowerCase().trim()}
 function bc(r){return BC[bk(r)]||"#4ade80"}
 function bb(r){return BB[bk(r)]||"#0f1117"}
 function bi(r){return BI[bk(r)]||"◎"}
-function be(r){return BE[bk(r)]||"🍽️"}
+function be(r){return BE[bk(r)]||null} // null = sem rede conhecida
 
 const LOGO=`<svg class="logo-svg" viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg"><line x1="9" y1="1" x2="9" y2="15" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="1" x2="4" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="1" x2="14" y2="8" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><path d="M4 8 Q9 13 14 8" fill="none" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="25" stroke="#e8eaed" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="20" r="3.2" fill="#4ade80"/></svg>`;
 
-let A={user:null,profile:null,nav:"home",modal:null,query:"",authMode:"login",
+let A={
+  user:null,profile:null,
+  nav:"home",modal:null,query:"",authMode:"login",
   restaurants:[],visits:{},ratings:{},likes:{},achs:new Set(),
-  friends:[],feed:[],friendSearch:[],editingProfile:false,loadingApp:true};
+  friends:[],followers:[],feed:[],friendSearch:[],
+  friendVisits:{}, // {rid: [{name,avatar,count}]}
+  editingProfile:false,pendingAvatar:null,loadingApp:true,
+  profileView:null // null|"garfados"|"conquistas"|"seguindo"|"seguidores"
+};
 let toastTimer=null;
 
 function toast(m){
@@ -217,6 +269,7 @@ function toast(m){
   requestAnimationFrame(()=>{t.textContent=m;t.classList.add("show");toastTimer=setTimeout(()=>{t.classList.remove("show");toastTimer=null;},2800);});
 }
 
+/* ── SVG POSTERS ── */
 function mkSVG(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
   const nm=r.name.length>14?r.name.slice(0,13)+"…":r.name,ad=r.addr.length>17?r.addr.slice(0,16)+"…":r.addr;
@@ -226,44 +279,60 @@ function mkSVGSm(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede),nm=r.name.length>13?r.name.slice(0,12)+"…":r.name;
   return`<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg"><rect width="200" height="130" fill="${bg}"/><text x="100" y="72" text-anchor="middle" font-family="Arial" font-size="42" fill="${col}" opacity="0.14">${ico}</text><rect x="0" y="88" width="200" height="42" fill="rgba(0,0,0,0.78)"/><text x="10" y="108" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#e8eaed">${nm}</text>${r.rating?`<text x="10" y="124" font-family="Arial" font-size="9" fill="#FFC72C">★ ${r.rating}</text>`:""}</svg>`;
 }
-function p(r){return r.img?`<img class="pi" src="${r.img}" alt="${r.name}" onerror="this.style.display='none'">${mkSVG(r)}`:mkSVG(r)}
-function psm(r){return r.img?`<img src="${r.img}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVGSm(r)}`:mkSVGSm(r)}
+function poster(r){return r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}`:mkSVG(r)}
+function posterSm(r){return r.img?`<img src="${r.img}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVGSm(r)}`:mkSVGSm(r)}
 
+/* ── SUPABASE DATA ── */
 async function loadData(){
   if(!A.user)return;
   const uid=A.user.id;
-  const[vR,rR,lR,aR,fR]=await Promise.all([
+  const[vR,rR,lR,aR,fR,folR]=await Promise.all([
     sb.from("visits").select("*").eq("user_id",uid),
     sb.from("ratings").select("*").eq("user_id",uid),
     sb.from("likes").select("*").eq("user_id",uid),
     sb.from("achievements").select("*").eq("user_id",uid),
     sb.from("friendships").select("following_id").eq("follower_id",uid),
+    sb.from("friendships").select("follower_id, profiles(id,name,username,avatar_url)").eq("following_id",uid),
   ]);
   A.visits={};(vR.data||[]).forEach(v=>A.visits[v.restaurant_id]=v.count||1);
   A.ratings={};(rR.data||[]).forEach(r=>{A.ratings[r.restaurant_id]={Comida:r.comida,Atendimento:r.atendimento,Limpeza:r.limpeza,Banheiro:r.banheiro,nota:r.nota};});
   A.likes={};(lR.data||[]).forEach(l=>A.likes[l.restaurant_id]=true);
   A.achs=new Set((aR.data||[]).map(a=>a.achievement_id));
   A.friends=(fR.data||[]).map(f=>f.following_id);
-  await loadFeed();
+  A.followers=(folR.data||[]).map(f=>f.profiles).filter(Boolean);
+  await loadFriendData();
 }
 
-async function loadFeed(){
-  if(!A.friends.length){A.feed=[];return;}
-  const{data}=await sb.from("visits").select("*, profiles(name,username,avatar_url)").in("user_id",A.friends).order("updated_at",{ascending:false}).limit(30);
-  A.feed=data||[];
+async function loadFriendData(){
+  // feed + visitas de amigos
+  if(!A.friends.length){A.feed=[];A.friendVisits={};return;}
+  const[feedR,fvR]=await Promise.all([
+    sb.from("visits").select("*, profiles(id,name,username,avatar_url)").in("user_id",A.friends).order("updated_at",{ascending:false}).limit(40),
+    sb.from("visits").select("restaurant_id,count,profiles(name,avatar_url)").in("user_id",A.friends),
+  ]);
+  A.feed=feedR.data||[];
+  // agrupar visitas de amigos por restaurante
+  A.friendVisits={};
+  (fvR.data||[]).forEach(v=>{
+    if(!A.friendVisits[v.restaurant_id])A.friendVisits[v.restaurant_id]=[];
+    const p=v.profiles||{};
+    A.friendVisits[v.restaurant_id].push({name:p.name||"?",avatar:p.avatar_url||null,count:v.count||1});
+  });
 }
 
+async function loadFollowers(){
+  const{data}=await sb.from("friendships").select("follower_id, profiles(id,name,username,avatar_url)").eq("following_id",A.user.id);
+  A.followers=(data||[]).map(f=>f.profiles).filter(Boolean);
+}
+
+/* ── SAVE ── */
 async function saveVisit(rid,count){
   if(!A.user)return;
   const r=A.restaurants.find(x=>x.id===rid);if(!r)return;
   if(count===0)await sb.from("visits").delete().eq("user_id",A.user.id).eq("restaurant_id",rid);
   else await sb.from("visits").upsert({user_id:A.user.id,restaurant_id:rid,restaurant_name:r.name,restaurant_rede:r.rede,count,updated_at:new Date().toISOString()},{onConflict:"user_id,restaurant_id"});
 }
-async function saveLike(rid,liked){
-  if(!A.user)return;
-  if(liked)await sb.from("likes").upsert({user_id:A.user.id,restaurant_id:rid});
-  else await sb.from("likes").delete().eq("user_id",A.user.id).eq("restaurant_id",rid);
-}
+async function saveLike(rid,v){if(!A.user)return;if(v)await sb.from("likes").upsert({user_id:A.user.id,restaurant_id:rid});else await sb.from("likes").delete().eq("user_id",A.user.id).eq("restaurant_id",rid);}
 async function saveRating(rid,field,val){
   if(!A.user)return;
   const mr=A.ratings[rid]||{};
@@ -278,21 +347,74 @@ async function saveNote(rid,nota){
 }
 async function saveAch(id){if(!A.user)return;await sb.from("achievements").upsert({user_id:A.user.id,achievement_id:id},{onConflict:"user_id,achievement_id"});}
 
-async function addVisit(rid,d){A.visits[rid]=Math.max(0,(A.visits[rid]||0)+d);await saveVisit(rid,A.visits[rid]);checkAchs();render();}
+/* ── AVATAR UPLOAD ── */
+async function handleAvatarFile(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>2*1024*1024){toast("⚠ Foto deve ter menos de 2MB");return;}
+  const reader=new FileReader();
+  reader.onload=e=>{A.pendingAvatar=e.target.result;render();};
+  reader.readAsDataURL(file);
+}
+
+function triggerAvatarUpload(){document.getElementById("avatar-file-input").click();}
+
+async function uploadAvatar(dataUrl){
+  // converte base64 para blob e faz upload no Supabase Storage
+  if(!dataUrl||!A.user)return null;
+  try{
+    const res=await fetch(dataUrl);
+    const blob=await res.blob();
+    const ext=blob.type.split("/")[1]||"jpg";
+    const path=`avatars/${A.user.id}.${ext}`;
+    const{error}=await sb.storage.from("avatars").upload(path,blob,{upsert:true,contentType:blob.type});
+    if(error){
+      // storage pode não estar configurado — usa URL base64 direto (funciona mas é longo)
+      return dataUrl;
+    }
+    const{data}=sb.storage.from("avatars").getPublicUrl(path);
+    return data.publicUrl+"?t="+Date.now();
+  }catch(e){return dataUrl;}
+}
+
+/* ── AÇÕES ── */
+async function addVisit(rid,d){
+  A.visits[rid]=Math.max(0,(A.visits[rid]||0)+d);
+  await saveVisit(rid,A.visits[rid]);
+  checkAchs();render();
+}
 async function toggleLike(rid){A.likes[rid]=!A.likes[rid];await saveLike(rid,A.likes[rid]);render();}
 async function setRat(rid,c,v){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid][c]=v;await saveRating(rid,c,v);checkAchs();renderModal();}
 async function setNote(rid,nota){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid].nota=nota;await saveNote(rid,nota);}
 
-function openModal(id){A.modal=id;render()}
-function closeModal(){A.modal=null;A.editingProfile=false;render()}
-function setNav(n){A.nav=n;A.modal=null;A.query="";A.editingProfile=false;if(n==="amigos")loadFeed().then(render);else render()}
-function setQuery(q){A.query=q;document.getElementById("search-clear")?.classList.toggle("show",!!q);renderSearchArea()}
-function clearSearch(){A.query="";const i=document.getElementById("search-input");if(i)i.value="";document.getElementById("search-clear")?.classList.remove("show");renderSearchArea()}
+function openModal(id){A.modal=id;render();setTimeout(()=>initSwipe(),50);}
+function closeModal(){A.modal=null;A.editingProfile=false;A.pendingAvatar=null;render();}
+function setNav(n){A.nav=n;A.modal=null;A.query="";A.editingProfile=false;A.profileView=null;if(n==="amigos")loadFriendData().then(render);else render();}
+function setQuery(q){A.query=q;document.getElementById("search-clear")?.classList.toggle("show",!!q);renderSearchArea();}
+function clearSearch(){A.query="";const i=document.getElementById("search-input");if(i)i.value="";document.getElementById("search-clear")?.classList.remove("show");renderSearchArea();}
 
+/* swipe down para fechar modal */
+function initSwipe(){
+  const sheet=document.querySelector(".msheet");if(!sheet)return;
+  let startY=0,dragging=false;
+  sheet.addEventListener("touchstart",e=>{startY=e.touches[0].clientY;dragging=true;},{passive:true});
+  sheet.addEventListener("touchmove",e=>{
+    if(!dragging)return;
+    const dy=e.touches[0].clientY-startY;
+    if(dy>0&&sheet.scrollTop<=0){sheet.style.transform=`translateY(${dy}px)`;sheet.style.transition="none";}
+  },{passive:true});
+  sheet.addEventListener("touchend",e=>{
+    if(!dragging)return;dragging=false;
+    const dy=e.changedTouches[0].clientY-startY;
+    sheet.style.transition="transform .3s ease";
+    if(dy>100){closeModal();}else{sheet.style.transform="translateY(0)";}
+  },{passive:true});
+}
+
+/* ── CONQUISTAS ── */
 const ADEFS=[
   {id:"first",ico:"🍟",name:"Primeira garfada",desc:"Marque 1 lugar",chk:()=>Object.values(A.visits).some(v=>v>0)},
-  {id:"three",ico:"🗺️",name:"Explorador",desc:"Garfe 3 lugares",chk:()=>A.restaurants.filter(r=>(A.visits[r.id]||0)>0).length>=3},
-  {id:"five",ico:"⭐",name:"Colecionador",desc:"Garfe 5 lugares",chk:()=>A.restaurants.filter(r=>(A.visits[r.id]||0)>0).length>=5},
+  {id:"three",ico:"🗺️",name:"Explorador",desc:"Garfe 3 lugares",chk:()=>garfCount()>=3},
+  {id:"five",ico:"⭐",name:"Colecionador",desc:"Garfe 5 lugares",chk:()=>garfCount()>=5},
   {id:"all",ico:"🏆",name:"Completou!",desc:"Garfe todos",chk:()=>A.restaurants.length>0&&A.restaurants.every(r=>(A.visits[r.id]||0)>0)},
   {id:"viciado",ico:"😵",name:"Viciado",desc:"5x no mesmo lugar",chk:()=>Math.max(0,...Object.values(A.visits).concat(0))>=5},
   {id:"habitue",ico:"👑",name:"Habitué",desc:"10x no mesmo lugar",chk:()=>Math.max(0,...Object.values(A.visits).concat(0))>=10},
@@ -302,10 +424,11 @@ const ADEFS=[
   {id:"like",ico:"♥",name:"Favorito",desc:"Curta um lugar",chk:()=>Object.values(A.likes).some(Boolean)},
   {id:"social",ico:"👥",name:"Social",desc:"Adicione um amigo",chk:()=>A.friends.length>=1},
 ];
-async function checkAchs(){
-  for(const a of ADEFS){if(!A.achs.has(a.id)&&a.chk()){A.achs.add(a.id);await saveAch(a.id);setTimeout(()=>toast(a.ico+" "+a.name+" desbloqueada!"),300);}}
-}
+async function checkAchs(){for(const a of ADEFS){if(!A.achs.has(a.chk())&&a.chk()){A.achs.add(a.id);await saveAch(a.id);setTimeout(()=>toast(a.ico+" "+a.name+" desbloqueada!"),300);}}}
+// fix: usar id não chk
+async function checkAchs(){for(const a of ADEFS){if(!A.achs.has(a.id)&&a.chk()){A.achs.add(a.id);await saveAch(a.id);setTimeout(()=>toast(a.ico+" "+a.name+" desbloqueada!"),300);}}}
 
+/* ── AUTH ── */
 async function doAuth(e){
   e.preventDefault();
   const email=document.getElementById("auth-email").value.trim();
@@ -327,9 +450,10 @@ function trErr(e){
 }
 async function doLogout(){
   await sb.auth.signOut();
-  A={...A,user:null,profile:null,visits:{},ratings:{},likes:{},achs:new Set(),friends:[],feed:[],nav:"home"};render();
+  A={...A,user:null,profile:null,visits:{},ratings:{},likes:{},achs:new Set(),friends:[],followers:[],feed:[],friendVisits:{},nav:"home"};render();
 }
 
+/* ── AMIGOS ── */
 async function searchUsers(q){
   if(!q||q.length<2){A.friendSearch=[];renderFriendsArea();return;}
   const{data}=await sb.from("profiles").select("*").or(`username.ilike.%${q}%,name.ilike.%${q}%`).limit(10);
@@ -344,15 +468,24 @@ async function toggleFollow(uid){
     A.friends=[...A.friends,uid];toast("✓ Seguindo!");checkAchs();
   }render();
 }
+
+/* ── PERFIL ── */
 async function saveProfile(){
-  const name=document.getElementById("ep-name").value.trim()||"Explorador";
-  const bio=document.getElementById("ep-bio").value.trim();
-  const avatar=document.getElementById("ep-avatar").value.trim();
-  const username=document.getElementById("ep-username").value.trim().toLowerCase().replace(/[^a-z0-9_]/g,"");
-  await sb.from("profiles").update({name,bio,avatar_url:avatar||null,username:username||null}).eq("id",A.user.id);
-  A.profile={...A.profile,name,bio,avatar_url:avatar||null,username};
-  A.editingProfile=false;A.modal=null;toast("✓ Perfil salvo!");render();
+  const name=document.getElementById("ep-name")?.value.trim()||"Explorador";
+  const bio=document.getElementById("ep-bio")?.value.trim();
+  const username=document.getElementById("ep-username")?.value.trim().toLowerCase().replace(/[^a-z0-9_]/g,"");
+  let avatarUrl=A.profile?.avatar_url||null;
+  if(A.pendingAvatar){
+    toast("Salvando foto…");
+    avatarUrl=await uploadAvatar(A.pendingAvatar);
+  }
+  await sb.from("profiles").update({name,bio,avatar_url:avatarUrl||null,username:username||null}).eq("id",A.user.id);
+  A.profile={...A.profile,name,bio,avatar_url:avatarUrl||null,username};
+  A.editingProfile=false;A.modal=null;A.pendingAvatar=null;
+  toast("✓ Perfil salvo!");render();
 }
+
+/* ── FETCH SHEET ── */
 async function fetchRestaurants(spin=true){
   const btn=document.getElementById("reload-btn");if(btn&&spin)btn.classList.add("spinning");
   try{
@@ -361,6 +494,16 @@ async function fetchRestaurants(spin=true){
     toast("✓ "+A.restaurants.length+" restaurantes carregados!");
   }catch(e){toast("⚠ Erro ao carregar planilha.");}
   const b2=document.getElementById("reload-btn");if(b2)b2.classList.remove("spinning");render();
+}
+
+/* ── RENDER ── */
+function garfCount(){return A.restaurants.filter(r=>(A.visits[r.id]||0)>0).length;}
+function totV(){return Object.values(A.visits).reduce((a,b)=>a+b,0);}
+function getRedes(){
+  // só redes com mais de 1 filial (exclui "outros/únicos")
+  const counts={};
+  A.restaurants.forEach(r=>{const k=bk(r.rede);counts[k]=(counts[k]||0)+1;});
+  return Object.entries(counts).filter(([k,v])=>v>1&&k!=="outro"&&be(k)!==null).map(([k])=>k);
 }
 
 function render(){
@@ -373,9 +516,14 @@ function render(){
   else if(A.nav==="hunter")html=rHunter();
   else if(A.nav==="amigos")html=rAmigos();
   else if(A.nav==="perfil")html=rPerfil();
-  html+=rNav();scr.innerHTML=html;
+  html+=rNav();
+  scr.innerHTML=html;
   const ms=document.getElementById("modal-slot");
-  if(ms){if(A.editingProfile)ms.innerHTML=rEditProfile();else if(A.modal!==null)ms.innerHTML=rModal();else ms.innerHTML="";}
+  if(ms){
+    if(A.editingProfile)ms.innerHTML=rEditProfile();
+    else if(A.modal!==null){ms.innerHTML=rModal();setTimeout(()=>initSwipe(),50);}
+    else ms.innerHTML="";
+  }
   const inp=document.getElementById("search-input");if(inp&&A.query){inp.value=A.query;document.getElementById("search-clear")?.classList.add("show");}
 }
 
@@ -384,16 +532,16 @@ function rLoading(){return`<div class="loading-screen"><svg style="width:52px;he
 function rAuth(){
   const isR=A.authMode==="register";
   return`<div class="auth-screen"><svg viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg" width="52" height="72"><line x1="9" y1="1" x2="9" y2="15" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/><line x1="4" y1="1" x2="4" y2="8" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/><line x1="14" y1="1" x2="14" y2="8" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/><path d="M4 8 Q9 13 14 8" fill="none" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="25" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/><circle cx="9" cy="20" r="3.2" fill="#4ade80"/></svg>
-    <div class="auth-title">garfado</div>
-    <div class="auth-sub">${isR?"Crie sua conta e comece a garfar":"Seus dados em qualquer dispositivo"}</div>
-    <form class="auth-form" onsubmit="doAuth(event)">
-      ${isR?`<input class="auth-input" id="auth-name" placeholder="Seu nome" required/>`:""}
-      <input class="auth-input" id="auth-email" type="email" placeholder="Email" required/>
-      <input class="auth-input" id="auth-password" type="password" placeholder="Senha (mín. 6 caracteres)" required minlength="6"/>
-      <div class="auth-err" id="auth-err"></div>
-      <button class="auth-btn" id="auth-btn" type="submit">${isR?"Criar conta":"Entrar"}</button>
-    </form>
-    <div class="auth-switch">${isR?"Já tem conta?":"Não tem conta?"} <button onclick="A.authMode='${isR?"login":"register"}';render()">${isR?"Fazer login":"Criar conta"}</button></div>
+  <div class="auth-title">garfado</div>
+  <div class="auth-sub">${isR?"Crie sua conta e comece a garfar":"Seus dados salvos em qualquer dispositivo"}</div>
+  <form class="auth-form" onsubmit="doAuth(event)">
+    ${isR?`<input class="auth-input" id="auth-name" placeholder="Seu nome" required/>`:""}
+    <input class="auth-input" id="auth-email" type="email" placeholder="Email" required/>
+    <input class="auth-input" id="auth-password" type="password" placeholder="Senha (mín. 6 caracteres)" required minlength="6"/>
+    <div class="auth-err" id="auth-err"></div>
+    <button class="auth-btn" id="auth-btn" type="submit">${isR?"Criar conta":"Entrar"}</button>
+  </form>
+  <div class="auth-switch">${isR?"Já tem conta?":"Não tem conta?"} <button onclick="A.authMode='${isR?"login":"register"}';render()">${isR?"Fazer login":"Criar conta"}</button></div>
   </div>`;
 }
 
@@ -403,73 +551,308 @@ function rNav(){
 function rTopbar(){return`<div class="topbar"><div class="logo-row">${LOGO}<span class="wm">garfado</span></div><div class="topbar-right"><button class="reload-btn" id="reload-btn" onclick="fetchRestaurants(false)">↻</button><span class="ver">v${VER}</span></div></div>`;}
 function rSearch(){return`<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="search-input" type="search" placeholder="Buscar por nome ou endereço…" oninput="setQuery(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/><button class="search-clear" id="search-clear" onclick="clearSearch()">✕</button></div>`;}
 
-function renderSearchArea(){const a=document.getElementById("search-area");if(a)a.innerHTML=A.query?rSearchRes():rGrid();}
+function renderSearchArea(){const a=document.getElementById("search-area");if(a)a.innerHTML=A.query?rSearchRes():rMainContent();}
 function rSearchRes(){
   const q=A.query.toLowerCase();
   const hits=A.restaurants.filter(r=>r.name.toLowerCase().includes(q)||r.addr.toLowerCase().includes(q)||r.rede.toLowerCase().includes(q));
   if(!hits.length)return`<div style="text-align:center;padding:2rem 1rem;color:var(--faint);font-size:12px">Nenhum resultado para "<strong>${A.query}</strong>"</div>`;
-  return`<div class="search-results">${hits.map(r=>{const v=(A.visits[r.id]||0)>0,col=bc(r.rede),nb=r.rede.charAt(0).toUpperCase()+r.rede.slice(1).split(" ")[0];return`<div class="search-item" onclick="openModal(${r.id})"><div class="search-thumb">${p(r)}</div><div class="search-info"><div class="search-name">${r.name}</div><div class="search-addr">${r.addr}</div><span class="search-rede" style="background:${col}22;color:${col};border:.5px solid ${col}44">${nb}</span></div>${v?`<span style="color:var(--green);font-size:16px">✓</span>`:`<span style="color:var(--faint);font-size:14px">◎</span>`}</div>`;}).join("")}</div>`;
+  return`<div class="search-results">${hits.map(r=>{const v=(A.visits[r.id]||0)>0,col=bc(r.rede),nb=r.rede.charAt(0).toUpperCase()+r.rede.slice(1).split(" ")[0];return`<div class="search-item" onclick="openModal(${r.id})"><div class="search-thumb">${poster(r)}</div><div class="search-info"><div class="search-name">${r.name}</div><div class="search-addr">${r.addr}</div><span class="search-rede" style="background:${col}22;color:${col};border:.5px solid ${col}44">${nb}</span></div>${v?`<span style="color:var(--green);font-size:16px">✓</span>`:`<span style="color:var(--faint);font-size:14px">◎</span>`}</div>`;}).join("")}</div>`;
 }
-function rGrid(){
+
+/* amigos que foram no restaurante */
+function friendsWhoVisited(rid){return A.friendVisits[rid]||[];}
+
+function rMainContent(){
   const vis=A.restaurants.filter(r=>(A.visits[r.id]||0)>0);
   if(!vis.length)return`<div class="empty-state"><div class="empty-ico">◎</div>${A.restaurants.length===0?"Carregando restaurantes…":"Você ainda não garfou nenhum lugar!"}</div>`;
-  return`<div class="grid-3">${vis.map(r=>{const v=A.visits[r.id]||0,vals=Object.values(A.ratings[r.id]||{}).filter(x=>typeof x==="number"),avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null,c=r.img?`<img class="pi" src="${r.img}" alt="${r.name}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;}).join("")}</div>`;
+  return`<div class="grid-3">${vis.map(r=>{
+    const v=A.visits[r.id]||0;
+    const vals=Object.values(A.ratings[r.id]||{}).filter(x=>typeof x==="number");
+    const avg=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):null;
+    const c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`:mkSVG(r);
+    return`<div class="pw" onclick="openModal(${r.id})">${c}${v>0?`<div class="pvc">✓</div>`:""}${v>1?`<div class="pvn">${v}x</div>`:""}${avg?`<div class="pmr">★${avg}</div>`:""}</div>`;
+  }).join("")}</div>`;
 }
-function gC(){return A.restaurants.filter(r=>(A.visits[r.id]||0)>0).length}
-function totV(){return Object.values(A.visits).reduce((a,b)=>a+b,0)}
-function getRedes(){return[...new Set(A.restaurants.map(r=>bk(r.rede)).filter(Boolean))]}
 
-function rHome(){
-  const g=gC(),tot=totV(),pend=A.restaurants.length-g;
-  return`${rTopbar()}${rSearch()}<div class="scroll-body"><div id="search-area"><div class="sec-head"><span class="sec-title">Visitados</span><span class="sec-sub">${g} de ${A.restaurants.length}</span></div><div class="stats-row"><div class="stat-pill"><div class="stat-pill-v" style="color:var(--green)">${g}</div><div class="stat-pill-l">garfados</div></div><div class="stat-pill"><div class="stat-pill-v" style="color:var(--gold)">${pend}</div><div class="stat-pill-l">faltam</div></div><div class="stat-pill"><div class="stat-pill-v">${tot}</div><div class="stat-pill-l">visitas</div></div><div class="stat-pill"><div class="stat-pill-v">${A.achs.size}</div><div class="stat-pill-l">conquistas</div></div></div><div class="divider"></div>${rGrid()}</div><div id="modal-slot"></div></div>`;
+/* strip de restaurantes que amigos visitaram */
+function rFriendStrip(){
+  // top restaurantes que pelo menos 1 amigo visitou e eu não fui
+  const candidates=A.restaurants.filter(r=>
+    !(A.visits[r.id]>0) && friendsWhoVisited(r.id).length>0
+  ).sort((a,b)=>friendsWhoVisited(b.id).length-friendsWhoVisited(a.id).length).slice(0,10);
+  if(!candidates.length)return"";
+  const cards=candidates.map(r=>{
+    const friends=friendsWhoVisited(r.id);
+    const f=friends[0];
+    const ini=(f.name||"?").charAt(0).toUpperCase();
+    return`<div class="friend-pw" onclick="openModal(${r.id})">
+      ${poster(r)}
+      <div class="friend-pw-avatar">${f.avatar?`<img src="${f.avatar}" onerror="this.style.display='none'">${ini}`:ini}</div>
+      <div class="friend-pw-label">
+        <div class="friend-pw-name">${r.name}</div>
+        <div class="friend-pw-who">${friends.length===1?f.name.split(" ")[0]:`${friends.length} amigos`}</div>
+      </div>
+    </div>`;
+  }).join("");
+  return`<div class="sec-head"><span class="sec-title">Amigos foram aqui</span><span class="sec-sub">você ainda não foi</span></div><div class="friend-strip">${cards}</div><div class="divider"></div>`;
 }
+
+/* ── HOME ── */
+function rHome(){
+  return`${rTopbar()}${rSearch()}
+    <div class="scroll-body"><div id="search-area">
+      <div class="sec-head"><span class="sec-title">Visitados</span><span class="sec-sub">${garfCount()} de ${A.restaurants.length}</span></div>
+      ${rFriendStrip()}
+      ${rMainContent()}
+    </div><div id="modal-slot"></div></div>`;
+}
+
+/* ── DESTAQUES ── */
 function rDest(){
   const sg=A.restaurants.filter(r=>!(A.visits[r.id]>0)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8);
-  const ct=A.restaurants.filter(r=>A.likes[r.id]);
-  const dc=r=>`<div class="dest-card" onclick="openModal(${r.id})"><div class="dest-poster">${psm(r)}</div><div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div></div>`;
-  return`${rTopbar()}${rSearch()}<div class="scroll-body"><div id="search-area"><div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>${sg.length?`<div class="cards-h">${sg.map(dc).join("")}</div>`:`<p style="font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center">Você já foi em todos! 🎉</p>`}<div class="divider"></div><div class="sec-head"><span class="sec-title">Curtidos</span><span class="sec-sub">seus favoritos</span></div>${ct.length?`<div class="cards-h">${ct.map(dc).join("")}</div>`:`<p style="font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center">Curta um lugar para ver aqui</p>`}</div><div id="modal-slot"></div></div>`;
+  const fav=A.restaurants.filter(r=>A.likes[r.id]); // favoritos (era "curtidos")
+  const dc=r=>`<div class="dest-card" onclick="openModal(${r.id})"><div class="dest-poster">${posterSm(r)}</div><div class="dest-info"><div class="dest-name">${r.name}</div><div class="dest-meta">${r.addr.split(",")[0]}</div>${r.rating?`<div class="dest-rating">★ ${r.rating}</div>`:""}</div></div>`;
+  return`${rTopbar()}${rSearch()}
+    <div class="scroll-body"><div id="search-area">
+      <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
+      ${sg.length?`<div class="cards-h">${sg.map(dc).join("")}</div>`:`<p style="font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center">Você já foi em todos! 🎉</p>`}
+      <div class="divider"></div>
+      <div class="sec-head"><span class="sec-title">Favoritos</span><span class="sec-sub">seus preferidos</span></div>
+      ${fav.length?`<div class="cards-h">${fav.map(dc).join("")}</div>`:`<p style="font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center">Curta um lugar para ver aqui</p>`}
+    </div><div id="modal-slot"></div></div>`;
 }
+
+/* ── HUNTER ── (sem "outros", só redes com filiais múltiplas e emoji conhecido) */
 function rHunter(){
-  const redes=getRedes();if(!redes.length)return`${rTopbar()}${rSearch()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Nenhuma franquia encontrada.</div></div>`;
+  const redes=getRedes();
+  if(!redes.length)return`${rTopbar()}${rSearch()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Adicione restaurantes com redes conhecidas para ver aqui.</div></div>`;
   const rc=redes.filter(rede=>{const t=A.restaurants.filter(r=>bk(r.rede)===rede);return t.length>0&&t.every(r=>(A.visits[r.id]||0)>0)}).length;
-  const fH=redes.map(rede=>{const todos=A.restaurants.filter(r=>bk(r.rede)===rede),gf=todos.filter(r=>(A.visits[r.id]||0)>0),pct=todos.length?Math.round(gf.length/todos.length*100):0,col=bc(rede),emoji=be(rede),nome=rede.charAt(0).toUpperCase()+rede.slice(1),ok=gf.length===todos.length&&todos.length>0;return`<div class="franchise-card" onclick="openFr('${rede}')"><div class="franchise-head"><div class="franchise-icon" style="background:${col}22;border:.5px solid ${col}44">${emoji}</div><div class="franchise-info"><div class="franchise-name">${nome}</div><div class="franchise-count">${gf.length} de ${todos.length} filial${todos.length>1?"is":""}</div></div><div class="franchise-right"><div class="franchise-pct" style="color:${ok?"var(--green)":col}">${pct}%</div>${ok?`<div style="font-size:16px">✓</div>`:""}</div></div><div class="franchise-progress"><div class="franchise-prog-fill" style="width:${pct}%;background:${ok?"var(--green)":col}"></div></div></div>`;}).join("");
-  return`${rTopbar()}${rSearch()}<div class="scroll-body"><div id="search-area"><div class="sec-head"><span class="sec-title">Hunter</span><span class="sec-sub">${rc}/${redes.length} completas</span></div><div class="franchise-list">${fH}</div></div><div id="modal-slot"></div></div>`;
+  const fH=redes.map(rede=>{
+    const todos=A.restaurants.filter(r=>bk(r.rede)===rede);
+    const gf=todos.filter(r=>(A.visits[r.id]||0)>0);
+    const pct=todos.length?Math.round(gf.length/todos.length*100):0;
+    const col=bc(rede),emoji=be(rede),nome=rede.charAt(0).toUpperCase()+rede.slice(1);
+    const ok=gf.length===todos.length&&todos.length>0;
+    return`<div class="franchise-card" onclick="openFr('${rede}')">
+      <div class="franchise-head">
+        <div class="franchise-icon" style="background:${col}22;border:.5px solid ${col}44">${emoji}</div>
+        <div class="franchise-info"><div class="franchise-name">${nome}</div><div class="franchise-count">${gf.length} de ${todos.length} filial${todos.length>1?"is":""}</div></div>
+        <div class="franchise-right"><div class="franchise-pct" style="color:${ok?"var(--green)":col}">${pct}%</div>${ok?`<div style="font-size:16px">✓</div>`:""}</div>
+      </div>
+      <div class="franchise-progress"><div class="franchise-prog-fill" style="width:${pct}%;background:${ok?"var(--green)":col}"></div></div>
+    </div>`;
+  }).join("");
+  return`${rTopbar()}${rSearch()}
+    <div class="scroll-body"><div id="search-area">
+      <div class="sec-head"><span class="sec-title">Hunter</span><span class="sec-sub">${rc}/${redes.length} completas</span></div>
+      <div class="franchise-list">${fH}</div>
+    </div><div id="modal-slot"></div></div>`;
 }
 function openFr(rede){
   const todos=A.restaurants.filter(r=>bk(r.rede)===rede),nome=rede.charAt(0).toUpperCase()+rede.slice(1);
   const ms=document.getElementById("modal-slot");
-  const lH=todos.map(r=>{const v=A.visits[r.id]||0;return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer" onclick="openModal(${r.id})"><div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0">${p(r)}</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr}</div>${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}</div>${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>`:`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint)"></div>`}</div>`;}).join("");
+  const lH=todos.map(r=>{const v=A.visits[r.id]||0;return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer" onclick="openModal(${r.id})"><div style="width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0">${poster(r)}</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr}</div>${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}</div>${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">✓</div>`:`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint)"></div>`}</div>`;}).join("");
   ms.innerHTML=`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet"><div class="mhandle"></div><div class="mhead"><div class="mtitle">${nome}</div><div class="msub">${todos.filter(r=>(A.visits[r.id]||0)>0).length} de ${todos.length} garfadas</div></div><div style="padding:.75rem 1.25rem">${lH}</div></div></div>`;
+  setTimeout(()=>initSwipe(),50);
 }
+
+/* ── AMIGOS ── seguidores + feed */
 function tAgo(ts){if(!ts)return"";const d=(Date.now()-new Date(ts).getTime())/1000;if(d<60)return"agora";if(d<3600)return Math.floor(d/60)+"min";if(d<86400)return Math.floor(d/3600)+"h";return Math.floor(d/86400)+"d";}
+
 function rAmigos(){
-  const feedH=!A.feed.length?`<div class="empty-state"><div class="empty-ico">👥</div>Nenhuma atividade recente.<br>Busque amigos acima!</div>`:A.feed.map(v=>{const r=A.restaurants.find(x=>x.id===v.restaurant_id),pr=v.profiles||{},ini=(pr.name||"?").charAt(0).toUpperCase();return`<div class="feed-item"><div class="feed-avatar">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div><div class="feed-info"><div class="feed-text"><strong>${pr.name||pr.username||"Alguém"}</strong> garfou <strong>${v.restaurant_name}</strong>${v.count>1?` <span style="color:var(--gold)">${v.count}x</span>`:""}</div><div class="feed-time">${tAgo(v.updated_at)}</div></div>${r?`<div class="feed-thumb">${psm(r)}</div>`:""}</div>`;}).join("");
-  return`${rTopbar()}<div class="scroll-body"><div class="sec-head"><span class="sec-title">Amigos</span><span class="sec-sub">${A.friends.length} seguindo</span></div><div style="padding:0 1rem .75rem"><input class="search-user-input" placeholder="Buscar por nome ou @username…" oninput="searchUsers(this.value)"/><div id="friend-search-area"></div></div><div class="divider"></div><div class="sec-head"><span class="sec-title">Feed</span><span class="sec-sub">atividade recente</span></div>${feedH}<div id="modal-slot"></div></div>`;
+  // seguidores que te seguem
+  const followersH=!A.followers.length
+    ?`<p style="font-size:11px;color:var(--faint);text-align:center;padding:.5rem 0">Ninguém te segue ainda</p>`
+    :A.followers.map(u=>{
+        const ini=(u.name||"?").charAt(0).toUpperCase();
+        const isF=A.friends.includes(u.id);
+        return`<div class="follower-row">
+          <div class="follower-av">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
+          <div class="follower-info"><div class="follower-name">${u.name||"Sem nome"}</div><div class="follower-meta">@${u.username||"?"}</div></div>
+          <button class="follow-btn${isF?" following":""}" onclick="toggleFollow('${u.id}')">${isF?"Seguindo":"Seguir"}</button>
+        </div>`;
+      }).join("");
+
+  const feedH=!A.feed.length
+    ?`<div class="empty-state"><div class="empty-ico">📰</div>Nenhuma atividade recente.<br>Siga amigos para ver o feed!</div>`
+    :A.feed.map(v=>{
+        const r=A.restaurants.find(x=>x.id===v.restaurant_id);
+        const pr=v.profiles||{};const ini=(pr.name||"?").charAt(0).toUpperCase();
+        return`<div class="feed-item">
+          <div class="feed-avatar">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
+          <div class="feed-info">
+            <div class="feed-text"><strong>${pr.name||pr.username||"Alguém"}</strong> garfou <strong>${v.restaurant_name}</strong>${v.count>1?` <span style="color:var(--gold)">${v.count}x</span>`:""}</div>
+            <div class="feed-time">${tAgo(v.updated_at)}</div>
+          </div>
+          ${r?`<div class="feed-thumb">${posterSm(r)}</div>`:""}
+        </div>`;
+      }).join("");
+
+  return`${rTopbar()}
+    <div class="scroll-body">
+      <div class="sec-head"><span class="sec-title">Buscar amigos</span></div>
+      <div style="padding:0 1rem .75rem">
+        <input class="search-user-input" placeholder="Buscar por nome ou @username…" oninput="searchUsers(this.value)"/>
+        <div id="friend-search-area"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-head"><span class="sec-title">Seguidores</span><span class="sec-sub">${A.followers.length} pessoa${A.followers.length!==1?"s":""} te seguem</span></div>
+      ${followersH}
+      <div class="divider"></div>
+      <div class="sec-head"><span class="sec-title">Feed</span><span class="sec-sub">atividade dos que você segue</span></div>
+      ${feedH}
+      <div id="modal-slot"></div>
+    </div>`;
 }
+
 function renderFriendsArea(){
   const a=document.getElementById("friend-search-area");if(!a)return;
   if(!A.friendSearch.length){a.innerHTML="";return;}
-  a.innerHTML=A.friendSearch.map(u=>{const ini=(u.name||"?").charAt(0).toUpperCase(),isF=A.friends.includes(u.id);return`<div class="friend-row"><div class="friend-av">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div><div class="friend-info"><div class="friend-name">${u.name||"Sem nome"}</div><div class="friend-meta">@${u.username||"?"}</div></div><button class="follow-btn${isF?" following":""}" onclick="toggleFollow('${u.id}')">${isF?"Seguindo":"Seguir"}</button></div>`;}).join("");
-}
-function rPerfil(){
-  const pr=A.profile||{},ini=(pr.name||"G").charAt(0).toUpperCase(),g=gC(),tot=totV();
-  const vis=A.restaurants.filter(r=>(A.visits[r.id]||0)>0).slice(0,4);
-  const recH=vis.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--faint)"><div style="width:32px;height:48px;border-radius:4px;overflow:hidden;flex-shrink:0">${psm(r)}</div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:var(--text)">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr.split(",")[0]}</div></div><div style="font-size:11px;color:var(--green);font-weight:500">${A.visits[r.id]}x</div></div>`).join("");
-  return`${rTopbar()}<div class="scroll-body"><div class="profile-hero"><div class="avatar-circle" onclick="A.editingProfile=true;render()">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div><div class="profile-name">${pr.name||"Explorador"}</div>${pr.username?`<div class="profile-username">@${pr.username}</div>`:""}<div class="profile-bio">${pr.bio||"Toque no avatar para editar"}</div><div class="profile-stats"><div class="pstat"><div class="pstat-v" style="color:var(--green)">${g}</div><div class="pstat-l">garfados</div></div><div class="pstat-d"></div><div class="pstat"><div class="pstat-v">${tot}</div><div class="pstat-l">visitas</div></div><div class="pstat-d"></div><div class="pstat"><div class="pstat-v" style="color:var(--gold)">${A.achs.size}</div><div class="pstat-l">conquistas</div></div><div class="pstat-d"></div><div class="pstat"><div class="pstat-v">${A.friends.length}</div><div class="pstat-l">seguindo</div></div></div></div><div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 1rem .75rem">${ADEFS.map(a=>`<div title="${a.name}" style="width:36px;height:36px;border-radius:9px;background:var(--s2);border:.5px solid ${A.achs.has(a.id)?"var(--gold)":"var(--faint)"};display:flex;align-items:center;justify-content:center;font-size:18px;filter:${A.achs.has(a.id)?"none":"grayscale(1) opacity(.2)"}">${a.ico}</div>`).join("")}</div>${vis.length?`<div class="sec-head"><span class="sec-title">Últimas garfadas</span></div><div style="padding:0 1rem .75rem">${recH}</div>`:""}<button class="logout-btn" onclick="doLogout()">Sair da conta</button><div id="modal-slot"></div></div>`;
-}
-function rEditProfile(){
-  const pr=A.profile||{};
-  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet"><div class="mhandle"></div><div class="edit-sheet"><div class="msec" style="text-align:center;margin-bottom:1rem">Editar perfil</div><div class="edit-label">Nome</div><input class="edit-input" id="ep-name" value="${pr.name||""}"/><div class="edit-label">Username</div><input class="edit-input" id="ep-username" placeholder="ex: joao123" value="${pr.username||""}"/><div class="edit-label">Bio</div><input class="edit-input" id="ep-bio" placeholder="Uma frase sobre você" value="${pr.bio||""}"/><div class="edit-label">URL da foto (opcional)</div><input class="edit-input" id="ep-avatar" placeholder="https://..." value="${pr.avatar_url||""}"/><button class="edit-save" onclick="saveProfile()">Salvar</button></div></div></div>`;
-}
-const CRIT=["Comida","Atendimento","Limpeza","Banheiro"];
-function rModal(){
-  if(A.modal===null)return"";const r=A.restaurants.find(x=>x.id===A.modal);if(!r)return"";
-  const v=A.visits[r.id]||0,liked=A.likes[r.id],mr=A.ratings[r.id]||{},note=mr.nota||"";
-  const cH=CRIT.map(c=>{const cur=mr[c]||0;return`<div class="crow"><span class="clbl">${c}</span><div class="srow">${[1,2,3,4,5].map(n=>`<button class="sbtn${n<=cur?" lit":""}" onclick="setRat(${r.id},'${c}',${n})">★</button>`).join("")}</div>${cur?`<span style="font-size:11px;color:var(--muted);margin-left:5px">${cur}.0</span>`:""}</div>`;}).join("");
-  const pc=r.img?`<img src="${r.img}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVG(r)}`:mkSVG(r);
-  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet"><div class="mhandle"></div><div class="mhead"><div class="mtitle">${r.name}</div><div class="msub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div></div><div class="mposter">${pc}${v>0?'<div class="mribbon">garfado</div>':""}</div><div class="mactions"><button class="mact" onclick="addVisit(${r.id},1)"><span class="mact-ico${v>0?" aw":""}">◎</span><span class="mact-lbl">${v>0?v+"x garfado":"Garfar"}</span></button><button class="mact" onclick="toggleLike(${r.id})"><span class="mact-ico${liked?" al":""}">${liked?"♥":"♡"}</span><span class="mact-lbl">Curtir</span></button><button class="mact" onclick="addVisit(${r.id},-1)"><span class="mact-ico" style="${v>0?"":"opacity:.3"}">−◎</span><span class="mact-lbl">Remover</span></button></div><div class="mbody">${r.rating?`<div style="display:flex;align-items:center;gap:6px;margin-bottom:.875rem"><span style="font-size:17px;font-weight:500;color:var(--text)">${r.rating}</span><span style="color:var(--gold);font-size:13px">${"★".repeat(Math.round(r.rating))}</span><span style="font-size:11px;color:var(--muted)">&nbsp;${r.rating}/5.0</span></div>`:""}<div class="vcrow"><div><div class="vclbl">minhas visitas</div><div class="vcnum">${v}<span style="font-size:13px;font-weight:400;color:var(--muted)"> vez${v!==1?"es":""}</span></div></div><div class="vcctrl"><button class="vcbtn" onclick="addVisit(${r.id},-1)" ${v===0?"disabled":""}>−</button><button class="vcbtn p" onclick="addVisit(${r.id},1)">+</button></div></div><div class="msec">minha avaliação</div>${cH}<textarea class="notea" placeholder="Escreva sua impressão..." oninput="setNote(${r.id},this.value)">${note}</textarea></div></div></div>`;
+  a.innerHTML=A.friendSearch.map(u=>{const ini=(u.name||"?").charAt(0).toUpperCase(),isF=A.friends.includes(u.id);return`<div class="follower-row"><div class="follower-av">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div><div class="follower-info"><div class="follower-name">${u.name||"Sem nome"}</div><div class="follower-meta">@${u.username||"?"}</div></div><button class="follow-btn${isF?" following":""}" onclick="toggleFollow('${u.id}')">${isF?"Seguindo":"Seguir"}</button></div>`;}).join("");
 }
 
+/* ── PERFIL ── com stats clicáveis */
+function rPerfil(){
+  // se profileView está ativo, mostra lista expandida
+  if(A.profileView==="garfados") return rProfileList("garfados");
+  if(A.profileView==="conquistas") return rProfileList("conquistas");
+  if(A.profileView==="seguindo") return rProfileList("seguindo");
+  if(A.profileView==="seguidores") return rProfileList("seguidores");
+
+  const pr=A.profile||{},ini=(pr.name||"G").charAt(0).toUpperCase(),g=garfCount();
+  const vis=A.restaurants.filter(r=>(A.visits[r.id]||0)>0).slice(0,4);
+  const recH=vis.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--faint);cursor:pointer" onclick="openModal(${r.id})"><div style="width:32px;height:48px;border-radius:4px;overflow:hidden;flex-shrink:0">${posterSm(r)}</div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:500;color:var(--text)">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr.split(",")[0]}</div></div><div style="font-size:11px;color:var(--gold);font-weight:500">${A.visits[r.id]}x</div></div>`).join("");
+
+  return`${rTopbar()}
+    <div class="scroll-body">
+      <div class="profile-hero">
+        <div class="avatar-wrap" onclick="A.editingProfile=true;render()">
+          <div class="avatar-circle">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
+          <div class="avatar-edit-badge">✎</div>
+        </div>
+        <div class="profile-name">${pr.name||"Explorador"}</div>
+        ${pr.username?`<div class="profile-username">@${pr.username}</div>`:""}
+        <div class="profile-bio">${pr.bio||"Toque no avatar para editar"}</div>
+        <div class="profile-stats">
+          <div class="pstat" onclick="A.profileView='garfados';render()"><div class="pstat-v" style="color:var(--green)">${g}</div><div class="pstat-l">garfados</div></div>
+          <div class="pstat-d"></div>
+          <div class="pstat" onclick="A.profileView='conquistas';render()"><div class="pstat-v" style="color:var(--gold)">${A.achs.size}</div><div class="pstat-l">conquistas</div></div>
+          <div class="pstat-d"></div>
+          <div class="pstat" onclick="A.profileView='seguindo';render()"><div class="pstat-v">${A.friends.length}</div><div class="pstat-l">seguindo</div></div>
+          <div class="pstat-d"></div>
+          <div class="pstat" onclick="A.profileView='seguidores';render()"><div class="pstat-v">${A.followers.length}</div><div class="pstat-l">seguidores</div></div>
+        </div>
+      </div>
+      ${vis.length?`<div class="sec-head"><span class="sec-title">Últimas garfadas</span></div><div style="padding:0 1rem .75rem">${recH}</div>`:""}
+      <button class="logout-btn" onclick="doLogout()">Sair da conta</button>
+      <div id="modal-slot"></div>
+    </div>`;
+}
+
+function rProfileList(view){
+  let title="",content="";
+  if(view==="garfados"){
+    title=`Garfados (${garfCount()})`;
+    const vis=A.restaurants.filter(r=>(A.visits[r.id]||0)>0);
+    content=vis.length?`<div class="grid-3" style="padding:3px">${vis.map(r=>{const v=A.visits[r.id]||0,c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-label"><div class="pw-label-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}<div class="pvc">✓</div>${v>1?`<div class="pvn">${v}x</div>`:""}</div>`;}).join("")}</div>`:`<div class="empty-state"><div class="empty-ico">◎</div>Nenhum lugar garfado ainda.</div>`;
+  }else if(view==="conquistas"){
+    title=`Conquistas (${A.achs.size}/${ADEFS.length})`;
+    const ul=ADEFS.filter(a=>A.achs.has(a.id)),lk=ADEFS.filter(a=>!A.achs.has(a.id));
+    const cards=list=>list.map(a=>`<div style="background:var(--s2);border-radius:12px;padding:.875rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;border:.5px solid ${A.achs.has(a.id)?"var(--gold)":"var(--faint)"}"><div style="font-size:26px;filter:${A.achs.has(a.id)?"none":"grayscale(1) opacity(.2)"}">${a.ico}</div><div style="font-size:12px;font-weight:500;color:${A.achs.has(a.id)?"var(--text)":"var(--faint)"}">${a.name}</div><div style="font-size:10px;color:var(--faint);line-height:1.4">${a.desc}</div></div>`).join("");
+    content=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 1rem 1rem">${cards(ul)}${cards(lk)}</div>`;
+  }else if(view==="seguindo"){
+    title=`Seguindo (${A.friends.length})`;
+    if(!A.friends.length)content=`<div class="empty-state"><div class="empty-ico">👥</div>Você não segue ninguém ainda.</div>`;
+    else content=`<div style="padding:0 .5rem">${A.friends.map(fid=>{return`<div class="follower-row"><div class="follower-av" style="background:var(--s2)">?</div><div class="follower-info"><div class="follower-name">Carregando…</div></div><button class="follow-btn following" onclick="toggleFollow('${fid}')">Seguindo</button></div>`;}).join("")}</div>`;
+    // carrega profiles dos seguidos
+    if(A.friends.length)sb.from("profiles").select("*").in("id",A.friends).then(({data})=>{
+      const a=document.getElementById("profile-list-content");
+      if(!a)return;
+      a.innerHTML=(data||[]).map(u=>{const ini=(u.name||"?").charAt(0).toUpperCase();return`<div class="follower-row"><div class="follower-av">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div><div class="follower-info"><div class="follower-name">${u.name||"Sem nome"}</div><div class="follower-meta">@${u.username||"?"}</div></div><button class="follow-btn following" onclick="toggleFollow('${u.id}')">Seguindo</button></div>`;}).join("");
+    });
+  }else if(view==="seguidores"){
+    title=`Seguidores (${A.followers.length})`;
+    content=!A.followers.length?`<div class="empty-state"><div class="empty-ico">👥</div>Ninguém te segue ainda.</div>`:`<div style="padding:0 .5rem">${A.followers.map(u=>{const ini=(u.name||"?").charAt(0).toUpperCase(),isF=A.friends.includes(u.id);return`<div class="follower-row"><div class="follower-av">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div><div class="follower-info"><div class="follower-name">${u.name||"Sem nome"}</div><div class="follower-meta">@${u.username||"?"}</div></div><button class="follow-btn${isF?" following":""}" onclick="toggleFollow('${u.id}')">${isF?"Seguindo":"Seguir"}</button></div>`;}).join("")}</div>`;
+  }
+  return`${rTopbar()}
+    <div class="scroll-body">
+      <div style="display:flex;align-items:center;gap:10px;padding:1rem 1rem .75rem;border-bottom:.5px solid var(--faint)">
+        <button onclick="A.profileView=null;render()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:0;line-height:1">←</button>
+        <span style="font-family:Georgia,serif;font-size:15px;font-weight:700;color:var(--text)">${title}</span>
+      </div>
+      <div id="profile-list-content">${content}</div>
+      <div id="modal-slot"></div>
+    </div>`;
+}
+
+/* ── EDIT PROFILE ── */
+function rEditProfile(){
+  const pr=A.profile||{};
+  const ini=(pr.name||"G").charAt(0).toUpperCase();
+  const previewSrc=A.pendingAvatar||pr.avatar_url||null;
+  const previewContent=previewSrc?`<img src="${previewSrc}" onerror="this.innerHTML='${ini}'">`:`${ini}`;
+  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet"><div class="mhandle"></div><div class="edit-sheet">
+    <div class="msec" style="text-align:center;margin-bottom:1rem">Editar perfil</div>
+    <div class="avatar-preview">${previewContent}</div>
+    <button class="avatar-upload-btn" onclick="triggerAvatarUpload()">📷 Escolher foto da biblioteca</button>
+    <div class="edit-label">Nome</div><input class="edit-input" id="ep-name" value="${pr.name||""}"/>
+    <div class="edit-label">Username</div><input class="edit-input" id="ep-username" placeholder="ex: joao123" value="${pr.username||""}"/>
+    <div class="edit-label">Bio</div><input class="edit-input" id="ep-bio" placeholder="Uma frase sobre você" value="${pr.bio||""}"/>
+    <div class="edit-label">Ou cole URL de imagem</div><input class="edit-input" id="ep-avatar" placeholder="https://..." value="${pr.avatar_url||""}"/>
+    <button class="edit-save" onclick="saveProfile()">Salvar</button>
+  </div></div></div>`;
+}
+
+/* ── MODAL RESTAURANTE ── */
+const CRIT=["Comida","Atendimento","Limpeza","Banheiro"];
+function rModal(){
+  if(A.modal===null)return"";
+  const r=A.restaurants.find(x=>x.id===A.modal);if(!r)return"";
+  const v=A.visits[r.id]||0; // número de visitas
+  const garfado=v>0;          // se foi ou não (binário)
+  const liked=A.likes[r.id],mr=A.ratings[r.id]||{},note=mr.nota||"";
+  const cH=CRIT.map(c=>{const cur=mr[c]||0;return`<div class="crow"><span class="clbl">${c}</span><div class="srow">${[1,2,3,4,5].map(n=>`<button class="sbtn${n<=cur?" lit":""}" onclick="setRat(${r.id},'${c}',${n})">★</button>`).join("")}</div>${cur?`<span style="font-size:11px;color:var(--muted);margin-left:5px">${cur}.0</span>`:""}</div>`;}).join("");
+  const pc=r.img?`<img src="${r.img}" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display='none'">${mkSVG(r)}`:mkSVG(r);
+
+  // amigos que foram
+  const fw=friendsWhoVisited(r.id);
+  const fwH=fw.length?`<div style="margin-bottom:.875rem"><div class="msec">amigos que foram</div><div style="display:flex;gap:6px;flex-wrap:wrap">${fw.map(f=>{const ini=(f.name||"?").charAt(0).toUpperCase();return`<div style="display:flex;align-items:center;gap:5px;background:var(--s2);border-radius:99px;padding:4px 8px 4px 4px"><div style="width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#0f1117;overflow:hidden">${f.avatar?`<img src="${f.avatar}" style="width:100%;height:100%;object-fit:cover">`:ini}</div><span style="font-size:10px;color:var(--text)">${f.name.split(" ")[0]}</span></div>`;}).join("")}</div></div>`:"";
+
+  return`<div class="modal-back"><div class="modal-tap" onclick="closeModal()"></div><div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mhead"><div class="mtitle">${r.name}</div><div class="msub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div></div>
+    <div class="mposter">${pc}${garfado?'<div class="mribbon">garfado</div>':""}</div>
+    <div class="mactions">
+      <button class="mact" onclick="addVisit(${r.id},1)">
+        <span class="mact-ico${garfado?" aw":""}">◎</span>
+        <span class="mact-lbl">${garfado?"+ visita":"Garfar"}</span>
+      </button>
+      <button class="mact" onclick="toggleLike(${r.id})">
+        <span class="mact-ico${liked?" al":""}">${liked?"♥":"♡"}</span>
+        <span class="mact-lbl">Favorito</span>
+      </button>
+      <button class="mact" onclick="addVisit(${r.id},-1)">
+        <span class="mact-ico" style="${v>0?"":"opacity:.3"}">−◎</span>
+        <span class="mact-lbl">Remover</span>
+      </button>
+    </div>
+    <div class="mbody">
+      ${r.rating?`<div style="display:flex;align-items:center;gap:6px;margin-bottom:.875rem"><span style="font-size:17px;font-weight:500;color:var(--text)">${r.rating}</span><span style="color:var(--gold);font-size:13px">${"★".repeat(Math.round(r.rating))}</span><span style="font-size:11px;color:var(--muted)">&nbsp;${r.rating}/5.0</span></div>`:""}
+      <div class="vcrow">
+        <div><div class="vclbl">minhas visitas</div><div class="vcnum">${v}<span style="font-size:13px;font-weight:400;color:var(--muted)"> vez${v!==1?"es":""}</span></div></div>
+        <div class="vcctrl">
+          <button class="vcbtn" onclick="addVisit(${r.id},-1)" ${v===0?"disabled":""}>−</button>
+          <button class="vcbtn p" onclick="addVisit(${r.id},1)">+</button>
+        </div>
+      </div>
+      ${fwH}
+      <div class="msec">minha avaliação</div>${cH}
+      <textarea class="notea" placeholder="Escreva sua impressão..." oninput="setNote(${r.id},this.value)">${note}</textarea>
+    </div>
+  </div></div>`;
+}
+
+/* ── INIT ── */
 (async()=>{
   A.loadingApp=true;render();
   const{data:{session}}=await sb.auth.getSession();
@@ -484,7 +867,7 @@ function rModal(){
     if(ev==="SIGNED_IN"&&session){
       A.user=session.user;
       const{data:prof}=await sb.from("profiles").select("*").eq("id",A.user.id).single();
-      A.profile=prof;A.loadingApp=false;render();
+      A.profile=prof;render();
       await Promise.all([loadData(),fetchRestaurants(false)]);render();
     }
     if(ev==="SIGNED_OUT"){A.user=null;A.profile=null;render();}
