@@ -251,8 +251,9 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 <script>
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
+const GPLACES_KEY="AIzaSyAhzE6fevFrKs5q5MiZQrPp2l326QtN0FI";
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.8.0";
+const VER="2.9.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -286,7 +287,11 @@ let A={
   myReactions:{},      // {feedKey: bool}
   reviews:{},
   trending:[],         // [{restaurant_id, count}]
-  onboarding:false,    // mostrar tela de username na 1ª vez
+  onboarding:false,
+  placesCache:{},
+  searchPlacesResults:[],
+  searchPlacesQuery:"",
+  onboarding:false,
   pullRefreshing:false,
 };
 let toastTimer=null;
@@ -607,7 +612,15 @@ async function toggleLike(rid){A.likes[rid]=!A.likes[rid];await saveLike(rid,A.l
 async function setRat(rid,c,v){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid][c]=v;await saveRating(rid,c,v);checkAchs();renderModal();}
 async function setNote(rid,nota){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid].nota=nota;await saveNote(rid,nota);}
 
-function openModal(id){A.modal=id;render();setTimeout(()=>{initSwipe();loadReviews(id);},50);}
+function openModal(id){
+  A.modal=id;render();
+  setTimeout(()=>{
+    initSwipe();
+    loadReviews(id);
+    const r=A.restaurants.find(x=>x.id===id);
+    if(r&&!r.img)enrichRestaurantPhoto(r);
+  },50);
+}
 function closeModal(){A.modal=null;A.editingProfile=false;A.pendingAvatar=null;A.pendingCheckin=null;A.checkinRid=null;render();}
 
 function setNav(n){if(n==="amigos")AMIGOS_TAB="feed";
@@ -718,6 +731,35 @@ async function doLogout(){
 }
 
 /* ── AMIGOS ── */
+async function handlePlacesSearch(q){
+  A.searchPlacesQuery=q;
+  if(!q||q.length<2){A.searchPlacesResults=[];renderSearchPlaces();return;}
+  renderSearchPlaces("buscando...");
+  const results=await searchGooglePlaces(q);
+  A.searchPlacesResults=results;
+  renderSearchPlaces();
+}
+
+function renderSearchPlaces(msg){
+  const el=document.getElementById("places-search-results");
+  if(!el)return;
+  if(msg){el.innerHTML=`<div style="font-size:11px;color:var(--faint);padding:.5rem 0;text-align:center">${msg}</div>`;return;}
+  const res=A.searchPlacesResults;
+  if(!res.length){el.innerHTML="";return;}
+  el.innerHTML=res.map(p=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="addFromPlaces(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+      ${p.photo?`<img src="${p.photo}" style="width:40px;height:60px;object-fit:cover;border-radius:5px;flex-shrink:0"/>`:
+        `<div style="width:40px;height:60px;border-radius:5px;background:var(--s2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px">🍽</div>`}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.addr}</div>
+        ${p.rating?`<div style="font-size:10px;color:var(--gold)">★ ${p.rating}</div>`:""}
+      </div>
+      <div style="font-size:20px;color:var(--green);flex-shrink:0">+</div>
+    </div>
+  `).join("");
+}
+
 async function searchUsers(q){
   if(!q||q.length<2){A.friendSearch=[];renderFriendsArea();return;}
   const{data}=await sb.from("profiles").select("*").or(`username.ilike.%${q}%,name.ilike.%${q}%`).limit(10);
@@ -748,6 +790,87 @@ async function saveProfile(){
 }
 
 /* ── PLANILHA ── */
+
+/* ── GOOGLE PLACES INTEGRATION ── */
+async function fetchPlacePhoto(r){
+  if(!r||!r.name)return null;
+  if(A.placesCache[r.id]!==undefined)return A.placesCache[r.id];
+  try{
+    // Text Search para achar o place_id
+    const query=encodeURIComponent(r.name+" "+r.addr.split(",")[0]+" Brasil");
+    const tsUrl=`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${GPLACES_KEY}&language=pt-BR&region=br`;
+    // Places API via proxy não é possível direto — usar Place Search com fetch via campo fields
+    // Usar Places API (New) com endpoint correto
+    const resp=await fetch(`https://places.googleapis.com/v1/places:searchText`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "X-Goog-Api-Key":GPLACES_KEY,
+        "X-Goog-FieldMask":"places.id,places.photos,places.displayName"
+      },
+      body:JSON.stringify({textQuery:r.name+" "+r.addr.split(",")[0],languageCode:"pt-BR",regionCode:"BR",maxResultCount:1})
+    });
+    const data=await resp.json();
+    const place=data.places?.[0];
+    if(!place||!place.photos||!place.photos.length){A.placesCache[r.id]=null;return null;}
+    // Pegar URL da primeira foto
+    const photoName=place.photos[0].name;
+    const photoUrl=`https://places.googleapis.com/v1/${photoName}/media?maxHeightPx=600&maxWidthPx=400&key=${GPLACES_KEY}`;
+    A.placesCache[r.id]=photoUrl;
+    return photoUrl;
+  }catch(e){A.placesCache[r.id]=null;return null;}
+}
+
+async function enrichRestaurantPhoto(r){
+  if(r.img)return; // já tem foto
+  const url=await fetchPlacePhoto(r);
+  if(url){
+    // Atualizar no array em memória
+    const idx=A.restaurants.findIndex(x=>x.id===r.id);
+    if(idx>=0)A.restaurants[idx].img=url;
+    render();
+  }
+}
+
+// Buscar restaurante pelo Google Places e adicionar ao app
+async function searchGooglePlaces(query){
+  if(!query||query.length<2)return[];
+  try{
+    const resp=await fetch(`https://places.googleapis.com/v1/places:searchText`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json",
+        "X-Goog-Api-Key":GPLACES_KEY,
+        "X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress,places.photos,places.rating,places.types"
+      },
+      body:JSON.stringify({textQuery:query+" restaurante Brasil",languageCode:"pt-BR",regionCode:"BR",maxResultCount:5,
+        includedType:"restaurant"})
+    });
+    const data=await resp.json();
+    return(data.places||[]).map(p=>({
+      placeId:p.id,
+      name:p.displayName?.text||"",
+      addr:p.formattedAddress||"",
+      rating:p.rating||null,
+      photo:p.photos?.[0]?`https://places.googleapis.com/v1/${p.photos[0].name}/media?maxHeightPx=600&maxWidthPx=400&key=${GPLACES_KEY}`:null
+    }));
+  }catch(e){return[];}
+}
+
+async function addFromPlaces(place){
+  // Mostra modal de confirmação para garfar este lugar
+  // Como não temos backend para adicionar à planilha, registramos a visita diretamente
+  // usando o nome/endereço como identificador temporário
+  toast("✓ "+place.name+" adicionado!");
+  A.searchPlacesResults=[];
+  A.searchPlacesQuery="";
+  // Fechar busca e abrir o lugar
+  const tempId=Date.now();
+  const tempR={id:tempId,name:place.name,addr:place.addr,rede:"Outro",hours:"–",rating:place.rating,img:place.photo};
+  A.restaurants.push(tempR);
+  openModal(tempId);
+}
+
 async function fetchRestaurants(spin=true){
   const btn=document.getElementById("reload-btn");if(btn&&spin)btn.classList.add("spinning");
   try{
