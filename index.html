@@ -259,7 +259,7 @@ const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="3.1.0";
+const VER="3.2.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -634,8 +634,7 @@ function setNav(n){if(n==="amigos")AMIGOS_TAB="feed";
   if(n==="amigos")loadFriendData().then(()=>render());
   else render();
 }
-function setQuery(q){A.query=q;document.getElementById("search-clear")?.classList.toggle("show",!!q);renderSearchArea();}
-function clearSearch(){A.query="";const i=document.getElementById("search-input");if(i)i.value="";document.getElementById("search-clear")?.classList.remove("show");renderSearchArea();}
+// search unificado — ver handleUnifiedSearch abaixo
 
 function initPullRefresh(scrollId){
   const el=document.getElementById(scrollId);if(!el)return;
@@ -738,30 +737,23 @@ async function doLogout(){
 
 /* ── AMIGOS ── */
 function clearSearch(){
-  A.query="";A.searchPlacesQuery="";A.searchPlacesResults=[];
-  render();
-  setTimeout(()=>{const el=document.getElementById("search-input");if(el)el.focus();},50);
+  A.query="";A.searchPlacesResults=[];
+  renderSearchArea();
+  setTimeout(()=>{const el=document.getElementById("search-input");if(el){el.value="";el.focus();}},30);
 }
 
 async function handleUnifiedSearch(q){
-  // Buscar primeiro nos restaurantes locais
   A.query=q;
-  A.searchPlacesQuery=q;
-  if(!q||q.length<2){
-    A.searchPlacesResults=[];
-    renderSearchArea();
-    return;
-  }
-  // Se não tem resultados locais suficientes, buscar no Google
-  const local=A.restaurants.filter(r=>r.name.toLowerCase().includes(q.toLowerCase())||r.addr.toLowerCase().includes(q.toLowerCase()));
-  renderSearchArea();
-  if(local.length<3){
-    const results=await searchGooglePlaces(q);
-    A.searchPlacesResults=results;
-    // Atualizar só a seção de resultados do Places sem re-renderizar tudo
-    const el=document.getElementById("places-results-section");
-    if(el&&results.length)el.innerHTML=renderPlacesResults();
-    else if(el)el.innerHTML="";
+  if(!q||q.length<1){A.searchPlacesResults=[];renderSearchArea();return;}
+  renderSearchArea(); // mostra resultados locais imediatamente
+  if(q.length>=2){
+    const local=A.restaurants.filter(r=>r.name.toLowerCase().includes(q.toLowerCase())||r.addr.toLowerCase().includes(q.toLowerCase()));
+    if(local.length<3){
+      const results=await searchGooglePlaces(q);
+      A.searchPlacesResults=results;
+      const el=document.getElementById("places-results-section");
+      if(el)el.innerHTML=results.length?`<div class="sec-head" style="margin-top:.25rem"><span class="sec-title">Adicionar pelo Google</span></div>${renderPlacesResults()}`:"";
+    }
   }
 }
 
@@ -1068,14 +1060,16 @@ function rMainTopbar(){
     </div>
   </div>`;
 }
-function rSearch(){return`<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="search-input" type="search" placeholder="Buscar por nome ou endereço…" oninput="setQuery(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/><button class="search-clear" id="search-clear" onclick="clearSearch()" type="button">✕</button></div>
-  <div style="padding:0 12px 8px">
-    <div style="display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:10px;padding:8px 12px;border:.5px solid var(--faint)">
-      <span style="font-size:14px;flex-shrink:0">📍</span>
-      <input id="places-input" placeholder="Adicionar lugar pelo Google…" style="flex:1;background:none;border:none;font-size:12px;color:var(--text);font-family:inherit;outline:none" oninput="handlePlacesSearch(this.value)" value="${A.searchPlacesQuery}"/>
-      ${A.searchPlacesQuery?`<button onclick="A.searchPlacesQuery='';A.searchPlacesResults=[];render()" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:0" type="button">✕</button>`:''}
-    </div>
-    <div id="places-search-results">${A.searchPlacesResults.length?renderPlacesResults():''}</div>
+function rSearch(){
+  const q=A.query||"";
+  return`<div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="search-input" type="search"
+      placeholder="Buscar ou adicionar restaurante…"
+      oninput="handleUnifiedSearch(this.value)"
+      onkeydown="if(event.key==='Escape')clearSearch()"
+      value="${q}"/>
+    ${q?`<button class="search-clear" id="search-clear" onclick="clearSearch()" type="button">✕</button>`:""}
   </div>`;
 }
 
@@ -1096,12 +1090,16 @@ function renderPlacesResults(){
 function renderSearchArea(){
   const a=document.getElementById("search-area");
   if(!a)return;
-  if(A.query||A.searchPlacesQuery){
-    const local=rSearchRes();
-    // Adicionar seção Google Places se aplicável
-    const placesSection=`<div id="places-results-section">${A.searchPlacesResults.length?`<div class="sec-head" style="margin-top:.5rem"><span class="sec-title">Adicionar pelo Google</span></div>${renderPlacesResults()}`:""}`;
-    a.innerHTML=local+placesSection;
+  if(A.query){
+    let html=rSearchRes();
+    html+=`<div id="places-results-section">`;
+    if(A.searchPlacesResults.length){
+      html+=`<div class="sec-head" style="margin-top:.25rem"><span class="sec-title">Adicionar pelo Google</span></div>${renderPlacesResults()}`;
+    }
+    html+=`</div>`;
+    a.innerHTML=html;
   }else{
+    A.searchPlacesResults=[];
     a.innerHTML=rMainContent();
   }
 }
