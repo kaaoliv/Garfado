@@ -1505,23 +1505,29 @@ function rDest(){
 }
 
 /* ── HUNTER — clique corrigido com onclick direto ── */
+function rHunterTotal(gf,total){
+  if(!total)return"";
+  const pct=Math.round(gf/total*100);
+  const el=document.createElement("div");
+  el.style.cssText="background:var(--s2);border-radius:14px;padding:14px;margin:0 1rem .875rem;border:.5px solid var(--faint)";
+  el.innerHTML="<div style='display:flex;align-items:center;justify-content:space-between;margin-bottom:8px'>"
+    +"<span style='font-family:Georgia,serif;font-size:14px;font-weight:600;color:var(--text)'>Progresso total</span>"
+    +"<span style='font-size:14px;font-weight:700;color:var(--green)'>"+gf+"/"+total+"</span>"
+    +"</div>"
+    +"<div style='height:8px;background:var(--faint);border-radius:99px;overflow:hidden'>"
+    +"<div style='height:8px;background:var(--green);border-radius:99px;width:"+pct+"%;transition:width .4s'></div>"
+    +"</div>"
+    +"<div style='font-size:11px;color:var(--muted);margin-top:6px'>"+pct+"% das franquias conquistadas</div>";
+  return el.outerHTML;
+}
+
 function rHunter(){
   const redes=getRedes();
   if(!redes.length)return`${rMainTopbar()}${rSearch()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Adicione redes conhecidas com múltiplas filiais.</div></div>`;
   const rc=redes.filter(rede=>{const t=A.restaurants.filter(r=>bk(r.rede)===rede);return t.length>0&&t.every(r=>(A.visits[r.id]||0)>0)}).length;
   const totalUnidades=redes.reduce((s,rede)=>s+A.restaurants.filter(r=>bk(r.rede)===rede).length,0);
   const totalGarfadas=redes.reduce((s,rede)=>s+A.restaurants.filter(r=>bk(r.rede)===rede&&(A.visits[r.id]||0)>0).length,0);
-  const pctGeral=totalUnidades?Math.round(totalGarfadas/totalUnidades*100):0;
-  const hunterTotalH=totalUnidades?`<div class="hunter-total">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-      <span style="font-family:Georgia,serif;font-size:14px;font-weight:600;color:var(--text)">Progresso total</span>
-      <span style="font-size:14px;font-weight:700;color:var(--green)">${totalGarfadas}/${totalUnidades}</span>
-    </div>
-    <div style="height:8px;background:var(--faint);border-radius:99px;overflow:hidden">
-      <div style="height:8px;background:var(--green);border-radius:99px;width:${pctGeral}%;transition:width .4s"></div>
-    </div>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px">${pctGeral}% das franquias conquistadas</div>
-  </div>`:""`;
+  const hunterTotalH=rHunterTotal(totalGarfadas,totalUnidades);
   const fH=redes.map(function(rede,idx){
     const todos=A.restaurants.filter(r=>bk(r.rede)===rede);
     const gf=todos.filter(r=>(A.visits[r.id]||0)>0);
