@@ -259,14 +259,13 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
-const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="3.3.0";
+const VER="3.4.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
 const BB={"mcdonald's":"#1a0000","burger king":"#1a0800","bob's":"#00081a","kfc":"#1a0000","subway":"#001a00","pizzaria":"#1a0800","hamburgueria":"#0f0800","bar":"#0a0014","outro":"#0f1117"};
 const BI={"mcdonald's":"✦","burger king":"♨","bob's":"◈","kfc":"☖","subway":"≋","pizzaria":"✿","hamburgueria":"☀","bar":"◉","outro":"◎"};
-const BE={"mcdonald's":"🍔","burger king":"👑","bob's":"🧃","kfc":"🍗","subway":"🥖","pizzaria":"🍕","hamburgueria":"🍔","bar":"🍺"};
+const BE={"mcdonald's":"🍔","burger king":"👑","bob's":"🧃","kfc":"🍗","subway":"🥖"};
 
 function bk(r){return(r||"outro").toLowerCase().trim()}
 function bc(r){return BC[bk(r)]||"#4ade80"}
@@ -654,7 +653,7 @@ function initPullRefresh(scrollId){
     if(!pulling)return;pulling=false;
     const dy=e.changedTouches[0].clientY-startY;
     if(indicator){indicator.remove();indicator=null;}
-    if(dy>56){toast("↻ Atualizando…");fetchRestaurants(false);}
+    if(dy>56){toast("↻ Atualizando…");fetchRestaurants(false).then(()=>render());}
   },{passive:true});
 }
 
@@ -935,19 +934,15 @@ function detectRede(name){
 async function fetchRestaurants(spin=true){
   const btn=document.getElementById("reload-btn");if(btn&&spin)btn.classList.add("spinning");
   try{
-    // Carregar restaurantes salvos no Supabase (todos os usuários)
-    const{data}=await sb.from("restaurants").select("*");
-    if(data&&data.length){
-      // Mesclar com restaurantes já em memória sem duplicar
-      const existingIds=new Set(A.restaurants.map(r=>r.id));
-      const newOnes=(data||[]).filter(r=>!existingIds.has(r.id)).map(r=>({
-        id:r.id,name:r.name,addr:r.addr,rede:r.rede||"Outro",
+    const{data,error}=await sb.from("restaurants").select("*").order("name");
+    if(!error&&data){
+      A.restaurants=data.map(r=>({
+        id:r.id,name:r.name,addr:r.addr||"",rede:r.rede||"Outro",
         hours:r.hours||"–",rating:r.rating||null,img:r.img||null,
         place_id:r.place_id||null
       }));
-      A.restaurants=[...A.restaurants,...newOnes];
     }
-  }catch(e){}
+  }catch(e){console.error("fetchRestaurants:",e);}
   const b2=document.getElementById("reload-btn");if(b2)b2.classList.remove("spinning");
   render();
 }
@@ -956,12 +951,15 @@ async function fetchRestaurants(spin=true){
 function garfCount(){return A.restaurants.filter(r=>(A.visits[r.id]||0)>0).length;}
 function totV(){return Object.values(A.visits).reduce((a,b)=>a+b,0);}
 function getRedes(){
-  // Contar todas as redes conhecidas (incluindo as do Supabase)
+  // Hunter: só franquias conhecidas com emoji definido (McDonald's, BK, Bob's, KFC, Subway)
+  // Não inclui categorias genéricas como Hamburgueria, Bar, Pizzaria
   const counts={};
-  A.restaurants.forEach(r=>{const k=bk(r.rede);counts[k]=(counts[k]||0)+1;});
-  // Threshold: pelo menos 2 unidades E tem emoji definido
+  A.restaurants.forEach(r=>{
+    const k=bk(r.rede);
+    if(be(k)!==null) counts[k]=(counts[k]||0)+1; // só conta se tem emoji de franquia
+  });
   return Object.entries(counts)
-    .filter(([k,v])=>v>1&&be(k)!==null)
+    .filter(([k,v])=>v>=2) // pelo menos 2 unidades
     .sort((a,b)=>b[1]-a[1])
     .map(([k])=>k);
 }
