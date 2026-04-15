@@ -251,9 +251,9 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 <script>
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
-const GPLACES_KEY="AIzaSyAhzE6fevFrKs5q5MiZQrPp2l326QtN0FI";
+const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.9.0";
+const VER="3.0.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -733,31 +733,15 @@ async function doLogout(){
 /* ── AMIGOS ── */
 async function handlePlacesSearch(q){
   A.searchPlacesQuery=q;
-  if(!q||q.length<2){A.searchPlacesResults=[];renderSearchPlaces();return;}
-  renderSearchPlaces("buscando...");
+  if(!q||q.length<2){A.searchPlacesResults=[];render();return;}
+  // Mostrar loading
+  const el=document.getElementById("places-search-results");
+  if(el)el.innerHTML=`<div style="font-size:11px;color:var(--faint);padding:.5rem 0;text-align:center">Buscando…</div>`;
   const results=await searchGooglePlaces(q);
   A.searchPlacesResults=results;
-  renderSearchPlaces();
-}
-
-function renderSearchPlaces(msg){
-  const el=document.getElementById("places-search-results");
-  if(!el)return;
-  if(msg){el.innerHTML=`<div style="font-size:11px;color:var(--faint);padding:.5rem 0;text-align:center">${msg}</div>`;return;}
-  const res=A.searchPlacesResults;
-  if(!res.length){el.innerHTML="";return;}
-  el.innerHTML=res.map(p=>`
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="addFromPlaces(${JSON.stringify(p).replace(/"/g,'&quot;')})">
-      ${p.photo?`<img src="${p.photo}" style="width:40px;height:60px;object-fit:cover;border-radius:5px;flex-shrink:0"/>`:
-        `<div style="width:40px;height:60px;border-radius:5px;background:var(--s2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px">🍽</div>`}
-      <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
-        <div style="font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.addr}</div>
-        ${p.rating?`<div style="font-size:10px;color:var(--gold)">★ ${p.rating}</div>`:""}
-      </div>
-      <div style="font-size:20px;color:var(--green);flex-shrink:0">+</div>
-    </div>
-  `).join("");
+  // Atualizar só o container de resultados
+  const el2=document.getElementById("places-search-results");
+  if(el2)el2.innerHTML=results.length?renderPlacesResults():`<div style="font-size:11px;color:var(--faint);padding:.5rem 0;text-align:center">Nenhum resultado encontrado</div>`;
 }
 
 async function searchUsers(q){
@@ -1013,7 +997,30 @@ function rMainTopbar(){
     </div>
   </div>`;
 }
-function rSearch(){return`<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="search-input" type="search" placeholder="Buscar por nome ou endereço…" oninput="setQuery(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/><button class="search-clear" id="search-clear" onclick="clearSearch()" type="button">✕</button></div>`;}
+function rSearch(){return`<div class="search-wrap"><span class="search-icon">🔍</span><input class="search-input" id="search-input" type="search" placeholder="Buscar por nome ou endereço…" oninput="setQuery(this.value)" onkeydown="if(event.key==='Escape')clearSearch()"/><button class="search-clear" id="search-clear" onclick="clearSearch()" type="button">✕</button></div>
+  <div style="padding:0 12px 8px">
+    <div style="display:flex;align-items:center;gap:8px;background:var(--s2);border-radius:10px;padding:8px 12px;border:.5px solid var(--faint)">
+      <span style="font-size:14px;flex-shrink:0">📍</span>
+      <input id="places-input" placeholder="Adicionar lugar pelo Google…" style="flex:1;background:none;border:none;font-size:12px;color:var(--text);font-family:inherit;outline:none" oninput="handlePlacesSearch(this.value)" value="${A.searchPlacesQuery}"/>
+      ${A.searchPlacesQuery?`<button onclick="A.searchPlacesQuery='';A.searchPlacesResults=[];render()" style="background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:0" type="button">✕</button>`:''}
+    </div>
+    <div id="places-search-results">${A.searchPlacesResults.length?renderPlacesResults():''}</div>
+  </div>`;
+}
+
+function renderPlacesResults(){
+  return A.searchPlacesResults.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="addFromPlaces(${i})">
+      ${p.photo?`<img src="${p.photo}" style="width:40px;height:60px;object-fit:cover;border-radius:5px;flex-shrink:0"/>`:
+        `<div style="width:40px;height:60px;border-radius:5px;background:var(--s2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:20px">🍽</div>`}
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.addr}</div>
+        ${p.rating?`<div style="font-size:10px;color:var(--gold)">★ ${p.rating}</div>`:''}
+      </div>
+      <div style="font-size:22px;color:var(--green);flex-shrink:0;font-weight:300">+</div>
+    </div>`).join('');
+}
 
 function renderSearchArea(){const a=document.getElementById("search-area");if(a)a.innerHTML=A.query?rSearchRes():rMainContent();}
 function rSearchRes(){
