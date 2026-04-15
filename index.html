@@ -104,9 +104,9 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 
 /* HUNTER — pointer-events corretos */
 .franchise-list{padding:0 1rem;display:flex;flex-direction:column;gap:8px;padding-bottom:1rem}
-.franchise-card{background:var(--s2);border-radius:12px;border:.5px solid var(--faint);overflow:hidden;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;display:block;width:100%;text-align:left}
-.franchise-card:active{opacity:.75}
-.franchise-head{display:flex;align-items:center;gap:12px;padding:10px 12px}
+.franchise-card{background:var(--s2);border-radius:12px;border:.5px solid var(--faint);overflow:hidden;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;display:block;width:100%;text-align:left;-webkit-user-select:none;user-select:none}
+.franchise-card:active{opacity:.75;background:var(--s1)}
+.franchise-head{display:flex;align-items:center;gap:12px;padding:10px 12px;pointer-events:none}
 .franchise-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .franchise-info{flex:1;min-width:0}
 .franchise-name{font-size:13px;font-weight:500;color:var(--text)}
@@ -252,7 +252,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.5.0";
+const VER="2.6.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -1016,7 +1016,7 @@ function rPerfil(){
     <div class="scroll-body">
       <div class="profile-hero">
         <div class="avatar-wrap" onclick="A.editingProfile=true;render()">
-          <div class="avatar-circle">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
+          <div class="avatar-circle" style="position:relative">${pr.avatar_url?`<img src="${pr.avatar_url}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%" onload="this.nextSibling&&(this.nextSibling.style.display='none')" onerror="this.style.display='none'"/><span style="position:relative;z-index:1">${ini}</span>`:ini}</div>
           <div class="avatar-edit-badge">✎</div>
         </div>
         <div class="profile-name">${pr.name||"Explorador"}</div>
@@ -1031,6 +1031,10 @@ function rPerfil(){
           <div class="pstat-d"></div>
           <div class="pstat" onclick="A.profileView='seguidores';render()"><div class="pstat-v">${A.followers.length}</div><div class="pstat-l">seguidores</div></div>
         </div>
+      </div>
+      <div class="sec-head"><span class="sec-title">Conquistas</span><span class="sec-sub">${A.achs.size}/${ADEFS.length}</span></div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;padding:0 1rem .875rem">
+        ${ADEFS.map(a=>`<div onclick="showAchTooltip('${a.id}')" title="${a.name}" style="width:38px;height:38px;border-radius:10px;background:var(--s2);border:.5px solid ${A.achs.has(a.id)?"var(--gold)":"var(--faint)"};display:flex;align-items:center;justify-content:center;font-size:19px;filter:${A.achs.has(a.id)?"none":"grayscale(1) opacity(.25)"};cursor:pointer;touch-action:manipulation">${a.ico}</div>`).join("")}
       </div>
       ${vis.length?`<div class="sec-head"><span class="sec-title">Últimas garfadas</span></div><div style="padding:0 1rem .75rem">${recH}</div>`:""}
       <button class="logout-btn" onclick="doLogout()" type="button">Sair da conta</button>
@@ -1093,7 +1097,7 @@ function rUserProfile(){
   return`${rTopbarSimple(pr.name||"Perfil","closeUserProfile()")}
     <div class="scroll-body">
       <div class="profile-hero">
-        <div class="avatar-circle">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
+        <div class="avatar-circle" style="position:relative">${pr.avatar_url?`<img src="${pr.avatar_url}" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;border-radius:50%" onload="this.nextSibling&&(this.nextSibling.style.display='none')" onerror="this.style.display='none'"/><span style="position:relative;z-index:1">${ini}</span>`:ini}</div>
         <div class="profile-name">${pr.name||"Explorador"}</div>
         ${pr.username?`<div class="profile-username">@${pr.username}</div>`:""}
         ${pr.bio?`<div class="profile-bio">${pr.bio}</div>`:""}
