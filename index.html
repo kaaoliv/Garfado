@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#0f1117"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--green:#4ade80;--bg:#0f1117;--s1:#1a1d24;--s2:#252830;--text:#f5f5f7;--muted:#71717a;--faint:#2a2d35;--gold:#FFC72C;--card:#1a1d24;--surface:#14171e}
+:root{--green:#4ade80;--bg:#0f1117;--s1:#1a1d24;--s2:#252830;--text:#f5f5f7;--muted:#71717a;--faint:#2a2d35;--gold:#FFC72C;--card:#1a1d24;--surface:#14171e;--border:#2a2d35}
 html,body{height:100%;background:#0a0d10;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);-webkit-tap-highlight-color:transparent}
 body{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:16px}
 .shell{width:100%;max-width:390px;background:var(--bg);border-radius:32px;border:4px solid var(--s1);overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 32px);max-height:780px;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.6)}
@@ -25,11 +25,11 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .topbar-avatar{width:30px;height:30px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0f1117;overflow:hidden;cursor:pointer;touch-action:manipulation;flex-shrink:0}
 .topbar-avatar img{width:100%;height:100%;object-fit:cover}
 
-.search-wrap{padding:8px 12px;border-bottom:.5px solid var(--faint);flex-shrink:0;position:relative;display:flex;align-items:center}
-.search-icon{position:absolute;left:22px;color:var(--faint);font-size:15px;pointer-events:none}
-.search-input{width:100%;background:var(--s2);border:.5px solid var(--faint);border-radius:10px;padding:8px 36px 8px 34px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:border-color .15s}
-.search-input:focus{border-color:var(--green)}
-.search-input::placeholder{color:var(--faint)}
+.search-wrap{padding:4px 16px 12px;flex-shrink:0;position:relative;display:flex;align-items:center}
+.search-icon{position:absolute;left:28px;color:var(--muted);font-size:16px;pointer-events:none;top:50%;transform:translateY(-50%)}
+.search-input{width:100%;background:#1a1d24;border:none;border-radius:14px;padding:11px 16px 11px 40px;font-size:13px;color:var(--text);font-family:inherit;outline:none;transition:box-shadow .15s}
+.search-input:focus{box-shadow:0 0 0 1.5px rgba(74,222,128,.5)}
+.search-input::placeholder{color:var(--muted)}
 .search-clear{position:absolute;right:22px;background:none;border:none;cursor:pointer;color:var(--faint);font-size:16px;padding:4px;display:none}
 .search-clear.show{display:block}
 
@@ -92,15 +92,15 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .challenge-done-badge{font-size:10px;font-weight:600;color:var(--green)}
 
 /* ── POSTER UNIVERSAL: proporção 2:3 em todos os contextos ── */
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 3px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0}
 
 /* pw = poster no grid (ocupa célula inteira) */
-.pw{position:relative;aspect-ratio:2/3;cursor:pointer;border-radius:6px;overflow:hidden;touch-action:manipulation}
+.pw{position:relative;aspect-ratio:1/1;cursor:pointer;border-radius:12px;overflow:hidden;touch-action:manipulation}
 .pw:active{opacity:.75}
 .pw svg,.pw img.pi{width:100%;height:100%;object-fit:cover;display:block}
 
 /* pw-md = poster médio: carrosséis e destaques (largura fixa, 2:3) */
-.pw-md{position:relative;width:110px;flex-shrink:0;aspect-ratio:2/3;cursor:pointer;border-radius:6px;overflow:hidden;touch-action:manipulation;border:.5px solid var(--faint)}
+.pw-md{position:relative;width:112px;flex-shrink:0;aspect-ratio:3/4;cursor:pointer;border-radius:14px;overflow:hidden;touch-action:manipulation}
 .pw-md:active{opacity:.75}
 .cards-h .pw-md{-webkit-tap-highlight-color:rgba(74,222,128,.15)}
 .pw-md svg,.pw-md img{width:100%;height:100%;object-fit:cover;display:block}
@@ -110,11 +110,11 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .pw-sm svg,.pw-sm img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* overlays comuns */
-.pvc{position:absolute;top:4px;right:4px;background:var(--green);color:#0f1117;font-size:8px;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.pvc{position:absolute;top:6px;right:6px;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .pvn{position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,.8);color:var(--gold);font-size:8px;padding:1px 4px;border-radius:99px;pointer-events:none}
 .pmr{position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,.8);color:var(--gold);font-size:8px;padding:1px 4px;border-radius:99px;pointer-events:none}
-.pw-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 100%);padding:18px 5px 5px;pointer-events:none}
-.pw-overlay-name{font-size:9px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pw-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;padding:8px}
+.pw-overlay-name{font-family:Georgia,serif;font-size:11px;font-weight:600;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
 .pw-overlay-sub{font-size:7px;color:var(--green);margin-top:1px}
 
 /* CHECK-IN CTA */
@@ -122,10 +122,11 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .checkin-label{font-size:8px;color:var(--green);text-align:center;line-height:1.3;font-weight:500}
 
 /* FRIEND STRIP — usa pw-md */
-.friend-strip{display:flex;gap:6px;padding:0 12px 6px;overflow-x:auto}
+.friend-strip{display:flex;gap:12px;padding:0 16px 8px;overflow-x:auto}
 .friend-strip::-webkit-scrollbar{display:none}
-.friend-av-badge{position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:50%;background:var(--green);font-size:8px;font-weight:700;color:#0f1117;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--bg);overflow:hidden;pointer-events:none;z-index:2}
+.friend-av-badge{position:absolute;top:8px;left:8px;width:28px;height:28px;border-radius:50%;overflow:hidden;pointer-events:none;z-index:2;outline:2px solid var(--green);outline-offset:0}
 .friend-av-badge img{width:100%;height:100%;object-fit:cover}
+.friend-av-badge-ini{width:28px;height:28px;border-radius:50%;background:var(--green);font-size:10px;font-weight:700;color:#0f1117;display:flex;align-items:center;justify-content:center}
 
 /* SEARCH */
 .search-results{padding:0 8px}
@@ -301,7 +302,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
-const VER="3.7.0";
+const VER="3.8.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -1437,7 +1438,7 @@ function rMainContent(){
     const ks=filterMap[HOME_FILTER]||[];
     const rk=bk(r.rede);
     return(A.visits[r.id]||0)>0&&(ks.some(k=>rk.includes(k))||r.name.toLowerCase().includes(HOME_FILTER.toLowerCase()));
-  });
+  }).sort((a,b)=>HOME_SORT==='mais'?(A.visits[b.id]||0)-(A.visits[a.id]||0):0);
   if(!vis.length)return`<div class="empty-state"><div class="empty-ico">◎</div>${A.restaurants.length===0?"Carregando restaurantes…":"Você ainda não garfou nenhum lugar!"}</div>`;
   return`<div class="grid-3">${vis.map(r=>{
     const v=A.visits[r.id]||0;
@@ -1563,6 +1564,7 @@ function openFr(idx){
 /* ── AMIGOS — corrigido: seguidores aparecem sempre ── */
 let AMIGOS_TAB="feed";
 let HOME_FILTER="Todos";
+let HOME_SORT="recente";
 function setAmigosTab(t){AMIGOS_TAB=t;render();}
 
 function rAmigos(){
