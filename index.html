@@ -227,6 +227,12 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1.5rem;color:var(--faint);font-size:12px;text-align:center;line-height:1.8}
 .empty-ico{font-size:32px;margin-bottom:8px;opacity:.3}
+.fork-anim{animation:forkStab 1.2s ease-in-out infinite;}
+.fork-anim-delay{animation:forkStab 1.2s ease-in-out infinite;animation-delay:.4s;}
+.food-bounce{animation:foodPop .6s ease-out forwards;}
+@keyframes forkStab{0%,100%{transform:translateY(0) rotate(-15deg)}40%{transform:translateY(18px) rotate(-15deg)}60%{transform:translateY(18px) rotate(-15deg)}80%{transform:translateY(0) rotate(-15deg)}}
+@keyframes foodPop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 .loading-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px}
 .loading-txt{font-size:13px;color:var(--muted)}
 .loading-dots::after{content:"...";animation:dots 1.2s steps(4,end) infinite}
@@ -253,7 +259,7 @@ const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="3.0.0";
+const VER="3.1.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -731,6 +737,34 @@ async function doLogout(){
 }
 
 /* ── AMIGOS ── */
+function clearSearch(){
+  A.query="";A.searchPlacesQuery="";A.searchPlacesResults=[];
+  render();
+  setTimeout(()=>{const el=document.getElementById("search-input");if(el)el.focus();},50);
+}
+
+async function handleUnifiedSearch(q){
+  // Buscar primeiro nos restaurantes locais
+  A.query=q;
+  A.searchPlacesQuery=q;
+  if(!q||q.length<2){
+    A.searchPlacesResults=[];
+    renderSearchArea();
+    return;
+  }
+  // Se não tem resultados locais suficientes, buscar no Google
+  const local=A.restaurants.filter(r=>r.name.toLowerCase().includes(q.toLowerCase())||r.addr.toLowerCase().includes(q.toLowerCase()));
+  renderSearchArea();
+  if(local.length<3){
+    const results=await searchGooglePlaces(q);
+    A.searchPlacesResults=results;
+    // Atualizar só a seção de resultados do Places sem re-renderizar tudo
+    const el=document.getElementById("places-results-section");
+    if(el&&results.length)el.innerHTML=renderPlacesResults();
+    else if(el)el.innerHTML="";
+  }
+}
+
 async function handlePlacesSearch(q){
   A.searchPlacesQuery=q;
   if(!q||q.length<2){A.searchPlacesResults=[];render();return;}
@@ -858,10 +892,19 @@ async function addFromPlaces(place){
 async function fetchRestaurants(spin=true){
   const btn=document.getElementById("reload-btn");if(btn&&spin)btn.classList.add("spinning");
   try{
-    const res=await fetch(SHEET),data=await res.json();
-    A.restaurants=data.filter(r=>r.nome).map((r,i)=>({id:i,name:String(r.nome||"").trim(),addr:String(r.endereco||"").trim(),rede:String(r.rede||"Outro").trim(),hours:String(r.horario||"–").trim(),rating:r.nota?parseFloat(r.nota):null,img:String(r.imagem||"").trim()||null}));
-    toast("✓ "+A.restaurants.length+" restaurantes carregados!");
-  }catch{toast("⚠ Erro ao carregar planilha.");}
+    // Carregar restaurantes salvos no Supabase (todos os usuários)
+    const{data}=await sb.from("restaurants").select("*");
+    if(data&&data.length){
+      // Mesclar com restaurantes já em memória sem duplicar
+      const existingIds=new Set(A.restaurants.map(r=>r.id));
+      const newOnes=(data||[]).filter(r=>!existingIds.has(r.id)).map(r=>({
+        id:r.id,name:r.name,addr:r.addr,rede:r.rede||"Outro",
+        hours:r.hours||"–",rating:r.rating||null,img:r.img||null,
+        place_id:r.place_id||null
+      }));
+      A.restaurants=[...A.restaurants,...newOnes];
+    }
+  }catch(e){}
   const b2=document.getElementById("reload-btn");if(b2)b2.classList.remove("spinning");
   render();
 }
@@ -870,9 +913,14 @@ async function fetchRestaurants(spin=true){
 function garfCount(){return A.restaurants.filter(r=>(A.visits[r.id]||0)>0).length;}
 function totV(){return Object.values(A.visits).reduce((a,b)=>a+b,0);}
 function getRedes(){
+  // Contar todas as redes conhecidas (incluindo as do Supabase)
   const counts={};
   A.restaurants.forEach(r=>{const k=bk(r.rede);counts[k]=(counts[k]||0)+1;});
-  return Object.entries(counts).filter(([k,v])=>v>1&&be(k)!==null).map(([k])=>k);
+  // Threshold: pelo menos 2 unidades E tem emoji definido
+  return Object.entries(counts)
+    .filter(([k,v])=>v>1&&be(k)!==null)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([k])=>k);
 }
 function friendsWho(rid){return A.friendVisits[rid]||[];}
 function tAgo(ts){if(!ts)return"";const d=(Date.now()-new Date(ts).getTime())/1000;if(d<60)return"agora";if(d<3600)return Math.floor(d/60)+"min";if(d<86400)return Math.floor(d/3600)+"h";return Math.floor(d/86400)+"d";}
@@ -946,7 +994,30 @@ function rOnboarding(){
   </div>`;
 }
 
-function rLoading(){return`<div class="loading-screen"><svg style="width:52px;height:52px" viewBox="0 0 48 68" xmlns="http://www.w3.org/2000/svg"><line x1="24" y1="4" x2="24" y2="38" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/><line x1="10" y1="4" x2="10" y2="20" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/><line x1="38" y1="4" x2="38" y2="20" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/><path d="M10 20 Q24 34 38 20" fill="none" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/><line x1="24" y1="38" x2="24" y2="64" stroke="#4ade80" stroke-width="6" stroke-linecap="round"/><circle cx="24" cy="52" r="9" fill="#4ade80"/></svg><div class="loading-txt">carregando<span class="loading-dots"></span></div></div>`;}
+function rLoading(){
+  const foods=["🍔","🌮","🍕","🍜","🥗","🌯","🍣","🥪"];
+  const picks=[foods[Math.floor(Math.random()*foods.length)],foods[Math.floor(Math.random()*foods.length)],foods[Math.floor(Math.random()*foods.length)]];
+  return`<div class="loading-screen">
+    <div style="position:relative;width:140px;height:130px;margin-bottom:1.5rem">
+      <!-- comidas nas posições fixas -->
+      <div class="food-bounce" style="position:absolute;bottom:0;left:10px;font-size:32px;animation-delay:.1s">${picks[0]}</div>
+      <div class="food-bounce" style="position:absolute;bottom:0;left:54px;font-size:32px;animation-delay:.25s">${picks[1]}</div>
+      <div class="food-bounce" style="position:absolute;bottom:0;right:10px;font-size:32px;animation-delay:.4s">${picks[2]}</div>
+      <!-- garfo animado -->
+      <div class="fork-anim" style="position:absolute;top:0;left:50%;transform:translateX(-50%) rotate(-15deg);transform-origin:top center">
+        <svg width="28" height="72" viewBox="0 0 18 48" xmlns="http://www.w3.org/2000/svg">
+          <line x1="9" y1="1" x2="9" y2="28" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="4" y1="1" x2="4" y2="12" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="14" y1="1" x2="14" y2="12" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M4 12 Q9 18 14 12" fill="none" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+          <line x1="9" y1="28" x2="9" y2="47" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="9" cy="38" r="4" fill="#4ade80"/>
+        </svg>
+      </div>
+    </div>
+    <div class="loading-txt" style="animation:fadeInUp .5s ease forwards">garfado<span class="loading-dots"></span></div>
+  </div>`;
+}
 
 function rAuth(){
   const isR=A.authMode==="register";
@@ -1022,7 +1093,18 @@ function renderPlacesResults(){
     </div>`).join('');
 }
 
-function renderSearchArea(){const a=document.getElementById("search-area");if(a)a.innerHTML=A.query?rSearchRes():rMainContent();}
+function renderSearchArea(){
+  const a=document.getElementById("search-area");
+  if(!a)return;
+  if(A.query||A.searchPlacesQuery){
+    const local=rSearchRes();
+    // Adicionar seção Google Places se aplicável
+    const placesSection=`<div id="places-results-section">${A.searchPlacesResults.length?`<div class="sec-head" style="margin-top:.5rem"><span class="sec-title">Adicionar pelo Google</span></div>${renderPlacesResults()}`:""}`;
+    a.innerHTML=local+placesSection;
+  }else{
+    a.innerHTML=rMainContent();
+  }
+}
 function rSearchRes(){
   const q=A.query.toLowerCase();
   const hits=A.restaurants.filter(r=>r.name.toLowerCase().includes(q)||r.addr.toLowerCase().includes(q)||r.rede.toLowerCase().includes(q));
