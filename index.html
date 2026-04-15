@@ -259,7 +259,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
-const VER="3.4.0";
+const VER="3.5.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -295,6 +295,7 @@ let A={
   trending:[],         // [{restaurant_id, count}]
   onboarding:false,
   placesCache:{},
+  notaColetiva:null,
   searchPlacesResults:[],
   searchPlacesQuery:"",
   onboarding:false,
@@ -526,6 +527,60 @@ async function submitCheckin(){
 }
 
 /* ── AÇÕES ── */
+function shareProgress(){
+  const pr=A.profile||{};
+  const gc=garfCount();
+  const ac=A.achs.size;
+  const top=A.restaurants.filter(r=>(A.visits[r.id]||0)>0).sort((a,b)=>(A.visits[b.id]||0)-(A.visits[a.id]||0)).slice(0,3);
+  const ini=(pr.name||"G").charAt(0).toUpperCase();
+  // Gerar SVG do card
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0f1117"/>
+        <stop offset="100%" stop-color="#13161b"/>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="600" fill="url(#bg)" rx="24"/>
+    <rect x="1" y="1" width="398" height="598" fill="none" stroke="#4ade80" stroke-width="1.5" rx="23" opacity=".3"/>
+    <!-- Logo -->
+    <text x="200" y="52" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#4ade80">garfado</text>
+    <line x1="40" y1="68" x2="360" y2="68" stroke="#4ade80" stroke-width=".5" opacity=".3"/>
+    <!-- Avatar -->
+    <circle cx="200" cy="130" r="44" fill="#1c2228" stroke="#4ade80" stroke-width="2"/>
+    <text x="200" y="140" text-anchor="middle" font-family="Arial" font-size="36" font-weight="700" fill="#4ade80">${ini}</text>
+    <!-- Nome -->
+    <text x="200" y="192" text-anchor="middle" font-family="Georgia,serif" font-size="20" font-weight="700" fill="#f0f2f4">${(pr.name||"Garfador").slice(0,20)}</text>
+    <text x="200" y="212" text-anchor="middle" font-family="Arial" font-size="12" fill="#4ade80">@${pr.username||"?"}</text>
+    <!-- Stats -->
+    <rect x="40" y="232" width="145" height="90" fill="#1c2228" rx="12"/>
+    <text x="112" y="268" text-anchor="middle" font-family="Georgia,serif" font-size="36" font-weight="700" fill="#4ade80">${gc}</text>
+    <text x="112" y="288" text-anchor="middle" font-family="Arial" font-size="11" fill="#8899aa">lugares garfados</text>
+    <rect x="215" y="232" width="145" height="90" fill="#1c2228" rx="12"/>
+    <text x="287" y="268" text-anchor="middle" font-family="Georgia,serif" font-size="36" font-weight="700" fill="#FFC72C">${ac}</text>
+    <text x="287" y="288" text-anchor="middle" font-family="Arial" font-size="11" fill="#8899aa">conquistas</text>
+    <!-- Top restaurantes -->
+    <text x="40" y="348" font-family="Arial" font-size="11" fill="#4ade80" font-weight="600" letter-spacing="1">MAIS GARFADOS</text>
+    ${top.map((r,i)=>`
+    <rect x="40" y="${370+i*58}" width="320" height="48" fill="#1c2228" rx="10"/>
+    <text x="60" y="${399+i*58}" font-family="Georgia,serif" font-size="13" font-weight="600" fill="#f0f2f4">${r.name.slice(0,28)}</text>
+    <text x="60" y="${415+i*58}" font-family="Arial" font-size="10" fill="#8899aa">${A.visits[r.id]}x visitado</text>
+    `).join("")}
+    <!-- Footer -->
+    <text x="200" y="572" text-anchor="middle" font-family="Arial" font-size="10" fill="#4a5568">kaaoliv.github.io/Garfado</text>
+  </svg>`;
+
+  // Converter SVG para PNG via canvas e compartilhar
+  const blob=new Blob([svg],{type:"image/svg+xml"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download="garfado-card.svg";
+  link.click();
+  URL.revokeObjectURL(url);
+  toast("✓ Card salvo! Abra e compartilhe no Stories");
+}
+
 function showAchTooltip(id){
   const a=ADEFS.find(x=>x.id===id);if(!a)return;
   const unlocked=A.achs.has(id);
@@ -537,6 +592,15 @@ function showAchTooltip(id){
     t.classList.add("show");
     toastTimer=setTimeout(()=>{t.classList.remove("show");t.textContent="";toastTimer=null;},3000);
   });
+}
+
+async function loadNotaColetiva(rid){
+  try{
+    const{data}=await sb.from("ratings").select("nota").eq("restaurant_id",rid).not("nota","is",null);
+    const notas=(data||[]).map(r=>r.nota).filter(n=>n>0);
+    if(!notas.length)return null;
+    return(notas.reduce((a,b)=>a+b,0)/notas.length).toFixed(1);
+  }catch{return null;}
 }
 
 async function loadReviews(rid){
@@ -619,12 +683,18 @@ async function setRat(rid,c,v){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[ri
 async function setNote(rid,nota){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid].nota=nota;await saveNote(rid,nota);}
 
 function openModal(id){
-  A.modal=id;render();
-  setTimeout(()=>{
+  A.modal=id;
+  A.notaColetiva=null; // reset
+  render();
+  setTimeout(async()=>{
     initSwipe();
     loadReviews(id);
     const r=A.restaurants.find(x=>x.id===id);
     if(r&&!r.img)enrichRestaurantPhoto(r);
+    // Carregar nota coletiva
+    const nc=await loadNotaColetiva(id);
+    A.notaColetiva=nc;
+    renderModal();
   },50);
 }
 function closeModal(){A.modal=null;A.editingProfile=false;A.pendingAvatar=null;A.pendingCheckin=null;A.checkinRid=null;render();}
@@ -987,7 +1057,7 @@ function render(){
   }
 
   let html="";
-  if(A.nav==="home")      html=rHome();
+  if(A.nav==="home")      html=A.restaurants.length===0?rWelcome():rHome();
   else if(A.nav==="dest") html=rDest();
   else if(A.nav==="hunter")html=rHunter();
   else if(A.nav==="amigos")html=rAmigos();
@@ -1035,18 +1105,57 @@ function rOnboarding(){
   </div>`;
 }
 
+function rWelcome(){
+  return`<div style="display:flex;flex-direction:column;height:100%;overflow-y:auto">
+    ${rMainTopbar()}
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;text-align:center;gap:0">
+      <svg viewBox="0 0 18 26" xmlns="http://www.w3.org/2000/svg" width="52" height="72" style="margin-bottom:1.25rem">
+        <line x1="9" y1="1" x2="9" y2="15" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="4" y1="1" x2="4" y2="8" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="14" y1="1" x2="14" y2="8" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M4 8 Q9 13 14 8" fill="none" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="9" y1="15" x2="9" y2="25" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="9" cy="20" r="3.2" fill="#4ade80"/>
+      </svg>
+      <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:.5rem">Bem-vindo ao Garfado!</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:2rem;line-height:1.6">Registre e descubra os melhores restaurantes que você já foi.</div>
+
+      <div style="width:100%;display:flex;flex-direction:column;gap:12px;margin-bottom:2rem">
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--s2);border-radius:12px;padding:12px 14px;text-align:left;border:.5px solid var(--faint)">
+          <div style="font-size:22px;flex-shrink:0">🔍</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">Busque um restaurante</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Use a barra de pesquisa para encontrar ou adicionar qualquer restaurante pelo Google</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--s2);border-radius:12px;padding:12px 14px;text-align:left;border:.5px solid var(--faint)">
+          <div style="font-size:22px;flex-shrink:0">◎</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">Garfe o lugar</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Toque em "Garfar" para marcar que você foi. Registre quantas vezes quiser</div></div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px;background:var(--s2);border-radius:12px;padding:12px 14px;text-align:left;border:.5px solid var(--faint)">
+          <div style="font-size:22px;flex-shrink:0">⭐</div>
+          <div><div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px">Avalie e colecione</div><div style="font-size:11px;color:var(--muted);line-height:1.5">Dê notas, desbloqueie conquistas e veja o ranking com seus amigos</div></div>
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('search-input')?.focus();A.query=' ';renderSearchArea();setTimeout(()=>{A.query='';renderSearchArea();},50)" type="button" style="width:100%;padding:14px;background:var(--green);color:#0f1117;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;touch-action:manipulation">
+        Adicionar meu primeiro restaurante →
+      </button>
+    </div>
+    ${rNav()}
+  </div>`;
+}
+
 function rLoading(){
-  const foods=["🍔","🌮","🍕","🍜","🥗","🌯","🍣","🥪"];
-  const picks=[foods[Math.floor(Math.random()*foods.length)],foods[Math.floor(Math.random()*foods.length)],foods[Math.floor(Math.random()*foods.length)]];
+  const foods=["🍔","🌮","🍕","🍜","🌯","🍣","🥪","🧆","🥩","🍱"];
+  const pick=()=>foods[Math.floor(Math.random()*foods.length)];
+  const msgs=["garfando por aí","procurando o melhor","vem que tem","qual vai ser hoje?","hora de garfar"];
+  const msg=msgs[Math.floor(Math.random()*msgs.length)];
+  const f1=pick(),f2=pick(),f3=pick();
   return`<div class="loading-screen">
-    <div style="position:relative;width:140px;height:130px;margin-bottom:1.5rem">
-      <!-- comidas nas posições fixas -->
-      <div class="food-bounce" style="position:absolute;bottom:0;left:10px;font-size:32px;animation-delay:.1s">${picks[0]}</div>
-      <div class="food-bounce" style="position:absolute;bottom:0;left:54px;font-size:32px;animation-delay:.25s">${picks[1]}</div>
-      <div class="food-bounce" style="position:absolute;bottom:0;right:10px;font-size:32px;animation-delay:.4s">${picks[2]}</div>
-      <!-- garfo animado -->
-      <div class="fork-anim" style="position:absolute;top:0;left:50%;transform:translateX(-50%) rotate(-15deg);transform-origin:top center">
-        <svg width="28" height="72" viewBox="0 0 18 48" xmlns="http://www.w3.org/2000/svg">
+    <div style="position:relative;width:150px;height:140px;margin-bottom:1.5rem">
+      <div style="position:absolute;bottom:8px;left:8px;font-size:34px;animation:foodPop .5s ease-out .1s both">${f1}</div>
+      <div style="position:absolute;bottom:8px;left:57px;font-size:34px;animation:foodPop .5s ease-out .25s both">${f2}</div>
+      <div style="position:absolute;bottom:8px;right:8px;font-size:34px;animation:foodPop .5s ease-out .4s both">${f3}</div>
+      <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);transform-origin:50% 0;animation:forkStab 1.1s ease-in-out infinite">
+        <svg width="30" height="78" viewBox="0 0 18 48" xmlns="http://www.w3.org/2000/svg">
           <line x1="9" y1="1" x2="9" y2="28" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
           <line x1="4" y1="1" x2="4" y2="12" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
           <line x1="14" y1="1" x2="14" y2="12" stroke="#4ade80" stroke-width="2.2" stroke-linecap="round"/>
@@ -1056,7 +1165,7 @@ function rLoading(){
         </svg>
       </div>
     </div>
-    <div class="loading-txt" style="animation:fadeInUp .5s ease forwards">garfado<span class="loading-dots"></span></div>
+    <div class="loading-txt" style="animation:fadeInUp .6s ease .3s both">${msg}<span class="loading-dots"></span></div>
   </div>`;
 }
 
@@ -1396,7 +1505,10 @@ function rPerfil(){
         ${ADEFS.map(a=>`<div onclick="showAchTooltip('${a.id}')" title="${a.name}" style="width:38px;height:38px;border-radius:10px;background:var(--s2);border:.5px solid ${A.achs.has(a.id)?"var(--gold)":"var(--faint)"};display:flex;align-items:center;justify-content:center;font-size:19px;filter:${A.achs.has(a.id)?"none":"grayscale(1) opacity(.25)"};cursor:pointer;touch-action:manipulation">${a.ico}</div>`).join("")}
       </div>
       ${vis.length?`<div class="sec-head"><span class="sec-title">Últimas garfadas</span></div><div style="padding:0 1rem .75rem">${recH}</div>`:""}
-      <button class="logout-btn" onclick="doLogout()" type="button">Sair da conta</button>
+      <button onclick="shareProgress()" type="button" style="width:calc(100% - 2rem);margin:0 1rem .75rem;padding:12px;background:var(--s2);color:var(--text);border:.5px solid var(--faint);border-radius:12px;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;touch-action:manipulation;display:flex;align-items:center;justify-content:center;gap:8px">
+  <span>📤</span> Compartilhar meu progresso
+</button>
+<button class="logout-btn" onclick="doLogout()" type="button">Sair da conta</button>
       <div id="modal-slot"></div>
     </div>`;
 }
@@ -1538,7 +1650,7 @@ function rModal(){
         <div class="mhero-title">${r.name}</div>
         <div class="mhero-sub">${r.addr}${r.hours&&r.hours!=="–"?" · "+r.hours:""}</div>
       </div>
-      ${garfado?'<div class="mhero-ribbon">✓ garfado</div>':""}
+      ${garfado?'<div class="mhero-ribbon" style="background:var(--green);color:#0f1117;font-size:10px;font-weight:800;padding:4px 14px;border-radius:0 0 10px 10px;position:absolute;top:0;left:50%;transform:translateX(-50%);letter-spacing:1px;text-transform:uppercase">✓ garfado</div>':""}
       <button onclick="closeModal()" type="button" style="position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.5);border:none;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;touch-action:manipulation">×</button>
     </div>
     <div class="mhandle" style="margin-top:8px"></div>
@@ -1548,7 +1660,24 @@ function rModal(){
       <button class="mact" onclick="addVisit(${r.id},-1)" type="button"><span class="mact-ico" style="${v>0?"":"opacity:.3"}">−◎</span><span class="mact-lbl">Remover</span></button>
     </div>
     <div class="mbody">
-      ${r.rating?`<div style="display:flex;align-items:center;gap:6px;margin-bottom:.875rem"><span style="font-size:17px;font-weight:500;color:var(--text)">${r.rating}</span><span style="color:var(--gold);font-size:13px">${"★".repeat(Math.round(r.rating))}</span><span style="font-size:11px;color:var(--muted)">&nbsp;${r.rating}/5.0</span></div>`:""}
+      <div style="display:flex;gap:10px;margin-bottom:.875rem;flex-wrap:wrap">
+        ${r.rating?`<div style="flex:1;min-width:120px;background:var(--s2);border-radius:10px;padding:10px 12px;border:.5px solid var(--faint)">
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Google Maps</div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <span style="font-size:18px;font-weight:700;color:var(--text)">${r.rating}</span>
+            <span style="color:var(--gold);font-size:12px">${"★".repeat(Math.round(r.rating))}</span>
+            <span style="font-size:10px;color:var(--muted)">/5</span>
+          </div>
+        </div>`:""}
+        <div style="flex:1;min-width:120px;background:var(--s2);border-radius:10px;padding:10px 12px;border:.5px solid var(--faint)">
+          <div style="font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Garfado</div>
+          ${A.notaColetiva?`<div style="display:flex;align-items:center;gap:5px">
+            <span style="font-size:18px;font-weight:700;color:var(--green)">${A.notaColetiva}</span>
+            <span style="color:var(--gold);font-size:12px">${"★".repeat(Math.round(A.notaColetiva))}</span>
+            <span style="font-size:10px;color:var(--muted)">/5</span>
+          </div>`:`<div style="font-size:11px;color:var(--faint);margin-top:2px">sem avaliações</div>`}
+        </div>
+      </div>
       <div class="vcrow">
         <div><div class="vclbl">minhas visitas</div><div class="vcnum">${v}<span style="font-size:13px;font-weight:400;color:var(--muted)"> vez${v!==1?"es":""}</span></div></div>
         <div class="vcctrl">
@@ -1574,6 +1703,60 @@ function rModal(){
       </div>
     </div>
   </div></div>`;
+}
+
+function shareProgress(){
+  const pr=A.profile||{};
+  const gc=garfCount();
+  const ac=A.achs.size;
+  const top=A.restaurants.filter(r=>(A.visits[r.id]||0)>0).sort((a,b)=>(A.visits[b.id]||0)-(A.visits[a.id]||0)).slice(0,3);
+  const ini=(pr.name||"G").charAt(0).toUpperCase();
+  // Gerar SVG do card
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 600" width="400" height="600">
+    <defs>
+      <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0f1117"/>
+        <stop offset="100%" stop-color="#13161b"/>
+      </linearGradient>
+    </defs>
+    <rect width="400" height="600" fill="url(#bg)" rx="24"/>
+    <rect x="1" y="1" width="398" height="598" fill="none" stroke="#4ade80" stroke-width="1.5" rx="23" opacity=".3"/>
+    <!-- Logo -->
+    <text x="200" y="52" text-anchor="middle" font-family="Georgia,serif" font-size="28" font-weight="700" fill="#4ade80">garfado</text>
+    <line x1="40" y1="68" x2="360" y2="68" stroke="#4ade80" stroke-width=".5" opacity=".3"/>
+    <!-- Avatar -->
+    <circle cx="200" cy="130" r="44" fill="#1c2228" stroke="#4ade80" stroke-width="2"/>
+    <text x="200" y="140" text-anchor="middle" font-family="Arial" font-size="36" font-weight="700" fill="#4ade80">${ini}</text>
+    <!-- Nome -->
+    <text x="200" y="192" text-anchor="middle" font-family="Georgia,serif" font-size="20" font-weight="700" fill="#f0f2f4">${(pr.name||"Garfador").slice(0,20)}</text>
+    <text x="200" y="212" text-anchor="middle" font-family="Arial" font-size="12" fill="#4ade80">@${pr.username||"?"}</text>
+    <!-- Stats -->
+    <rect x="40" y="232" width="145" height="90" fill="#1c2228" rx="12"/>
+    <text x="112" y="268" text-anchor="middle" font-family="Georgia,serif" font-size="36" font-weight="700" fill="#4ade80">${gc}</text>
+    <text x="112" y="288" text-anchor="middle" font-family="Arial" font-size="11" fill="#8899aa">lugares garfados</text>
+    <rect x="215" y="232" width="145" height="90" fill="#1c2228" rx="12"/>
+    <text x="287" y="268" text-anchor="middle" font-family="Georgia,serif" font-size="36" font-weight="700" fill="#FFC72C">${ac}</text>
+    <text x="287" y="288" text-anchor="middle" font-family="Arial" font-size="11" fill="#8899aa">conquistas</text>
+    <!-- Top restaurantes -->
+    <text x="40" y="348" font-family="Arial" font-size="11" fill="#4ade80" font-weight="600" letter-spacing="1">MAIS GARFADOS</text>
+    ${top.map((r,i)=>`
+    <rect x="40" y="${370+i*58}" width="320" height="48" fill="#1c2228" rx="10"/>
+    <text x="60" y="${399+i*58}" font-family="Georgia,serif" font-size="13" font-weight="600" fill="#f0f2f4">${r.name.slice(0,28)}</text>
+    <text x="60" y="${415+i*58}" font-family="Arial" font-size="10" fill="#8899aa">${A.visits[r.id]}x visitado</text>
+    `).join("")}
+    <!-- Footer -->
+    <text x="200" y="572" text-anchor="middle" font-family="Arial" font-size="10" fill="#4a5568">kaaoliv.github.io/Garfado</text>
+  </svg>`;
+
+  // Converter SVG para PNG via canvas e compartilhar
+  const blob=new Blob([svg],{type:"image/svg+xml"});
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement("a");
+  link.href=url;
+  link.download="garfado-card.svg";
+  link.click();
+  URL.revokeObjectURL(url);
+  toast("✓ Card salvo! Abra e compartilhe no Stories");
 }
 
 function showAchTooltip(id){
