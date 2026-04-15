@@ -248,7 +248,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.3.0";
+const VER="2.4.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -355,14 +355,19 @@ async function loadData(){
     sb.from("likes").select("*").eq("user_id",uid),
     sb.from("achievements").select("*").eq("user_id",uid),
     sb.from("friendships").select("following_id").eq("follower_id",uid),
-    sb.from("friendships").select("follower_id, profiles(id,name,username,avatar_url)").eq("following_id",uid),
+    sb.from("friendships").select("follower_id").eq("following_id",uid),
   ]);
   A.visits={};(vR.data||[]).forEach(v=>A.visits[v.restaurant_id]=v.count||1);
   A.ratings={};(rR.data||[]).forEach(r=>{A.ratings[r.restaurant_id]={Comida:r.comida,Atendimento:r.atendimento,Limpeza:r.limpeza,Banheiro:r.banheiro,nota:r.nota};});
   A.likes={};(lR.data||[]).forEach(l=>A.likes[l.restaurant_id]=true);
   A.achs=new Set((aR.data||[]).map(a=>a.achievement_id));
   A.friends=(fR.data||[]).map(f=>f.following_id);
-  A.followers=(folR.data||[]).map(f=>f.profiles).filter(Boolean);
+  // BUG FIX: buscar profiles dos seguidores separadamente
+  const followerIds=(folR.data||[]).map(f=>f.follower_id).filter(Boolean);
+  if(followerIds.length){
+    const{data:folProfs}=await sb.from("profiles").select("id,name,username,avatar_url").in("id",followerIds);
+    A.followers=folProfs||[];
+  }else{A.followers=[];}
   // datas das minhas visitas
   A.visitDates={};
   (vR.data||[]).forEach(v=>{if(v.updated_at)A.visitDates[v.restaurant_id]=v.updated_at;});
@@ -507,7 +512,7 @@ async function setNote(rid,nota){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[
 function openModal(id){A.modal=id;render();setTimeout(()=>initSwipe(),50);}
 function closeModal(){A.modal=null;A.editingProfile=false;A.pendingAvatar=null;A.pendingCheckin=null;A.checkinRid=null;render();}
 
-function setNav(n){
+function setNav(n){if(n==="amigos")AMIGOS_TAB="feed";
   A.nav=n;A.modal=null;A.query="";A.editingProfile=false;A.profileView=null;A.viewingUserId=null;A.viewingUser=null;
   if(n==="amigos")loadFriendData().then(()=>render());
   else render();
@@ -885,63 +890,92 @@ function openFr(rede){
 }
 
 /* ── AMIGOS — corrigido: seguidores aparecem sempre ── */
-function rAmigos(){
-  const followersH=!A.followers.length
-    ?`<p style="font-size:11px;color:var(--faint);text-align:center;padding:.75rem 0 .5rem">Ninguém te segue ainda</p>`
-    :A.followers.map(u=>{
-        const ini=(u.name||"?").charAt(0).toUpperCase(),isF=A.friends.includes(u.id);
-        return`<div class="follower-row">
-          <div class="follower-av" onclick="viewUserProfile('${u.id}')" type="button">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
-          <div class="follower-info" onclick="viewUserProfile('${u.id}')"><div class="follower-name">${u.name||"Sem nome"}</div><div class="follower-meta">@${u.username||"?"}</div></div>
-          <button class="follow-btn${isF?" following":""}" onclick="toggleFollow('${u.id}')" type="button">${isF?"Seguindo":"Seguir"}</button>
-        </div>`;
-      }).join("");
+let AMIGOS_TAB="feed";
+function setAmigosTab(t){AMIGOS_TAB=t;render();}
 
+function rAmigos(){
+  // ── FEED ──
   const feedH=!A.feed.length
     ?`<div class="empty-state"><div class="empty-ico">📰</div>Siga alguém para ver o feed!</div>`
     :A.feed.map(v=>{
         const r=A.restaurants.find(x=>x.id===v.restaurant_id),pr=v.profiles||{},ini=(pr.name||"?").charAt(0).toUpperCase();
         const fk=`${v.user_id}_${v.restaurant_id}`;
-        const rxCount=A.reactions[fk]||0;
-        const myRx=A.myReactions[fk];
+        const rxCount=A.reactions[fk]||0,myRx=A.myReactions[fk];
         return`<div class="feed-item">
           <div class="feed-avatar" onclick="viewUserProfile('${pr.id}')">${pr.avatar_url?`<img src="${pr.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
           <div class="feed-info">
             <div class="feed-text"><button class="feed-name-link" onclick="viewUserProfile('${pr.id}')" type="button">${pr.name||pr.username||"Alguém"}</button> garfou <strong>${v.restaurant_name}</strong>${v.count>1?` <span style="color:var(--gold)">${v.count}x</span>`:""}</div>
             <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
               <span class="feed-time">${tAgo(v.updated_at)}</span>
-              <button onclick="reactFeed('${fk}','${pr.id}','${v.restaurant_name}')" type="button" style="background:${myRx?"rgba(255,100,0,.15)":"none"};border:${myRx?".5px solid rgba(255,100,0,.4)":".5px solid var(--faint)"};border-radius:99px;padding:2px 8px;font-size:11px;cursor:pointer;color:${myRx?"#ff6400":"var(--faint)"};display:flex;align-items:center;gap:3px;touch-action:manipulation">🔥${rxCount>0?`<span>${rxCount}</span>`:""}</button>
+              <button onclick="reactFeed('${fk}','${pr.id}','${v.restaurant_name}')" type="button" style="background:${myRx?"rgba(255,100,0,.12)":"none"};border:.5px solid ${myRx?"rgba(255,100,0,.4)":"var(--faint)"};border-radius:99px;padding:2px 8px;font-size:11px;cursor:pointer;color:${myRx?"#ff6400":"var(--faint)"};display:flex;align-items:center;gap:3px;touch-action:manipulation">🔥${rxCount>0?` <span style="font-size:10px">${rxCount}</span>`:""}</button>
             </div>
           </div>
           ${r?`<div class="feed-thumb pw-sm" onclick="openModal(${r.id})" style="width:32px;cursor:pointer;touch-action:manipulation">${posterSm(r)}</div>`:""}
         </div>`;
       }).join("");
 
-  // ranking
-  const rankH=!A.ranking.length?"":A.ranking.map((entry,i)=>{
-    const p=entry.profile,ini=(p.name||"?").charAt(0).toUpperCase();
-    const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":"";
-    const isMe=entry.isMe;
-    return`<div style="display:flex;align-items:center;gap:10px;padding:8px 1rem;border-bottom:.5px solid var(--faint);${isMe?"background:rgba(74,222,128,.05)":""}" ${!isMe?`onclick="viewUserProfile('${p.id}')"`:""}><div style="width:22px;text-align:center;font-size:${medal?"16":"12"}px;color:${medal?"":"var(--muted)"};flex-shrink:0">${medal||"#"+(i+1)}</div><div style="width:34px;height:34px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#0f1117;overflow:hidden;flex-shrink:0;border:${isMe?"2px solid var(--green)":"none"}">${p.avatar_url?`<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">${ini}`:ini}</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:${isMe?"600":"400"};color:${isMe?"var(--green)":"var(--text)"};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${isMe?"Você":p.name||"?"}</div><div style="font-size:10px;color:var(--muted)">@${p.username||"?"}</div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:14px;font-weight:500;color:var(--text)">${entry.garfCount}</div><div style="font-size:9px;color:var(--muted)">garfados</div></div></div>`;
-  }).join("");
+  // ── RANKING ──
+  const rankH=!A.ranking.length
+    ?`<div class="empty-state"><div class="empty-ico">🏅</div>Siga amigos para ver o ranking!</div>`
+    :A.ranking.map((entry,i)=>{
+        const p=entry.profile,ini=(p.name||"?").charAt(0).toUpperCase();
+        const medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":"";
+        const isMe=entry.isMe;
+        return`<div style="display:flex;align-items:center;gap:12px;padding:12px 1rem;border-bottom:.5px solid var(--faint);${isMe?"background:rgba(74,222,128,.05)":""};cursor:${isMe?"default":"pointer"};touch-action:manipulation" ${!isMe?`onclick="viewUserProfile('${p.id}')"`:""}">
+          <div style="width:28px;text-align:center;font-size:${medal?"20":"13"}px;color:${medal?"":"var(--muted)"};flex-shrink:0">${medal||"#"+(i+1)}</div>
+          <div style="width:40px;height:40px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#0f1117;overflow:hidden;flex-shrink:0;outline:${isMe?"2.5px solid var(--green)":"none"};outline-offset:2px">${p.avatar_url?`<img src="${p.avatar_url}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">${ini}`:ini}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:${isMe?"600":"400"};color:${isMe?"var(--green)":"var(--text)"};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${isMe?"Você":p.name||"?"}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:1px">@${p.username||"?"}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:18px;font-weight:600;color:${isMe?"var(--green)":"var(--text)"};line-height:1">${entry.garfCount}</div>
+            <div style="font-size:9px;color:var(--muted);margin-top:2px">garfados</div>
+          </div>
+        </div>`;
+      }).join("");
+
+  // ── PESSOAS (seguidores + busca) ──
+  const followersH=!A.followers.length
+    ?`<div style="padding:1rem;text-align:center;font-size:12px;color:var(--faint)">Ninguém te segue ainda</div>`
+    :A.followers.map(u=>{
+        const ini=(u.name||"?").charAt(0).toUpperCase(),isF=A.friends.includes(u.id);
+        return`<div class="follower-row">
+          <div class="follower-av" onclick="viewUserProfile('${u.id}')">${u.avatar_url?`<img src="${u.avatar_url}" onerror="this.style.display='none'">${ini}`:ini}</div>
+          <div class="follower-info" onclick="viewUserProfile('${u.id}')">
+            <div class="follower-name">${u.name||"Sem nome"}</div>
+            <div class="follower-meta">@${u.username||"?"}</div>
+          </div>
+          <button class="follow-btn${isF?" following":""}" onclick="toggleFollow('${u.id}')" type="button">${isF?"Seguindo":"Seguir back"}</button>
+        </div>`;
+      }).join("");
+
+  const pessoasH=`
+    <div style="padding:10px 1rem 6px">
+      <input class="search-user-input" placeholder="🔍  Buscar por nome ou @username…" oninput="searchUsers(this.value)" style="margin-bottom:6px"/>
+      <div id="friend-search-area"></div>
+    </div>
+    ${A.followers.length?`<div style="padding:6px 1rem 4px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Seguidores · ${A.followers.length}</div>${followersH}`:`<div style="padding:6px 1rem 4px;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px">Seguidores</div>${followersH}`}`;
+
+  // ── TABS INTERNAS ──
+  const tabs=[{id:"feed",l:"Feed 📰"},{id:"ranking",l:"Ranking 🏅"},{id:"pessoas",l:"Pessoas 👥"}];
+  const tabBar=`<div style="display:flex;border-bottom:.5px solid var(--faint);flex-shrink:0;background:var(--bg)">
+    ${tabs.map(t=>`<button onclick="setAmigosTab('${t.id}')" type="button" style="flex:1;padding:9px 0 8px;background:none;border:none;border-bottom:2px solid ${AMIGOS_TAB===t.id?"var(--green)":"transparent"};margin-bottom:-.5px;font-size:12px;color:${AMIGOS_TAB===t.id?"var(--green)":"var(--muted)"};cursor:pointer;font-family:inherit;font-weight:${AMIGOS_TAB===t.id?"500":"400"};touch-action:manipulation;letter-spacing:.2px">${t.l}</button>`).join("")}
+  </div>`;
+
+  let bodyH="";
+  if(AMIGOS_TAB==="feed")bodyH=feedH;
+  else if(AMIGOS_TAB==="ranking")bodyH=rankH;
+  else bodyH=pessoasH;
 
   return`${rMainTopbar()}
-    <div class="scroll-body">
-      ${A.ranking.length?`<div class="sec-head"><span class="sec-title">Ranking</span><span class="sec-sub">entre você e amigos</span></div>${rankH}<div class="divider" style="margin-top:.5rem"></div>`:""}
-      <div class="sec-head"><span class="sec-title">Buscar amigos</span></div>
-      <div style="padding:0 1rem .75rem">
-        <input class="search-user-input" placeholder="Buscar por nome ou @username…" oninput="searchUsers(this.value)"/>
-        <div id="friend-search-area"></div>
-      </div>
-      <div class="divider"></div>
-      <div class="sec-head"><span class="sec-title">Seguidores</span><span class="sec-sub">${A.followers.length} pessoa${A.followers.length!==1?"s":""} te seguem</span></div>
-      ${followersH}
-      <div class="divider"></div>
-      <div class="sec-head"><span class="sec-title">Feed</span><span class="sec-sub">quem você segue</span></div>
-      ${feedH}
+    ${tabBar}
+    <div class="scroll-body" id="main-scroll">
+      ${bodyH}
       <div id="modal-slot"></div>
     </div>`;
 }
+
 function renderFriendsArea(){
   const a=document.getElementById("friend-search-area");if(!a)return;
   if(!A.friendSearch.length){a.innerHTML="";return;}
