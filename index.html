@@ -252,7 +252,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.6.0";
+const VER="2.7.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -829,7 +829,7 @@ function rFriendStrip(){
       <div class="friend-av-badge">${f.avatar?`<img src="${f.avatar}" onerror="this.style.display='none'">${ini}`:ini}</div>
       <div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div><div class="pw-overlay-sub">${fw.length===1?f.name.split(" ")[0]:`${fw.length} amigos`}</div></div>
     </div>`;
-  }).join("");
+  }, this).join("");
   return`<div class="sec-head"><span class="sec-title">Amigos foram aqui</span><span class="sec-sub">você ainda não foi</span></div><div class="friend-strip">${cards}</div><div class="divider"></div>`;
 }
 
@@ -883,14 +883,14 @@ function rHunter(){
   const redes=getRedes();
   if(!redes.length)return`${rMainTopbar()}${rSearch()}<div class="scroll-body"><div class="empty-state" style="margin-top:3rem"><div class="empty-ico">🎯</div>Adicione redes conhecidas com múltiplas filiais.</div></div>`;
   const rc=redes.filter(rede=>{const t=A.restaurants.filter(r=>bk(r.rede)===rede);return t.length>0&&t.every(r=>(A.visits[r.id]||0)>0)}).length;
-  const fH=redes.map((rede,idx)=>{
+  const fH=redes.map(function(rede,idx){
     const todos=A.restaurants.filter(r=>bk(r.rede)===rede);
     const gf=todos.filter(r=>(A.visits[r.id]||0)>0);
     const pct=todos.length?Math.round(gf.length/todos.length*100):0;
     const col=bc(rede),emoji=be(rede),nome=rede.charAt(0).toUpperCase()+rede.slice(1);
     const ok=gf.length===todos.length&&todos.length>0;
     // onclick no elemento raiz, sem pointer-events:none nos filhos
-    return`<button class="franchise-card" onclick="openFr('${rede}')" type="button">
+    return`<button class="franchise-card" onclick="openFr(${idx})" type="button">
       <div class="franchise-head">
         <div class="franchise-icon" style="background:${col}22;border:.5px solid ${col}44">${emoji}</div>
         <div class="franchise-info"><div class="franchise-name">${nome}</div><div class="franchise-count">${gf.length} de ${todos.length} filial${todos.length>1?"is":""}</div></div>
@@ -905,7 +905,8 @@ function rHunter(){
       <div class="franchise-list">${fH}</div>
     </div><div id="modal-slot"></div></div>`;
 }
-function openFr(rede){
+function openFr(idx){
+  const rede=getRedes()[idx];if(!rede)return;
   const todos=A.restaurants.filter(r=>bk(r.rede)===rede),nome=rede.charAt(0).toUpperCase()+rede.slice(1);
   const ms=document.getElementById("modal-slot");if(!ms)return;
   const lH=todos.map(r=>{const v=A.visits[r.id]||0;return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--faint);cursor:pointer;touch-action:manipulation" onclick="openModal(${r.id})"><div class="pw-sm" style="pointer-events:none">${posterPlain(r)}</div><div style="flex:1;min-width:0;pointer-events:none"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div><div style="font-size:10px;color:var(--muted)">${r.addr}</div>${r.rating?`<div style="font-size:10px;color:var(--gold)">★ ${r.rating}</div>`:""}</div>${v>0?`<div style="width:22px;height:22px;border-radius:50%;background:var(--green);color:#0f1117;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;pointer-events:none">✓</div>`:`<div style="width:22px;height:22px;border-radius:50%;border:1px solid var(--faint);pointer-events:none"></div>`}</div>`;}).join("");
