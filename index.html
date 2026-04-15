@@ -60,6 +60,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 /* pw-md = poster médio: carrosséis e destaques (largura fixa, 2:3) */
 .pw-md{position:relative;width:110px;flex-shrink:0;aspect-ratio:2/3;cursor:pointer;border-radius:6px;overflow:hidden;touch-action:manipulation;border:.5px solid var(--faint)}
 .pw-md:active{opacity:.75}
+.cards-h .pw-md{-webkit-tap-highlight-color:rgba(74,222,128,.15)}
 .pw-md svg,.pw-md img{width:100%;height:100%;object-fit:cover;display:block}
 
 /* pw-sm = poster pequeno: listas inline (largura fixa, 2:3) */
@@ -259,7 +260,7 @@ const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="3.2.0";
+const VER="3.3.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -867,18 +868,68 @@ async function searchGooglePlaces(query){
   }catch(e){return[];}
 }
 
-async function addFromPlaces(place){
-  // Mostra modal de confirmação para garfar este lugar
-  // Como não temos backend para adicionar à planilha, registramos a visita diretamente
-  // usando o nome/endereço como identificador temporário
-  toast("✓ "+place.name+" adicionado!");
-  A.searchPlacesResults=[];
-  A.searchPlacesQuery="";
-  // Fechar busca e abrir o lugar
-  const tempId=Date.now();
-  const tempR={id:tempId,name:place.name,addr:place.addr,rede:"Outro",hours:"–",rating:place.rating,img:place.photo};
-  A.restaurants.push(tempR);
-  openModal(tempId);
+async function addFromPlaces(idx){
+  const place=A.searchPlacesResults[idx];
+  if(!place||!place.name){toast("⚠ Lugar inválido");return;}
+  if(!A.user){toast("⚠ Faça login primeiro");return;}
+  toast("Adicionando "+place.name+"…");
+  try{
+    let rid=null;
+    const rede=detectRede(place.name);
+    // Verificar se já existe pelo place_id
+    if(place.placeId){
+      const{data:ex}=await sb.from("restaurants").select("id").eq("place_id",place.placeId).maybeSingle();
+      if(ex)rid=ex.id;
+    }
+    if(!rid){
+      // Inserir novo restaurante no Supabase
+      const{data:ins,error}=await sb.from("restaurants").insert({
+        name:place.name,addr:place.addr,rede,
+        rating:place.rating||null,img:place.photo||null,
+        place_id:place.placeId||null,hours:"–"
+      }).select().single();
+      if(error){
+        // Tabela pode não existir — usar ID temporário em memória
+        console.warn("Supabase restaurants:",error.message);
+        rid=Date.now();
+      }else{
+        rid=ins.id;
+      }
+    }
+    // Adicionar em memória se ainda não existe
+    if(!A.restaurants.find(r=>r.id===rid)){
+      A.restaurants.push({id:rid,name:place.name,addr:place.addr,
+        rede,rating:place.rating||null,img:place.photo||null,hours:"–"});
+    }
+    // Limpar busca e ir para home
+    A.query="";A.searchPlacesResults=[];
+    A.nav="home";
+    render();
+    setTimeout(()=>openModal(rid),80);
+  }catch(e){
+    console.error(e);
+    // Fallback: adicionar só em memória
+    const rid=Date.now();
+    A.restaurants.push({id:rid,name:place.name,addr:place.addr,
+      rede:detectRede(place.name),rating:place.rating||null,img:place.photo||null,hours:"–"});
+    A.query="";A.searchPlacesResults=[];
+    A.nav="home";
+    render();
+    setTimeout(()=>openModal(rid),80);
+  }
+}
+
+function detectRede(name){
+  const n=(name||"").toLowerCase();
+  if(n.includes("mcdonald")||n.includes("méqui"))return"McDonald's";
+  if(n.includes("burger king"))return"Burger King";
+  if(n.includes("bob's")||n.includes("bobs"))return"Bob's";
+  if(n.includes("kfc"))return"KFC";
+  if(n.includes("subway"))return"Subway";
+  if(n.includes("pizz"))return"Pizzaria";
+  if(n.includes("hamburguer")||n.includes("smash")||n.includes("burger"))return"Hamburgueria";
+  if(n.includes("bar ")||n.startsWith("bar")||n.includes("boteco"))return"Bar";
+  return"Outro";
 }
 
 async function fetchRestaurants(spin=true){
@@ -1116,7 +1167,7 @@ function rFriendStrip(){
   if(!cands.length)return"";
   const cards=cands.map(r=>{
     const fw=friendsWho(r.id),f=fw[0],ini=(f.name||"?").charAt(0).toUpperCase();
-    return`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
+    return`<div class="pw-md" onpointerup="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
       ${posterPlain(r)}
       <div class="friend-av-badge">${f.avatar?`<img src="${f.avatar}" onerror="this.style.display='none'">${ini}`:ini}</div>
       <div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div><div class="pw-overlay-sub">${fw.length===1?f.name.split(" ")[0]:`${fw.length} amigos`}</div></div>
@@ -1151,7 +1202,7 @@ function rHome(){
 function rDest(){
   const sg=A.restaurants.filter(r=>!(A.visits[r.id]>0)).sort((a,b)=>(b.rating||0)-(a.rating||0)).slice(0,8);
   const fav=A.restaurants.filter(r=>A.likes[r.id]);
-  const dc=r=>`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
+  const dc=r=>`<div class="pw-md" onpointerup="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
     ${posterPlain(r)}
     <div class="pw-md-label">
       <div class="pw-md-name">${r.name}</div>
@@ -1166,7 +1217,7 @@ function rDest(){
     `<div class="sec-head"><span class="sec-title">Em alta esta semana</span><span class="sec-sub">mais visitados</span></div>
     <div class="cards-h">${trendRests.map((r,i)=>{
       const cnt=A.trending[i]?.cnt||0;
-      return`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
+      return`<div class="pw-md" onpointerup="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
         ${posterPlain(r)}
         <div class="pw-md-label">
           <div class="pw-md-name">${r.name}</div>
@@ -1400,7 +1451,7 @@ function rUserProfile(){
     ?`<div class="grid-3">${garfados.map(r=>{const v=visits[r.id]||0,c=r.img?`<img class="pi" src="${r.img}" onerror="this.style.display='none'">${mkSVG(r)}<div class="pw-overlay"><div class="pw-overlay-name">${r.name}</div></div>`:mkSVG(r);return`<div class="pw" onclick="openModal(${r.id})">${c}<div class="pvc">✓</div>${v>1?`<div class="pvn">${v}x</div>`:""}</div>`;}).join("")}</div>`
     :`<p style="font-size:11px;color:var(--faint);text-align:center;padding:1rem 0">Nenhum lugar garfado</p>`;
   const favH=favoritos.length
-    ?`<div class="cards-h">${favoritos.map(r=>`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">${posterPlain(r)}<div class="pw-md-label"><div class="pw-md-name">${r.name}</div><div class="pw-md-meta">${r.addr.split(",")[0]}</div></div></div>`).join("")}</div>`
+    ?`<div class="cards-h">${favoritos.map(r=>`<div class="pw-md" onpointerup="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">${posterPlain(r)}<div class="pw-md-label"><div class="pw-md-name">${r.name}</div><div class="pw-md-meta">${r.addr.split(",")[0]}</div></div></div>`).join("")}</div>`
     :`<p style="font-size:11px;color:var(--faint);text-align:center;padding:.5rem 1rem 1rem">Nenhum favorito ainda</p>`;
   const achH=ADEFS.map(a=>`<div title="${a.name}" style="width:36px;height:36px;border-radius:9px;background:var(--s2);border:.5px solid ${achs.has(a.id)?"var(--gold)":"var(--faint)"};display:flex;align-items:center;justify-content:center;font-size:18px;filter:${achs.has(a.id)?"none":"grayscale(1) opacity(.2)"}">${a.ico}</div>`).join("");
 
