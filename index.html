@@ -49,6 +49,20 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 .sec-sub{font-size:10px;color:var(--muted)}
 
 /* GRID */
+/* ── DESAFIOS ── */
+.challenge-card{background:var(--s2);border-radius:14px;padding:14px;border:.5px solid var(--faint);display:flex;flex-direction:column;gap:8px}
+.challenge-card.done{border-color:var(--green);background:rgba(74,222,128,.05)}
+.challenge-top{display:flex;align-items:center;gap:10px}
+.challenge-ico{font-size:24px;flex-shrink:0}
+.challenge-info{flex:1;min-width:0}
+.challenge-title{font-size:13px;font-weight:600;color:var(--text)}
+.challenge-desc{font-size:11px;color:var(--muted);margin-top:1px;line-height:1.4}
+.challenge-bar-wrap{height:5px;background:var(--faint);border-radius:99px;overflow:hidden}
+.challenge-bar{height:5px;border-radius:99px;background:var(--green);transition:width .4s ease}
+.challenge-footer{display:flex;align-items:center;justify-content:space-between}
+.challenge-prog{font-size:10px;color:var(--muted)}
+.challenge-done-badge{font-size:10px;font-weight:600;color:var(--green)}
+
 /* ── POSTER UNIVERSAL: proporção 2:3 em todos os contextos ── */
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:0 3px 3px}
 
@@ -259,7 +273,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const GPLACES_KEY=["AIzaSyAhzE6fe","vFrKs5q5MiZQr","Pp2l326QtN0FI"].join("");
-const VER="3.5.0";
+const VER="3.6.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -674,9 +688,18 @@ async function reactFeed(feedKey,uid,rname){
 }
 
 async function addVisit(rid,d){
-  A.visits[rid]=Math.max(0,(A.visits[rid]||0)+d);
+  const prev=A.visits[rid]||0;
+  A.visits[rid]=Math.max(0,prev+d);
   await saveVisit(rid,A.visits[rid]);
-  checkAchs();render();
+  checkAchs();
+  // Re-renderizar só o modal sem fechar
+  if(A.modal===rid){
+    renderModal();
+    // Atualizar poster no grid em background
+    setTimeout(render,300);
+  }else{
+    render();
+  }
 }
 async function toggleLike(rid){A.likes[rid]=!A.likes[rid];await saveLike(rid,A.likes[rid]);render();}
 async function setRat(rid,c,v){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid][c]=v;await saveRating(rid,c,v);checkAchs();renderModal();}
@@ -729,16 +752,30 @@ function initPullRefresh(scrollId){
 
 function initSwipe(){
   const sheet=document.querySelector(".msheet");if(!sheet)return;
-  let startY=0,dragging=false;
-  sheet.addEventListener("touchstart",e=>{startY=e.touches[0].clientY;dragging=true;},{passive:true});
+  let startX=0,startY=0,dragging=false,isVertical=null;
+  sheet.addEventListener("touchstart",e=>{
+    startX=e.touches[0].clientX;startY=e.touches[0].clientY;
+    dragging=true;isVertical=null;
+  },{passive:true});
   sheet.addEventListener("touchmove",e=>{
-    if(!dragging)return;const dy=e.touches[0].clientY-startY;
-    if(dy>0&&sheet.scrollTop<=0){sheet.style.transform=`translateY(${dy}px)`;sheet.style.transition="none";}
+    if(!dragging)return;
+    const dx=Math.abs(e.touches[0].clientX-startX);
+    const dy=e.touches[0].clientY-startY;
+    // Determinar direção na primeira vez
+    if(isVertical===null&&(Math.abs(dy)>5||dx>5))isVertical=Math.abs(dy)>dx;
+    if(!isVertical)return; // movimento horizontal — ignorar
+    if(dy>0&&sheet.scrollTop<=0){
+      sheet.style.transform=`translateY(${dy}px)`;
+      sheet.style.transition="none";
+    }
   },{passive:true});
   sheet.addEventListener("touchend",e=>{
-    if(!dragging)return;dragging=false;const dy=e.changedTouches[0].clientY-startY;
+    if(!dragging)return;dragging=false;
+    if(!isVertical){sheet.style.transform="translateY(0)";return;}
+    const dy=e.changedTouches[0].clientY-startY;
     sheet.style.transition="transform .3s ease";
     if(dy>100)closeModal();else sheet.style.transform="translateY(0)";
+    isVertical=null;
   },{passive:true});
 }
 
@@ -870,6 +907,56 @@ async function saveProfile(){
 }
 
 /* ── PLANILHA ── */
+
+
+/* ── DESAFIOS SEMANAIS ── */
+const CHALLENGES=[
+  {id:"c1",ico:"🗺",title:"Explorador",desc:"Garfe um lugar que você nunca foi antes",check:()=>getNewThisWeek()>=1,goal:1,unit:"lugar novo"},
+  {id:"c2",ico:"🔥",title:"Dupla garfada",desc:"Garfe 2 lugares novos essa semana",check:()=>getNewThisWeek()>=2,goal:2,unit:"lugares novos"},
+  {id:"c3",ico:"🏃",title:"Maratonista",desc:"Garfe 3 lugares diferentes essa semana",check:()=>getNewThisWeek()>=3,goal:3,unit:"lugares"},
+  {id:"c4",ico:"⭐",title:"Crítico",desc:"Avalie 2 restaurantes que você já foi",check:()=>getRatedThisWeek()>=2,goal:2,unit:"avaliados"},
+  {id:"c5",ico:"👑",title:"Rei do BK",desc:"Garfe um Burger King",check:()=>hasRedeThisWeek("burger king"),goal:1,unit:"BK garfado"},
+  {id:"c6",ico:"🍔",title:"Fanático do Méqui",desc:"Garfe um McDonald's",check:()=>hasRedeThisWeek("mcdonald's"),goal:1,unit:"Méqui garfado"},
+  {id:"c7",ico:"🥖",title:"Na maionese",desc:"Garfe um Subway",check:()=>hasRedeThisWeek("subway"),goal:1,unit:"Subway garfado"},
+  {id:"c8",ico:"💬",title:"Voz da galera",desc:"Deixe um review público em qualquer restaurante",check:()=>hasReviewThisWeek(),goal:1,unit:"review"},
+  {id:"c9",ico:"❤️",title:"Apaixonado",desc:"Favorite 3 restaurantes",check:()=>Object.keys(A.likes).filter(k=>A.likes[k]).length>=3,goal:3,unit:"favoritos"},
+  {id:"c10",ico:"🌟",title:"Garfador elite",desc:"Tenha pelo menos 5 lugares garfados no total",check:()=>garfCount()>=5,goal:5,unit:"no total"},
+];
+
+function getWeekStart(){
+  const d=new Date();d.setHours(0,0,0,0);
+  d.setDate(d.getDate()-d.getDay());return d;
+}
+function getNewThisWeek(){
+  const ws=getWeekStart();
+  return Object.entries(A.visitDates).filter(([rid,date])=>{
+    return new Date(date)>=ws&&(A.visits[rid]||0)>0;
+  }).length;
+}
+function getRatedThisWeek(){
+  // contar ratings com nota feitos essa semana (aproximação: total de ratings)
+  return Object.values(A.ratings).filter(r=>r.nota||r.Comida||r.Atendimento).length;
+}
+function hasRedeThisWeek(rede){
+  const ws=getWeekStart();
+  return A.restaurants.some(r=>
+    bk(r.rede)===rede&&
+    (A.visits[r.id]||0)>0&&
+    A.visitDates[r.id]&&new Date(A.visitDates[r.id])>=ws
+  );
+}
+function hasReviewThisWeek(){
+  // Verificar no DOM se há reviews do usuário (simplificado)
+  return false; // TODO: rastrear no estado
+}
+function getWeekChallenges(){
+  // Selecionar 3 desafios baseados no número da semana (rotação)
+  const weekNum=Math.floor(Date.now()/(7*24*60*60*1000));
+  const seed=weekNum%CHALLENGES.length;
+  const picks=[];
+  for(let i=0;i<3;i++) picks.push(CHALLENGES[(seed+i)%CHALLENGES.length]);
+  return picks;
+}
 
 /* ── GOOGLE PLACES INTEGRATION ── */
 async function fetchPlacePhoto(r){
@@ -1105,6 +1192,39 @@ function rOnboarding(){
   </div>`;
 }
 
+function rChallenges(){
+  const challenges=getWeekChallenges();
+  const now=new Date();
+  const weekEnd=new Date(getWeekStart());weekEnd.setDate(weekEnd.getDate()+7);
+  const diff=weekEnd-now;
+  const days=Math.floor(diff/(1000*60*60*24));
+  const hours=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const timeLeft=days>0?`${days}d ${hours}h restantes`:`${hours}h restantes`;
+
+  return challenges.map(c=>{
+    const done=c.check();
+    const prog=Math.min(c.goal,done?c.goal:
+      c.id==="c1"||c.id==="c2"||c.id==="c3"?getNewThisWeek():
+      c.id==="c4"?getRatedThisWeek():0);
+    const pct=Math.round(prog/c.goal*100);
+    return`<div class="challenge-card${done?" done":""}">
+      <div class="challenge-top">
+        <div class="challenge-ico">${c.ico}</div>
+        <div class="challenge-info">
+          <div class="challenge-title">${c.title}</div>
+          <div class="challenge-desc">${c.desc}</div>
+        </div>
+        ${done?`<div style="font-size:22px">✅</div>`:""}
+      </div>
+      <div class="challenge-bar-wrap"><div class="challenge-bar" style="width:${done?100:pct}%"></div></div>
+      <div class="challenge-footer">
+        <div class="challenge-prog">${done?`Concluído! 🎉`:`${prog} de ${c.goal} ${c.unit}`}</div>
+        <div class="challenge-prog">${timeLeft}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
 function rWelcome(){
   return`<div style="display:flex;flex-direction:column;height:100%;overflow-y:auto">
     ${rMainTopbar()}
@@ -1318,6 +1438,11 @@ function rDest(){
     </div>
     ${(A.visits[r.id]||0)>0?`<div class="pvc">✓</div>`:""}
   </div>`;
+  // desafios da semana
+  const challengesH=`<div class="sec-head"><span class="sec-title">Desafios da semana</span><span class="sec-sub">renovam todo domingo</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px;padding:0 1rem .875rem">${rChallenges()}</div>
+    <div class="divider"></div>`;
+
   // trending
   const trendRests=A.trending.map(t=>A.restaurants.find(r=>r.id===t.rid)).filter(Boolean);
   const trendH=!trendRests.length?"":
@@ -1335,7 +1460,8 @@ function rDest(){
     <div class="divider"></div>`;
 
   return`${rMainTopbar()}${rSearch()}
-    <div class="scroll-body"><div id="search-area">
+    <div class="scroll-body" id="main-scroll"><div id="search-area">
+      ${challengesH}
       ${trendH}
       <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
       ${sg.length?`<div class="cards-h">${sg.map(dc).join("")}</div>`:`<p style="font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center">Você já foi em todos! 🎉</p>`}
