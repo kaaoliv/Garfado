@@ -252,7 +252,7 @@ body{display:flex;align-items:center;justify-content:center;min-height:100vh;pad
 const SB_URL="https://psrlilbclyffmgadgbfg.supabase.co";
 const SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzcmxpbGJjbHlmZm1nYWRnYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMzI2NjAsImV4cCI6MjA5MTcwODY2MH0.3gsNRvNscf6NmAbR1OuOtTq2VlqSYLhgOLKU-92YNBU";
 const SHEET="https://script.google.com/macros/s/AKfycby6EAv-R5WmGMtMKYn5bpXxBIrk1ygLR72xKvczyD9fyI5f7hlOdBJb9ily0U_rfzFC/exec";
-const VER="2.7.0";
+const VER="2.8.0";
 const sb=supabase.createClient(SB_URL,SB_KEY);
 
 const BC={"mcdonald's":"#DA291C","burger king":"#F5821F","bob's":"#003087","kfc":"#e4002b","subway":"#009B48","pizzaria":"#cc3300","hamburgueria":"#8B4513","bar":"#7c3aed","outro":"#4ade80"};
@@ -284,6 +284,8 @@ let A={
   ranking:[],          // [{profile, garfCount}] amigos ordenados
   reactions:{},        // {feedKey: count}
   myReactions:{},      // {feedKey: bool}
+  reviews:{},
+  trending:[],         // [{restaurant_id, count}]
   onboarding:false,    // mostrar tela de username na 1ª vez
   pullRefreshing:false,
 };
@@ -305,22 +307,29 @@ function wrapText(text, maxChars) {
 }
 function mkSVG(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
-  const [nm1,nm2]=wrapText(r.name,16);
-  const addr=r.addr.length>24?r.addr.slice(0,23)+"…":r.addr;
+  const [nm1,nm2]=wrapText(r.name,15);
+  const addr=r.addr.length>22?r.addr.slice(0,21)+"…":r.addr;
   const rede=r.rede.toLowerCase()==="outro"?"":r.rede.charAt(0).toUpperCase()+r.rede.slice(1);
+  const fs1=nm1.length>12?14:nm1.length>8?16:18;
+  const fs2=nm2?(nm2.length>12?12:14):14;
+  const nameY=nm2?168:180;
+  const addrY=nm2?206:200;
+  const pílY=nm2?218:213;
+  const pílW=Math.max(rede.length*7+20,44);
   return`<svg viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
-    <rect width="200" height="300" fill="#141820"/>
-    <rect width="200" height="300" fill="${bg}" opacity="0.55"/>
-    <text x="100" y="130" text-anchor="middle" font-family="Arial" font-size="72" fill="${col}" opacity="0.22">${ico}</text>
-    <rect x="0" y="195" width="200" height="105" fill="rgba(0,0,0,0.82)"/>
-    <text x="100" y="${nm2?"222":"232"}" text-anchor="middle" font-family="Georgia,serif" font-size="${nm1.length>13?"14":"16"}" font-weight="700" fill="#f0f2f4">${nm1}</text>
-    ${nm2?`<text x="100" y="242" text-anchor="middle" font-family="Georgia,serif" font-size="${nm2.length>13?"12":"14"}" font-weight="700" fill="#f0f2f4">${nm2}</text>`:""}
-    <text x="100" y="${nm2?"258":"252"}" text-anchor="middle" font-family="Arial" font-size="9" fill="#7a8fa0">${addr}</text>
-    ${rede?`<rect x="60" y="${nm2?"265":"258"}" width="80" height="15" rx="7" fill="${col}" opacity="0.22"/>
-    <text x="100" y="${nm2?"276":"269"}" text-anchor="middle" font-family="Arial" font-size="9" font-weight="600" fill="${col}">${rede}</text>`:""}
-    ${r.rating?`<text x="100" y="293" text-anchor="middle" font-family="Arial" font-size="9" fill="#FFC72C">★ ${r.rating}</text>`:""}
+    <rect width="200" height="300" fill="${bg}"/>
+    <rect x="0" y="0" width="200" height="300" fill="${col}" opacity="0.08"/>
+    <text x="100" y="115" text-anchor="middle" font-family="Arial" font-size="80" fill="${col}" opacity="0.35">${ico}</text>
+    <rect x="0" y="145" width="200" height="155" fill="rgba(0,0,0,0.78)"/>
+    <line x1="0" y1="146" x2="200" y2="146" stroke="${col}" stroke-width="2" opacity="0.6"/>
+    <text x="100" y="${nameY}" text-anchor="middle" font-family="Georgia,serif" font-size="${fs1}" font-weight="700" fill="#ffffff">${nm1}</text>
+    ${nm2?`<text x="100" y="190" text-anchor="middle" font-family="Georgia,serif" font-size="${fs2}" font-weight="700" fill="#ffffff">${nm2}</text>`:""}
+    <text x="100" y="${addrY}" text-anchor="middle" font-family="Arial" font-size="9" fill="#8899aa">${addr}</text>
+    ${rede?`<rect x="${100-pílW/2}" y="${pílY}" width="${pílW}" height="18" rx="9" fill="${col}" opacity="0.35"/><line x1="${100-pílW/2}" y1="${pílY}" x2="${100+pílW/2}" y2="${pílY}" stroke="${col}" stroke-width="0" opacity="0"/><rect x="${100-pílW/2}" y="${pílY}" width="${pílW}" height="18" rx="9" fill="none" stroke="${col}" stroke-width="1" opacity="0.7"/><text x="100" y="${pílY+12.5}" text-anchor="middle" font-family="Arial" font-size="9.5" font-weight="700" fill="${col}">${rede}</text>`:""}
+    ${r.rating?`<text x="100" y="288" text-anchor="middle" font-family="Arial" font-size="10" fill="#FFC72C">★ ${r.rating}</text>`:""}
   </svg>`;
 }
+
 function mkSVGSm(r){
   const col=bc(r.rede),bg=bb(r.rede),ico=bi(r.rede);
   const nm=r.name.length>16?r.name.slice(0,15)+"…":r.name;
@@ -374,7 +383,7 @@ async function loadData(){
   // datas das minhas visitas
   A.visitDates={};
   (vR.data||[]).forEach(v=>{if(v.updated_at)A.visitDates[v.restaurant_id]=v.updated_at;});
-  await Promise.all([loadFriendData(),loadRanking()]);
+  await Promise.all([loadFriendData(),loadRanking(),loadTrending()]);
 }
 
 async function loadFriendData(){
@@ -397,6 +406,24 @@ async function loadFriendData(){
   (rxR.data||[]).forEach(r=>{A.reactions[r.feed_key]=(A.reactions[r.feed_key]||0)+1;});
   A.myReactions={};
   (myRxR.data||[]).forEach(r=>{A.myReactions[r.feed_key]=true;});
+}
+
+async function loadTrending(){
+  const weekAgo=new Date(Date.now()-7*24*60*60*1000).toISOString();
+  const{data}=await sb.from("visits")
+    .select("restaurant_id,count")
+    .gte("updated_at",weekAgo)
+    .order("count",{ascending:false})
+    .limit(8);
+  // agrupar por restaurante
+  const map={};
+  (data||[]).forEach(v=>{
+    map[v.restaurant_id]=(map[v.restaurant_id]||0)+(v.count||1);
+  });
+  A.trending=Object.entries(map)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,6)
+    .map(([rid,cnt])=>({rid:parseInt(rid),cnt}));
 }
 
 async function loadRanking(){
@@ -501,6 +528,61 @@ function showAchTooltip(id){
   });
 }
 
+async function loadReviews(rid){
+  const{data}=await sb.from("reviews")
+    .select("*, profiles(name,avatar_url)")
+    .eq("restaurant_id",rid)
+    .order("created_at",{ascending:false})
+    .limit(20);
+  A.reviews[rid]=(data||[]).map(r=>({
+    id:r.id,user_id:r.user_id,
+    text:r.text,
+    name:r.profiles?.name||"Anônimo",
+    avatar:r.profiles?.avatar_url||null,
+    created_at:r.created_at
+  }));
+  // atualizar só a lista sem re-renderizar o modal inteiro
+  const listEl=document.getElementById("reviews-list-"+rid);
+  if(!listEl)return;
+  const revs=A.reviews[rid]||[];
+  if(!revs.length){listEl.innerHTML='<div style="font-size:11px;color:var(--faint);text-align:center;padding:.5rem 0">Seja o primeiro a deixar um review!</div>';return;}
+  listEl.innerHTML=revs.map(rv=>{
+    const ini=(rv.name||"?").charAt(0).toUpperCase();
+    const isMe=rv.user_id===A.user?.id;
+    return`<div style="background:var(--s2);border-radius:10px;padding:10px 12px;border:.5px solid var(--faint)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <div style="width:24px;height:24px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#0f1117;overflow:hidden;flex-shrink:0">${rv.avatar?`<img src="${rv.avatar}" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'">${ini}`:ini}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;font-weight:500;color:var(--text)">${rv.name}</div>
+          <div style="font-size:9px;color:var(--faint)">${tAgo(rv.created_at)}</div>
+        </div>
+        ${isMe?`<button onclick="deleteReview('${rv.id}',${rid})" type="button" style="background:none;border:none;cursor:pointer;color:var(--faint);font-size:13px;padding:2px;touch-action:manipulation">✕</button>`:""}
+      </div>
+      <div style="font-size:12px;color:var(--text);line-height:1.5">${rv.text}</div>
+    </div>`;
+  }).join("");
+}
+
+async function submitReview(rid){
+  const inp=document.getElementById("review-input");
+  if(!inp)return;
+  const text=inp.value.trim();
+  if(!text||text.length<3){toast("⚠ Escreva pelo menos 3 caracteres");return;}
+  const{error}=await sb.from("reviews").insert({
+    user_id:A.user.id,restaurant_id:rid,text
+  });
+  if(error){toast("⚠ Erro ao enviar review");return;}
+  inp.value="";
+  toast("✓ Review publicado!");
+  loadReviews(rid);
+  checkAchs();
+}
+
+async function deleteReview(id,rid){
+  await sb.from("reviews").delete().eq("id",id).eq("user_id",A.user.id);
+  loadReviews(rid);
+}
+
 async function reactFeed(feedKey,uid,rname){
   if(!A.user)return;
   if(A.myReactions[feedKey]){
@@ -525,7 +607,7 @@ async function toggleLike(rid){A.likes[rid]=!A.likes[rid];await saveLike(rid,A.l
 async function setRat(rid,c,v){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid][c]=v;await saveRating(rid,c,v);checkAchs();renderModal();}
 async function setNote(rid,nota){if(!A.ratings[rid])A.ratings[rid]={};A.ratings[rid].nota=nota;await saveNote(rid,nota);}
 
-function openModal(id){A.modal=id;render();setTimeout(()=>initSwipe(),50);}
+function openModal(id){A.modal=id;render();setTimeout(()=>{initSwipe();loadReviews(id);},50);}
 function closeModal(){A.modal=null;A.editingProfile=false;A.pendingAvatar=null;A.pendingCheckin=null;A.checkinRid=null;render();}
 
 function setNav(n){if(n==="amigos")AMIGOS_TAB="feed";
@@ -868,8 +950,25 @@ function rDest(){
     </div>
     ${(A.visits[r.id]||0)>0?`<div class="pvc">✓</div>`:""}
   </div>`;
+  // trending
+  const trendRests=A.trending.map(t=>A.restaurants.find(r=>r.id===t.rid)).filter(Boolean);
+  const trendH=!trendRests.length?"":
+    `<div class="sec-head"><span class="sec-title">Em alta esta semana</span><span class="sec-sub">mais visitados</span></div>
+    <div class="cards-h">${trendRests.map((r,i)=>{
+      const cnt=A.trending[i]?.cnt||0;
+      return`<div class="pw-md" onclick="openModal(${r.id})" style="cursor:pointer;touch-action:manipulation">
+        ${posterPlain(r)}
+        <div class="pw-md-label">
+          <div class="pw-md-name">${r.name}</div>
+          <div style="font-size:8px;color:var(--green);margin-top:1px">🔥 ${cnt} visita${cnt!==1?"s":""}</div>
+        </div>
+      </div>`;
+    }).join("")}</div>
+    <div class="divider"></div>`;
+
   return`${rMainTopbar()}${rSearch()}
     <div class="scroll-body"><div id="search-area">
+      ${trendH}
       <div class="sec-head"><span class="sec-title">Sugestões</span><span class="sec-sub">melhores notas</span></div>
       ${sg.length?`<div class="cards-h">${sg.map(dc).join("")}</div>`:`<p style="font-size:11px;color:var(--faint);padding:.5rem 1rem 1rem;text-align:center">Você já foi em todos! 🎉</p>`}
       <div class="divider"></div>
@@ -1202,7 +1301,18 @@ function rModal(){
       ${fwH}
       ${checkinSection}
       <div class="msec">minha avaliação</div>${cH}
-      <textarea class="notea" placeholder="Escreva sua impressão..." oninput="setNote(${r.id},this.value)">${note}</textarea>
+      <textarea class="notea" placeholder="Nota privada (só você vê)..." oninput="setNote(${r.id},this.value)">${note}</textarea>
+      <div style="height:.5px;background:var(--faint);margin:1rem 0"></div>
+      <div class="msec">reviews públicos</div>
+      <div id="reviews-section-${r.id}">
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input id="review-input" placeholder="Escreva um review público…" style="flex:1;background:var(--s2);border:.5px solid var(--faint);border-radius:8px;padding:8px 10px;font-size:12px;color:var(--text);font-family:inherit;outline:none" onkeydown="if(event.key==='Enter')submitReview(${r.id})"/>
+          <button onclick="submitReview(${r.id})" type="button" style="padding:8px 12px;background:var(--green);color:#0f1117;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;touch-action:manipulation">↑</button>
+        </div>
+        <div id="reviews-list-${r.id}" style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11px;color:var(--faint);text-align:center;padding:.5rem 0">Carregando reviews…</div>
+        </div>
+      </div>
     </div>
   </div></div>`;
 }
